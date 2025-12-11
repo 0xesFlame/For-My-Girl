@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SYSTEM CRITICAL</title>
+    <title>СЕКРЕТНЫЙ АРХИВ</title>
     <style>
         body {
             background-color: #000;
@@ -14,20 +14,24 @@
             padding: 0;
             min-height: 100vh;
             overflow-x: hidden;
+            user-select: none; /* Запрещаем выделение (кроме секрета) */
         }
 
-        /* --- ЭКРАН 1: ПАРОЛЬ --- */
+        /* --- ЭКРАН 1: ВХОД --- */
         #login-screen {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             height: 100vh;
-            transition: opacity 1s;
+            z-index: 10;
         }
+        h1 { text-shadow: 0 0 10px #0f0; margin-bottom: 10px; }
+        .subtitle { color: #fff; margin-bottom: 30px; font-size: 0.9em; }
+        
         input {
-            padding: 10px;
-            font-size: 1.2em;
+            padding: 15px;
+            font-size: 1.5em;
             background: #111;
             border: 2px solid #0f0;
             color: #0f0;
@@ -35,9 +39,10 @@
             outline: none;
             margin-bottom: 20px;
             border-radius: 5px;
+            width: 250px;
         }
         button.login-btn {
-            padding: 10px 30px;
+            padding: 15px 40px;
             font-size: 1.2em;
             background: #0f0;
             color: #000;
@@ -45,138 +50,120 @@
             cursor: pointer;
             font-weight: bold;
             border-radius: 5px;
+            box-shadow: 0 0 15px #0f0;
+            transition: 0.3s;
         }
-        .error-msg {
-            color: red;
-            display: none;
-            margin-top: 10px;
-        }
+        button.login-btn:hover { background: #fff; }
+        .error-msg { color: red; display: none; margin-top: 15px; font-weight: bold; animation: shake 0.5s; }
 
-        /* --- ЭКРАН 2: ЛОВУШКА --- */
+        /* --- ЭКРАН 2: АД --- */
         #trap-screen {
             display: none;
             flex-direction: column;
             align-items: center;
-            background-color: #1a0000; /* Темно-кровавый фон */
+            background-color: #1a0000;
             color: #ff3333;
             width: 100%;
             position: relative;
-            padding-top: 50px;
+            padding-top: 20px;
+            overflow: hidden;
         }
 
-        /* Троллинг 1: Кнопка убегает */
+        /* Бегающая кнопка */
         #runaway-btn {
-            position: relative; /* Важно для js */
-            margin-top: 30px;
+            position: absolute;
+            top: 200px;
             padding: 15px 30px;
             background: #ff0000;
             color: white;
             font-weight: bold;
             border: 2px solid white;
             cursor: pointer;
-            font-size: 1.2em;
-            box-shadow: 0 0 15px red;
             z-index: 100;
+            box-shadow: 0 0 20px red;
             transition: top 0.1s, left 0.1s; 
         }
 
-        /* Троллинг 2: Фейковая загрузка */
-        .fake-loader {
-            width: 300px;
-            border: 2px solid #ff3333;
-            padding: 5px;
-            margin: 30px auto;
+        /* Фейковые окна ошибок */
+        .popup {
+            position: absolute;
+            background: #ccc;
+            color: black;
+            border: 2px solid blue;
+            padding: 10px;
+            font-family: sans-serif;
+            font-size: 12px;
+            box-shadow: 5px 5px 10px rgba(0,0,0,0.5);
+            z-index: 50;
+            width: 200px;
+            text-align: left;
         }
-        .progress-bar {
-            height: 20px;
-            background-color: #ff3333;
-            width: 0%;
-            transition: width 0.2s;
-        }
-        .status-text {
-            font-size: 0.8em;
-            margin-top: 5px;
-            min-height: 1.2em;
+        .popup-header {
+            background: blue;
+            color: white;
+            padding: 2px 5px;
+            margin: -10px -10px 10px -10px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
         }
 
-        /* Троллинг 3: Бесполезный переключатель */
-        .toggle-container {
-            margin: 20px;
-            display: flex;
+        /* Скример */
+        #screamer {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: black;
+            z-index: 9999;
             align-items: center;
             justify-content: center;
-            gap: 10px;
+            flex-direction: column;
         }
-        .switch {
-            position: relative;
-            display: inline-block;
-            width: 60px;
-            height: 34px;
-        }
-        .switch input { opacity: 0; width: 0; height: 0; }
-        .slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background-color: #330000;
-            border: 1px solid red;
-            transition: .4s;
-        }
-        .slider:before {
-            position: absolute;
-            content: "";
-            height: 26px;
-            width: 26px;
-            left: 4px;
-            bottom: 3px;
-            background-color: red;
-            transition: .4s;
-        }
-        input:checked + .slider { background-color: #ff3333; }
-        input:checked + .slider:before { transform: translateX(26px); background-color: white; }
+        #screamer img { width: 80%; max-width: 500px; animation: shake 0.1s infinite; }
+        .scary-text { font-size: 5em; color: red; font-weight: bold; }
 
-        /* Шифр и мусор */
-        .cipher {
-            margin-top: 50px;
-            color: #4d0000; /* Еле видный текст */
-            font-size: 0.8em;
-            word-wrap: break-word;
-            width: 80%;
-            line-height: 1.2;
-            opacity: 0.7;
-        }
-
-        /* --- СЕКРЕТНАЯ ЗОНА --- */
-        /* Огромный отступ, чтобы нужно было скроллить */
+        /* Секретная зона */
         .spacer {
-            height: 2000px; /* Пустота */
+            height: 3000px; /* Долгий скролл */
             width: 100%;
             display: flex;
-            align-items: flex-end; /* Текст в самом низу */
+            align-items: flex-end;
             justify-content: center;
-            padding-bottom: 50px;
-        }
-
-        .secret-text {
-            /* Цвет почти совпадает с фоном #1a0000 */
-            color: #240000; 
-            font-size: 14px;
-            font-weight: bold;
-            text-align: center;
-            transition: color 0.5s;
+            padding-bottom: 100px;
             cursor: text;
         }
-        
-        /* Если выделить текст мышкой - он станет белым */
-        .secret-text::selection {
-            background: white;
-            color: black;
+        .secret-text {
+            color: #1f0505; /* Почти невидимый */
+            font-size: 12px;
+            user-select: text; /* Разрешаем выделение */
         }
-        
-        /* Небольшая подсказка при наведении (можно убрать, если хочешь хардкор) */
-        .secret-text:hover {
-            color: #330000; 
+        .secret-text::selection { background: white; color: black; }
+
+        /* Анимации */
+        @keyframes shake {
+            0% { transform: translate(1px, 1px) rotate(0deg); }
+            10% { transform: translate(-1px, -2px) rotate(-1deg); }
+            20% { transform: translate(-3px, 0px) rotate(1deg); }
+            30% { transform: translate(3px, 2px) rotate(0deg); }
+            40% { transform: translate(1px, -1px) rotate(1deg); }
+            50% { transform: translate(-1px, 2px) rotate(-1deg); }
+            60% { transform: translate(-3px, 1px) rotate(0deg); }
+            70% { transform: translate(3px, 1px) rotate(-1deg); }
+            80% { transform: translate(-1px, -1px) rotate(1deg); }
+            90% { transform: translate(1px, 2px) rotate(0deg); }
+            100% { transform: translate(1px, -2px) rotate(-1deg); }
         }
+        @keyframes blink { 50% { opacity: 0; } }
+
+        /* Ссылка-обманка */
+        .fake-link {
+            color: #555;
+            text-decoration: underline;
+            cursor: pointer;
+            margin-top: 20px;
+            font-size: 0.8em;
+        }
+        .fake-link:hover { color: red; }
 
     </style>
 </head>
@@ -184,131 +171,149 @@
 
     <!-- ЭКРАН 1 -->
     <div id="login-screen">
-        <h1 style="text-shadow: 0 0 10px #0f0;">SECURE LOGIN</h1>
-        <input type="text" id="passwordInput" placeholder="ПАРОЛЬ">
-        <button class="login-btn" onclick="checkPassword()">ACCESS</button>
-        <p class="error-msg" id="errorMsg">ОШИБКА ДОСТУПА</p>
+        <h1>СИСТЕМА НАВЕДЕНИЯ</h1>
+        <div class="subtitle">ВВЕДИТЕ КОД ЧТОБЫ ПОЛУЧИТЬ КООРДИНАТЫ</div>
+        
+        <input type="text" id="passwordInput" placeholder="КОД ДОСТУПА">
+        <button class="login-btn" onclick="checkPassword()">ПОЛУЧИТЬ</button>
+        
+        <p class="error-msg" id="errorMsg">ОШИБКА! НЕВЕРНЫЙ КОД!</p>
     </div>
 
     <!-- ЭКРАН 2 (ЛОВУШКА) -->
-    <div id="trap-screen">
-        <h1 style="font-size: 3em; animation: blink 0.2s infinite;">ERROR 404</h1>
-        <p>СИСТЕМА ЗАБЛОКИРОВАНА</p>
-        
-        <!-- Троллинг: Фейковый загрузчик -->
-        <div class="fake-loader">
-            <div class="progress-bar" id="progBar"></div>
+    <div id="trap-screen" onclick="randomPopup()">
+        <h1 style="color: red; font-size: 4em; animation: blink 0.1s infinite;">ВЗЛОМ!</h1>
+        <p>СИСТЕМА УНИЧТОЖАЕТСЯ...</p>
+
+        <!-- Кнопка убегает -->
+        <button id="runaway-btn" onmouseover="moveButton()">СКАЧАТЬ КООРДИНАТЫ</button>
+
+        <!-- Фейк загрузка -->
+        <div style="width: 80%; border: 1px solid red; height: 30px; margin-top: 50px;">
+            <div id="bar" style="height:100%; width:0%; background:red; transition: width 0.5s;"></div>
         </div>
-        <div class="status-text" id="statusText">Инициализация вируса...</div>
+        <div id="status">Загрузка трояна...</div>
 
-        <!-- Троллинг: Кнопка -->
-        <p>Нажми кнопку, чтобы разблокировать:</p>
-        <button id="runaway-btn" onmouseover="moveButton()">РАЗБЛОКИРОВАТЬ</button>
-
-        <!-- Троллинг: Свитч -->
-        <div class="toggle-container">
-            <span>Сложный режим</span>
-            <label class="switch">
-                <input type="checkbox" id="trollSwitch" onchange="trollToggle()">
-                <span class="slider"></span>
-            </label>
-            <span>Легкий режим</span>
+        <!-- Невозможная галочка -->
+        <div style="margin-top: 30px; display: flex; align-items: center; gap: 10px;">
+            <input type="checkbox" id="humanCheck" onclick="noHuman(this)"> 
+            <label for="humanCheck">Я не робот</label>
         </div>
 
-        <div class="cipher">
-            01010101 FATAL EXCEPTION 0xB45 SYSTEM HALTED
-            <br><br>
-            TRYING TO REBOOT... FAILED.
-            <br>
-            DELETING C:/WINDOWS/SYSTEM32...
-            <br>
-            UPLOADING PERSONAL DATA TO SKYNET...
-            <br><br>
-            001010101001010101010101001
+        <!-- Ссылка на "помощь" (Скример) -->
+        <div class="fake-link" onclick="triggerScreamer(event)">[ ? ] Нужна помощь? Нажми сюда</div>
+
+        <!-- Поле с шифром -->
+        <div style="margin-top: 50px; opacity: 0.5; width: 90%; word-break: break-all;">
+            0100101 ERROR SYSTEM 32 DELETED KERNEL PANIC 0x00004
+            FATAL ERROR FATAL ERROR FATAL ERROR
         </div>
 
-        <!-- Пустота и секрет -->
+        <!-- СЕКРЕТ -->
         <div class="spacer">
-            <p class="secret-text">
-                Ладно, ты победила, хакер.<br>
-                Подсказка приклеена скотчем<br>
+            <div class="secret-text">
+                Ты нашла это! Умничка ❤️<br>
+                Координаты спрятаны на бумажке,<br>
+                которая приклеена скотчем<br>
                 ЗА ТВОИМ ТЕЛЕВИЗОРОМ.
-            </p>
+            </div>
         </div>
     </div>
 
+    <!-- СКРИМЕР -->
+    <div id="screamer">
+        <div class="scary-text">БУ! 👹</div>
+        <p style="color: white; font-size: 2em;">ПОПАЛАСЬ!</p>
+    </div>
+
     <script>
-        // --- Логика пароля ---
+        // Проверка пароля
         function checkPassword() {
             var input = document.getElementById("passwordInput").value;
-            // Проверка КПЮЛП (без учета регистра)
+            var error = document.getElementById("errorMsg");
+            
             if (input.toUpperCase().trim() === "КПЮЛП") {
                 document.getElementById("login-screen").style.display = "none";
                 document.getElementById("trap-screen").style.display = "flex";
-                document.body.style.backgroundColor = "#1a0000"; 
-                startFakeLoading(); // Запускаем анимацию загрузки
+                startChaos();
             } else {
-                document.getElementById("errorMsg").style.display = "block";
+                error.style.display = "block";
                 document.getElementById("passwordInput").value = "";
+                // Трясем экран при ошибке
+                document.body.style.animation = "shake 0.5s";
+                setTimeout(() => document.body.style.animation = "", 500);
             }
         }
 
-        // --- Логика бегающей кнопки ---
+        // Бегающая кнопка
         function moveButton() {
             var btn = document.getElementById("runaway-btn");
             var x = Math.random() * (window.innerWidth - 200);
-            if (x < 0) x = 0;
-            var y = Math.random() * 500; // Кнопка прыгает только в верхней части
+            var y = Math.random() * 400; 
+            btn.style.left = Math.max(0, x) + "px";
+            btn.style.top = Math.max(50, y) + "px";
+        }
+
+        // Галочка "Я не робот" - снимается сама
+        function noHuman(checkbox) {
+            setTimeout(() => {
+                checkbox.checked = false;
+                alert("Ошибка! Вы похожи на робота 🤖");
+            }, 200);
+        }
+
+        // СКРИМЕР
+        function triggerScreamer(e) {
+            e.stopPropagation(); // Чтобы не сработал randomPopup
+            var scr = document.getElementById("screamer");
+            scr.style.display = "flex";
+            // Мигание фона
+            var blinkInterval = setInterval(() => {
+                scr.style.backgroundColor = scr.style.backgroundColor === "black" ? "red" : "black";
+            }, 50);
+
+            // Убираем скример через 1.5 секунды
+            setTimeout(() => {
+                clearInterval(blinkInterval);
+                scr.style.display = "none";
+            }, 1500);
+        }
+
+        // Создание всплывающих окон при клике
+        function randomPopup() {
+            // Шанс 30%, чтобы не спамило слишком жестко
+            if (Math.random() > 0.3) return;
+
+            var div = document.createElement("div");
+            div.className = "popup";
+            div.innerHTML = `<div class="popup-header"><span>ERROR</span><span>X</span></div>VIRUS DETECTED<br>Stealing passwords...`;
             
-            btn.style.position = "absolute";
-            btn.style.left = x + "px";
-            btn.style.top = (y + 100) + "px"; 
+            var x = Math.random() * (window.innerWidth - 220);
+            var y = Math.random() * (window.innerHeight - 100) + window.scrollY;
+            
+            div.style.left = x + "px";
+            div.style.top = y + "px";
+            
+            document.body.appendChild(div);
+
+            // Удаляем окно через 2 секунды
+            setTimeout(() => div.remove(), 2000);
         }
 
-        // --- Логика фейкового свитча ---
-        function trollToggle() {
-            var checkbox = document.getElementById("trollSwitch");
-            if (checkbox.checked) {
-                // Если она включила - ждем 300мс и выключаем обратно
-                setTimeout(function() {
-                    checkbox.checked = false;
-                    alert("Отказано в доступе. Легких путей не ищем!");
-                }, 300);
-            }
-        }
-
-        // --- Логика фейковой загрузки ---
-        function startFakeLoading() {
-            var bar = document.getElementById("progBar");
-            var text = document.getElementById("statusText");
-            var width = 0;
-            var messages = [
-                "Скачивание интернета...", 
-                "Удаление косметики...", 
-                "Взлом пентагона...", 
-                "Ой, что-то сломалось...", 
-                "Повторная попытка...",
-                "Майнинг биткоинов...",
-                "Загрузка котиков..."
-            ];
-
-            setInterval(function() {
-                if (width >= 99) {
-                    width = 10; // Сброс
-                    text.innerText = "ОШИБКА! ПОВТОР...";
-                    text.style.color = "white";
-                } else {
-                    width++; 
-                    bar.style.width = width + '%';
-                    
-                    // Меняем текст иногда
-                    if (width % 15 === 0) {
-                        text.innerText = messages[Math.floor(Math.random() * messages.length)];
-                    }
+        // Загрузка
+        function startChaos() {
+            let bar = document.getElementById("bar");
+            let status = document.getElementById("status");
+            let w = 0;
+            setInterval(() => {
+                w += 5;
+                if (w > 100) {
+                    w = 0;
+                    status.innerText = "ОШИБКА! ПОВТОР...";
                 }
-            }, 50); // Скорость загрузки
+                bar.style.width = w + "%";
+            }, 100);
         }
     </script>
-
 </body>
 </html>
