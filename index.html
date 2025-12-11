@@ -16,14 +16,63 @@
             overflow-x: hidden;
             user-select: none; 
             touch-action: pan-y;
-            transition: transform 0.5s; /* Для переворота экрана */
+            transition: filter 0.2s, transform 1s; 
         }
 
-        /* Эффект пьяного экрана */
+        /* --- ЭФФЕКТЫ ХАОСА --- */
+        
+        /* 1. Землетрясение */
+        .earthquake-mode {
+            animation: hard-shake 0.1s infinite;
+        }
+        @keyframes hard-shake {
+            0% { transform: translate(2px, 2px) rotate(0deg); }
+            25% { transform: translate(-2px, -2px) rotate(-1deg); }
+            50% { transform: translate(-2px, 2px) rotate(1deg); }
+            75% { transform: translate(2px, -2px) rotate(-1deg); }
+            100% { transform: translate(0, 0) rotate(0); }
+        }
+
+        /* 2. Тако дождь */
+        .taco {
+            position: fixed;
+            top: -50px;
+            font-size: 40px;
+            z-index: 9999;
+            pointer-events: none;
+            animation: fall linear forwards;
+        }
+        @keyframes fall {
+            to { transform: translateY(110vh) rotate(720deg); }
+        }
+
+        /* 3. Вертушка */
+        .spin-mode {
+            transform: rotate(360deg);
+        }
+
+        /* 4. Блэкаут (Темнота) */
+        #blackout-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: black;
+            z-index: 10000;
+            cursor: none;
+        }
+
+        /* 5. Пьяный режим (Инверсия) */
         .drunk-mode {
             transform: scaleY(-1) scaleX(-1);
             filter: hue-rotate(90deg);
         }
+
+        /* 6. Исчезновение курсора */
+        .no-cursor {
+            cursor: none !important;
+        }
+
+        /* --- ОСНОВНЫЕ СТИЛИ --- */
 
         /* МАТРИЦА ФОН */
         canvas {
@@ -34,7 +83,7 @@
             opacity: 0.2; 
         }
 
-        /* --- ЭКРАН 1: ВХОД --- */
+        /* ВХОД */
         #login-screen {
             display: flex;
             flex-direction: column;
@@ -74,7 +123,7 @@
         button.login-btn:hover { background: #fff; }
         .error-msg { color: red; display: none; margin-top: 15px; }
 
-        /* --- ЭКРАН 2: ЛОВУШКА --- */
+        /* ЛОВУШКА */
         #trap-screen {
             display: none;
             flex-direction: column;
@@ -143,7 +192,6 @@
         .help-link { margin-top: 30px; font-size: 0.8em; color: #777; text-decoration: underline; cursor: pointer; }
         .help-link:hover { color: #fff; }
 
-        /* Фейковые окна */
         .popup {
             position: absolute;
             background: #ccc;
@@ -160,7 +208,6 @@
         }
         .popup-header { background: blue; color: white; padding: 2px; margin-bottom: 5px; font-weight: bold; }
 
-        /* КНОПКА ЛОВУШКА (ПРОПУСТИТЬ) */
         .skip-trap-btn {
             position: fixed;
             bottom: 20px;
@@ -172,14 +219,13 @@
             border: 2px solid white;
             cursor: pointer;
             z-index: 400;
-            display: none; /* Скрыта по умолчанию */
+            display: none; 
             box-shadow: 0 0 10px yellow;
             animation: bounce 1s infinite;
         }
-
         @keyframes bounce { 0%, 100% {transform: translateY(0);} 50% {transform: translateY(-5px);} }
 
-        /* --- ГЕЙТЫ --- */
+        /* ГЕЙТЫ */
         .gate-overlay {
             display: none; 
             position: fixed;
@@ -222,18 +268,7 @@
             width: 240px;
             height: 240px;
         }
-        .cell-2048 {
-            width: 55px;
-            height: 55px;
-            background: #ccc;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 18px;
-            font-weight: bold;
-            color: #333;
-            border-radius: 3px;
-        }
+        .cell-2048 { width: 55px; height: 55px; background: #ccc; display: flex; justify-content: center; align-items: center; font-size: 18px; font-weight: bold; color: #333; border-radius: 3px; }
         .c-0 { background: #cdc1b4; color: transparent; }
         .c-2 { background: #eee4da; }
         .c-4 { background: #ede0c8; }
@@ -247,23 +282,10 @@
         .c-1024 { background: #edc53f; color: #f9f6f2; }
         .c-2048 { background: #edc22e; color: #f9f6f2; box-shadow: 0 0 10px yellow; }
 
-        .controls-2048 {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 5px;
-            max-width: 200px;
-            margin: 10px auto;
-        }
-        .btn-2048 {
-            padding: 10px;
-            background: #444;
-            color: white;
-            border: 1px solid #777;
-            font-size: 1.2em;
-            cursor: pointer;
-        }
+        .controls-2048 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; max-width: 200px; margin: 10px auto; }
+        .btn-2048 { padding: 10px; background: #444; color: white; border: 1px solid #777; font-size: 1.2em; cursor: pointer; }
 
-        /* Окно оплаты */
+        /* Оплата */
         #payment-modal {
             display: none;
             position: fixed;
@@ -280,7 +302,7 @@
         }
         .pay-btn { background: green; color: white; padding: 10px; border: none; cursor: pointer; }
 
-        /* СКРИМЕР */
+        /* Скример */
         #screamer-overlay {
             display: none;
             position: fixed;
@@ -294,35 +316,22 @@
         .screamer-face { font-size: 8em; animation: shake 0.1s infinite; }
         .screamer-text { color: red; font-size: 3em; font-weight: bold; }
 
-        /* Секрет внизу */
-        .secret-container {
-            position: absolute;
-            bottom: 50px;
-            width: 100%;
-        }
-        .secret-text {
-            color: #240000; 
-            font-size: 14px;
-            font-weight: bold;
-            transition: color 0.2s;
-            user-select: text;
-        }
+        /* Секрет */
+        .secret-container { position: absolute; bottom: 50px; width: 100%; }
+        .secret-text { color: #240000; font-size: 14px; font-weight: bold; transition: color 0.2s; user-select: text; }
         .secret-text::selection { background: white; color: black; }
 
-        @keyframes shake {
-            0% { transform: translate(1px, 1px) rotate(0deg); }
-            50% { transform: translate(-1px, 2px) rotate(-1deg); }
-            100% { transform: translate(1px, -1px) rotate(1deg); }
-        }
+        @keyframes shake { 0% { transform: translate(1px, 1px) rotate(0deg); } 50% { transform: translate(-1px, 2px) rotate(-1deg); } 100% { transform: translate(1px, -1px) rotate(1deg); } }
 
     </style>
 </head>
 <body>
     
-    <!-- МАТРИЦА ФОН -->
     <canvas id="matrix"></canvas>
 
-    <!-- ВХОД -->
+    <!-- БЛЭКАУТ (ЭФФЕКТ) -->
+    <div id="blackout-overlay"></div>
+
     <div id="login-screen">
         <h1>СИСТЕМА НАВЕДЕНИЯ</h1>
         <div class="subtitle">ВВЕДИТЕ КОД ДЛЯ ПОЛУЧЕНИЯ КООРДИНАТ</div>
@@ -331,7 +340,6 @@
         <p class="error-msg" id="errorMsg">НЕВЕРНЫЙ КОД</p>
     </div>
 
-    <!-- ОСНОВНОЙ ЭКРАН -->
     <div id="trap-screen" onclick="randomPopup(event)">
         <div style="position: sticky; top: 20px; z-index: 200;">
             <div class="trap-title">ВЗЛОМ СИСТЕМЫ</div>
@@ -358,13 +366,9 @@
 
         <div class="help-link" onclick="triggerScreamer(event)">[ ? ] Нужна помощь?</div>
 
-        <!-- КНОПКА ЛОВУШКА -->
         <button class="skip-trap-btn" id="skipTrapBtn" onclick="activateSkipTrap()">⏩ ПРОПУСТИТЬ УРОВЕНЬ</button>
-
-        <!-- ОГРОМНЫЙ ШИФР -->
         <div class="big-cipher" id="cipherBlock"></div>
 
-        <!-- СЕКРЕТ -->
         <div class="secret-container" onclick="stopProp(event)">
             <p class="secret-text">
                 Ты просто герой.<br>
@@ -374,7 +378,7 @@
         </div>
     </div>
 
-    <!-- === ГЕЙТ 1: ЗАГАДКА === -->
+    <!-- ГЕЙТ 1: ЗАГАДКА -->
     <div id="gate1" class="gate-overlay">
         <div class="gate-box">
             <h2>ЗАЩИТА: ЗАГАДКА</h2>
@@ -385,7 +389,7 @@
         </div>
     </div>
 
-    <!-- === ГЕЙТ 2: МАТЕМАТИКА (5 УРОВНЕЙ) === -->
+    <!-- ГЕЙТ 2: МАТЕМАТИКА -->
     <div id="gate2" class="gate-overlay">
         <div class="gate-box">
             <h2 id="math-title">МАТЕМАТИКА 1/5</h2>
@@ -398,7 +402,7 @@
         </div>
     </div>
 
-    <!-- === ГЕЙТ 3: КЛИКЕР === -->
+    <!-- ГЕЙТ 3: КЛИКЕР -->
     <div id="gate3" class="gate-overlay">
         <div class="gate-box">
             <h2>ЗАЩИТА: КЛИКЕР</h2>
@@ -412,7 +416,7 @@
         </div>
     </div>
 
-    <!-- === ГЕЙТ 4: 2048 === -->
+    <!-- ГЕЙТ 4: 2048 -->
     <div id="gate4" class="gate-overlay">
         <div class="gate-box">
             <h2>ФИНАЛЬНЫЙ БОСС</h2>
@@ -427,7 +431,6 @@
         </div>
     </div>
 
-    <!-- ОКНО ОПЛАТЫ -->
     <div id="payment-modal" onclick="stopProp(event)">
         <h3>ТРЕБУЕТСЯ ОПЛАТА</h3>
         <p>Для дальнейшего спуска оплатите комиссию.</p>
@@ -437,7 +440,6 @@
         </div>
     </div>
 
-    <!-- СКРИМЕР -->
     <div id="screamer-overlay">
         <div class="screamer-face">👹</div>
         <div class="screamer-text">БУ!</div>
@@ -455,7 +457,6 @@
         const fontSize = 16;
         const columns = canvas.width/fontSize;
         const drops = Array(Math.floor(columns)).fill(1);
-
         function drawMatrix() {
             ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -470,7 +471,6 @@
         }
         setInterval(drawMatrix, 30);
 
-        // --- ГЕНЕРАЦИЯ ШИФРА ---
         function generateCipher() {
             let chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ@#$%&*<>";
             let str = "";
@@ -482,8 +482,6 @@
         }
         generateCipher();
 
-
-        // --- ЛОГИКА ПАРОЛЯ ---
         function checkPassword() {
             var input = document.getElementById("passwordInput").value;
             if (input.toUpperCase().trim() === "КПЮЛП") {
@@ -491,18 +489,85 @@
                 document.getElementById("trap-screen").style.display = "flex";
                 startFakeLoading();
                 window.addEventListener('scroll', checkScrollTraps);
-                startDrunkMode(); // Запуск пьяного режима
-                startBrokenScroll(); // Запуск сломанного скролла
+                startBrokenScroll(); 
+                startChaosSystem(); // ЗАПУСК ХАОСА
             } else {
                 document.getElementById("errorMsg").style.display = "block";
                 document.getElementById("passwordInput").value = "";
             }
         }
 
-        // --- ОБРАБОТКА СКРОЛЛА ---
-        // Состояние прохождения
-        let riddleFlags = [false, false, false]; // 3 загадки
-        let mathStage = 0; // 0 to 5
+        // ============================================
+        // === СИСТЕМА ХАОСА (НОВЫЕ ИВЕНТЫ) ===
+        // ============================================
+        function startChaosSystem() {
+            setInterval(() => {
+                // Каждые 25 секунд 40% шанс срабатывания события
+                if(Math.random() < 0.4) {
+                    triggerRandomChaos();
+                }
+            }, 25000);
+        }
+
+        function triggerRandomChaos() {
+            let rand = Math.random();
+            if (rand < 0.2) startTacoRain();
+            else if (rand < 0.4) triggerEarthquake();
+            else if (rand < 0.6) triggerSpin();
+            else if (rand < 0.8) triggerBlackout();
+            else triggerFreeze();
+        }
+
+        // 1. ТАКО ДОЖДЬ
+        function startTacoRain() {
+            for(let i=0; i<30; i++) {
+                let taco = document.createElement("div");
+                taco.innerText = "🌮";
+                taco.className = "taco";
+                taco.style.left = Math.random() * window.innerWidth + "px";
+                taco.style.animationDuration = (Math.random() * 2 + 2) + "s";
+                document.body.appendChild(taco);
+                setTimeout(() => taco.remove(), 4000);
+            }
+        }
+
+        // 2. ЗЕМЛЕТРЯСЕНИЕ
+        function triggerEarthquake() {
+            document.body.classList.add("earthquake-mode");
+            setTimeout(() => document.body.classList.remove("earthquake-mode"), 5000);
+        }
+
+        // 3. ВЕРТУШКА
+        function triggerSpin() {
+            document.body.classList.add("spin-mode");
+            setTimeout(() => document.body.classList.remove("spin-mode"), 3000);
+        }
+
+        // 4. БЛЭКАУТ
+        function triggerBlackout() {
+            document.getElementById("blackout-overlay").style.display = "block";
+            setTimeout(() => document.getElementById("blackout-overlay").style.display = "none", 2000);
+        }
+
+        // 5. ЗАМОРОЗКА (Только курсор)
+        function triggerFreeze() {
+            document.body.classList.add("no-cursor");
+            setTimeout(() => document.body.classList.remove("no-cursor"), 3000);
+        }
+
+        // === ПЬЯНЫЙ РЕЖИМ (Отдельно, реже) ===
+        setInterval(() => {
+            if (Math.random() > 0.8) {
+                document.body.classList.add('drunk-mode');
+                setTimeout(() => document.body.classList.remove('drunk-mode'), 5000);
+            }
+        }, 50000);
+
+
+        // --- ОСНОВНАЯ ЛОГИКА ---
+        
+        let riddleFlags = [false, false, false];
+        let mathStage = 0;
         let passedClicker = false;
         let passed2048 = false;
         let passedPayment = false;
@@ -511,36 +576,30 @@
             let y = window.scrollY;
             let skipBtn = document.getElementById("skipTrapBtn");
 
-            // Показываем кнопку-ловушку иногда
             if (y > 70000 && y < 75000) skipBtn.style.display = 'block';
             else if (y > 200000 && y < 205000) skipBtn.style.display = 'block';
             else skipBtn.style.display = 'none';
             
-            // 1. ЗАГАДКИ (Разбросаны)
             if (y > 20000 && !riddleFlags[0]) openRiddleGate(0);
             if (y > 160000 && !riddleFlags[1]) openRiddleGate(1);
             if (y > 340000 && !riddleFlags[2]) openRiddleGate(2);
 
-            // 2. МАТЕМАТИКА (5 уровней)
             if (y > 50000 && mathStage < 1) openMathGate(1);
             else if (y > 100000 && mathStage < 2) openMathGate(2);
-            else if (y > 180000 && mathStage < 3) openMathGate(3); // Hard
-            else if (y > 260000 && mathStage < 4) openMathGate(4); // Hard
-            else if (y > 360000 && mathStage < 5) openMathGate(5); // Hard
+            else if (y > 180000 && mathStage < 3) openMathGate(3); 
+            else if (y > 260000 && mathStage < 4) openMathGate(4); 
+            else if (y > 360000 && mathStage < 5) openMathGate(5); 
 
-            // 3. ОПЛАТА
             if (y > 130000 && !passedPayment) {
                 document.getElementById('payment-modal').style.display = 'block';
                 document.body.style.overflow = 'hidden';
             }
 
-            // 4. КЛИКЕР (300 000px)
             if (y > 300000 && !passedClicker) {
                 document.getElementById('gate3').style.display = 'flex';
                 document.body.style.overflow = 'hidden';
             }
 
-            // 5. 2048 (400 000px)
             if (y > 400000 && !passed2048) {
                 game2048.init();
                 document.getElementById('gate4').style.display = 'flex';
@@ -548,35 +607,18 @@
             }
         }
 
-        // === СЛОМАННЫЙ СКРОЛЛ ===
         function startBrokenScroll() {
             window.addEventListener('scroll', function() {
-                // 1% шанс дернуться вверх при скролле
-                if(Math.random() > 0.99) {
-                    window.scrollBy(0, -200);
-                }
+                if(Math.random() > 0.99) window.scrollBy(0, -200);
             });
         }
 
-        // === ПЬЯНЫЙ РЕЖИМ (ИНВЕРСИЯ) ===
-        function startDrunkMode() {
-            setInterval(() => {
-                // Каждые 40-60 сек шанс переворота
-                if (Math.random() > 0.6) {
-                    document.body.classList.add('drunk-mode');
-                    setTimeout(() => document.body.classList.remove('drunk-mode'), 5000);
-                }
-            }, 40000);
-        }
-
-        // === КНОПКА ПРОПУСТИТЬ (ЛОВУШКА) ===
         function activateSkipTrap() {
             alert("Ага, размечталась! ШТРАФ ЗА ЛЕНЬ!");
             window.scrollBy(0, -50000);
             document.getElementById("skipTrapBtn").style.display = 'none';
         }
 
-        // === ОПЛАТА ===
         function movePayBtn() {
             let btn = document.getElementById("payBtn");
             btn.style.position = "relative";
@@ -590,33 +632,23 @@
             alert("Платеж не прошел. Ладно, проходи бесплатно.");
         }
 
-
-        // === ПОЛНЫЙ СБРОС (ХАРДКОР) ===
         function failGate(reason) {
             alert("ОШИБКА: " + reason + "\nПОЛНЫЙ СБРОС СИСТЕМЫ!\nНАЧИНАЙ СНАЧАЛА!");
             window.scrollTo(0, 0); 
-            
-            // Сброс флагов
             riddleFlags = [false, false, false];
             mathStage = 0;
             passedClicker = false;
             passed2048 = false;
             passedPayment = false;
-
-            // Закрываем окна
             document.querySelectorAll('.gate-overlay').forEach(el => el.style.display = 'none');
             document.getElementById('payment-modal').style.display = 'none';
             document.body.style.overflow = 'auto';
-            
-            // Чистим поля
             document.getElementById('ans1').value = "";
             document.getElementById('ans2').value = "";
-            
             clearInterval(mathInterval);
             clearInterval(clickInterval);
         }
 
-        // === ГЕЙТ 1: ЗАГАДКИ ===
         const riddles = [
             { q: "Что поднимается вверх, но никогда не спускается?", a: ["возраст", "годы"] },
             { q: "Зимой и летом одним цветом?", a: ["елка", "ёлка", "ель", "сосна"] },
@@ -640,7 +672,6 @@
         function checkGate1() {
             let ans = document.getElementById('ans1').value.toLowerCase().trim();
             let correctAnswers = riddles[currentRiddleIndex].a;
-            
             if (correctAnswers.includes(ans)) {
                 riddleFlags[activeRiddleStage] = true;
                 document.getElementById('gate1').style.display = 'none';
@@ -651,7 +682,6 @@
             }
         }
 
-        // === ГЕЙТ 2: МАТЕМАТИКА (СЛОЖНЕЕ И СЛОЖНЕЕ) ===
         let currentMathAnswer = 0;
         let mathInterval;
         let currentMathLevel = 0;
@@ -659,36 +689,26 @@
         function openMathGate(level) {
             currentMathLevel = level;
             document.getElementById('math-title').innerText = `МАТЕМАТИКА ${level}/5`;
-            
             let timeLimit = 20;
             let probText = "";
-            
-            // ЛОГИКА ГЕНЕРАЦИИ
             let a = Math.floor(Math.random() * 20) + 1;
             let b = Math.floor(Math.random() * 20) + 1;
             let c = Math.floor(Math.random() * 10) + 1;
 
             if (level <= 2) {
-                // Легкие уровни (2 числа)
                 let types = ['+', '-'];
                 let type = types[Math.floor(Math.random() * types.length)];
                 if (type === '+') currentMathAnswer = a + b;
                 else currentMathAnswer = a - b;
                 probText = `${a} ${type} ${b} = ?`;
             } else {
-                // Сложные уровни (3 числа)
-                // Добавляем время
                 timeLimit = 35 + (level - 3) * 5; 
                 let types = ['+', '-', '*'];
                 let t1 = types[Math.floor(Math.random() * types.length)];
                 let t2 = types[Math.floor(Math.random() * types.length)];
-                
-                // Чтобы не было слишком жесткого умножения
                 if (t1 === '*') a = Math.floor(Math.random() * 5) + 1;
                 if (t2 === '*') b = Math.floor(Math.random() * 5) + 1;
-
                 probText = `${a} ${t1} ${b} ${t2} ${c} = ?`;
-                // Вычисляем через eval (безопасно тут)
                 currentMathAnswer = eval(`${a} ${t1} ${b} ${t2} ${c}`);
             }
 
@@ -724,7 +744,6 @@
             }
         }
 
-        // === ГЕЙТ 3: КЛИКЕР (5 секунд) ===
         let clicksLeft = 10;
         let clickGameActive = false;
         let clickInterval;
@@ -735,10 +754,8 @@
             clicksLeft = 10;
             document.getElementById('clickCount').innerText = clicksLeft;
             document.getElementById('startClickBtn').style.display = 'none';
-
             let timeLeft = 5.00;
             document.getElementById('click-timer').innerText = "5.00";
-
             clickInterval = setInterval(() => {
                 timeLeft -= 0.01;
                 document.getElementById('click-timer').innerText = timeLeft.toFixed(2);
@@ -753,15 +770,12 @@
 
         function clickerGame() {
             if (!clickGameActive) return;
-
             clicksLeft--;
             document.getElementById('clickCount').innerText = clicksLeft;
-            
             let btn = document.getElementById('clickGameBtn');
             let randX = Math.random() * 200 - 100;
             let randY = Math.random() * 200 - 100;
             btn.style.transform = `translate(${randX}px, ${randY}px)`;
-
             if (clicksLeft <= 0) {
                 clearInterval(clickInterval);
                 clickGameActive = false;
@@ -772,7 +786,6 @@
             }
         }
 
-        // === ГЕЙТ 4: 2048 ===
         const game2048 = {
             board: [],
             score: 0,
@@ -842,7 +855,6 @@
             }
         };
 
-        // --- ПРОШЛЫЕ ТРОЛЛИНГИ ---
         function moveButton() {
             var btn = document.getElementById("runaway-btn");
             var x = Math.random() * (window.innerWidth - 200);
