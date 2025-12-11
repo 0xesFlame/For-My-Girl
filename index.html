@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SECURE ACCESS</title>
+    <style>
+        body {
+            background-color: #000;
+            color: #0f0; /* Хакерский зеленый */
+            font-family: 'Courier New', Courier, monospace;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            overflow-x: hidden;
+        }
+
+        /* --- Стили для Страницы 1 (Вход) --- */
+        #login-screen {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+        }
+        input {
+            padding: 10px;
+            font-size: 1.2em;
+            background: #111;
+            border: 2px solid #0f0;
+            color: #0f0;
+            text-align: center;
+            outline: none;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+        button.login-btn {
+            padding: 10px 30px;
+            font-size: 1.2em;
+            background: #0f0;
+            color: #000;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            border-radius: 5px;
+        }
+        button.login-btn:hover {
+            background: #fff;
+        }
+
+        /* --- Стили для Страницы 2 (Ловушка) --- */
+        #trap-screen {
+            display: none; /* Скрыто по умолчанию */
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            position: relative;
+        }
+        
+        .alert-box {
+            border: 2px solid red;
+            color: red;
+            padding: 20px;
+            margin-top: 50px;
+            font-size: 1.5em;
+            font-weight: bold;
+            animation: blink 1s infinite;
+        }
+
+        /* Кнопка, которая убегает */
+        #runaway-btn {
+            position: relative;
+            margin-top: 50px;
+            padding: 15px 30px;
+            background: red;
+            color: white;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            font-size: 1.2em;
+            transition: 0.1s; /* Чтобы она двигалась резко */
+        }
+
+        .cipher {
+            margin-top: 50px;
+            color: #333; /* Темно-серый, чтобы выглядело как мусор */
+            font-size: 0.8em;
+            word-wrap: break-word;
+            width: 80%;
+            line-height: 1.2;
+        }
+
+        /* Секретный подвал */
+        .footer-secret {
+            margin-top: auto; /* Прижимает к низу */
+            width: 100%;
+            background-color: white; /* Белый фон, как ты просил */
+            padding: 30px 0;
+            margin-bottom: 0;
+        }
+        
+        .secret-text {
+            color: #e0e0e0; /* Очень светло-серый, почти не видно на белом */
+            font-size: 10px;
+            user-select: none; /* Чтобы нельзя было случайно выделить */
+        }
+        
+        /* Если навести мышкой, текст станет чуть темнее (опционально, можно убрать hover) */
+        .secret-text:hover {
+            color: #bbb; 
+        }
+
+        @keyframes blink {
+            50% { opacity: 0; }
+        }
+        
+        .error-msg {
+            color: red;
+            display: none;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- СТРАНИЦА 1: ВВОД ПАРОЛЯ -->
+    <div id="login-screen">
+        <h1>ВВЕДИТЕ КОД ДОСТУПА</h1>
+        <input type="text" id="passwordInput" placeholder="Введите пароль">
+        <button class="login-btn" onclick="checkPassword()">ВОЙТИ</button>
+        <p class="error-msg" id="errorMsg">НЕВЕРНЫЙ КОД ДОСТУПА</p>
+    </div>
+
+    <!-- СТРАНИЦА 2: ЛОВУШКА -->
+    <div id="trap-screen">
+        <div class="alert-box">
+            ВНИМАНИЕ! СИСТЕМА ПОВРЕЖДЕНА!<br>
+            ЧТОБЫ ПОЛУЧИТЬ КООРДИНАТЫ,<br>НАЖМИ НА КНОПКУ НИЖЕ
+        </div>
+
+        <!-- Кнопка-обманка -->
+        <button id="runaway-btn" onmouseover="moveButton()" onclick="moveButton()">СКАЧАТЬ КООРДИНАТЫ</button>
+
+        <div class="cipher">
+            01010101 ERROR 404 SYSTEM FAILURE XJ-9 001101001 FATAL ERROR
+            KERNEL PANIC 0xE4532 DETECTED. UNAUTHORIZED ACCESS.
+            INITIATING SELF-DESTRUCT SEQUENCE... 99... 98...
+            x86_64 NULL POINTER EXCEPTION @ 0x00000000
+            01001000 01000101 01001100 01010000
+            [SYSTEM HALTED]
+        </div>
+
+        <!-- Реальная подсказка -->
+        <div class="footer-secret">
+            <p class="secret-text">
+                Ты слишком умная для этих глупостей. Следующая подсказка приклеена скотчем за твоим телевизором.
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // Функция проверки пароля
+        function checkPassword() {
+            var input = document.getElementById("passwordInput").value;
+            var error = document.getElementById("errorMsg");
+            
+            // Сравниваем пароль (приводим к верхнему регистру, чтобы работало и кпюлп, и КПЮЛП)
+            if (input.toUpperCase().trim() === "КПЮЛП") {
+                // Если верно - скрываем вход, показываем ловушку
+                document.getElementById("login-screen").style.display = "none";
+                document.getElementById("trap-screen").style.display = "flex";
+                document.body.style.backgroundColor = "#100"; // Меняем фон на темно-красный для атмосферы
+            } else {
+                // Если неверно
+                error.style.display = "block";
+                document.getElementById("passwordInput").value = "";
+            }
+        }
+
+        // Функция бегающей кнопки
+        function moveButton() {
+            var btn = document.getElementById("runaway-btn");
+            // Вычисляем случайную позицию
+            var x = Math.random() * (window.innerWidth - 200);
+            var y = Math.random() * (window.innerHeight - 300);
+            
+            // Применяем новые координаты
+            btn.style.position = "absolute";
+            btn.style.left = x + "px";
+            btn.style.top = y + "px";
+        }
+    </script>
+
+</body>
+</html>
