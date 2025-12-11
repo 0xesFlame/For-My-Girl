@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SECURE DATA</title>
+    <title>SECURE ARCHIVE</title>
     <style>
         body {
             background-color: #000;
@@ -14,8 +14,8 @@
             padding: 0;
             min-height: 100vh;
             overflow-x: hidden;
-            /* Запрещаем выделение везде, кроме секрета внизу */
             user-select: none; 
+            touch-action: pan-y; /* Разрешаем скролл, но блокируем зум */
         }
 
         /* --- ЭКРАН 1: ВХОД --- */
@@ -61,13 +61,13 @@
             display: none;
             flex-direction: column;
             align-items: center;
-            background-color: #1a0000; /* Темно-бордовый фон */
+            background-color: #1a0000; 
             color: #ff3333;
             width: 100%;
             position: relative;
             padding-top: 50px;
-            /* ВАЖНО: Делаем скролл огромным */
-            height: 100000px; 
+            /* ВАЖНО: 400 000 пикселей высоты */
+            height: 400000px; 
         }
 
         .trap-title {
@@ -107,11 +107,9 @@
         .checkbox-container { margin-top: 15px; display: flex; align-items: center; gap: 10px; cursor: pointer; }
         .checkbox-container input { width: 20px; height: 20px; margin: 0; cursor: pointer; }
 
-        /* Ссылка-скример (без лишнего текста) */
         .help-link { margin-top: 30px; font-size: 0.8em; color: #777; text-decoration: underline; cursor: pointer; }
         .help-link:hover { color: #fff; }
 
-        /* Фейковые окна */
         .popup {
             position: absolute;
             background: #ccc;
@@ -128,9 +126,9 @@
         }
         .popup-header { background: blue; color: white; padding: 2px; margin-bottom: 5px; font-weight: bold; }
 
-        /* --- ГЕЙТЫ (Блокпосты с заданиями) --- */
+        /* --- ГЕЙТЫ --- */
         .gate-overlay {
-            display: none; /* Скрыто по умолчанию */
+            display: none; 
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.95);
@@ -143,25 +141,73 @@
         }
         .gate-box {
             background: #220000;
-            padding: 30px;
+            padding: 20px;
             border: 2px solid red;
-            max-width: 400px;
+            max-width: 90%;
             text-align: center;
         }
-        .gate-input {
-            margin-top: 15px;
+        .timer-display {
+            font-size: 2em;
+            color: #fff;
+            font-weight: bold;
+            margin: 10px 0;
+            border: 1px solid white;
             padding: 5px;
-            font-size: 1.2em;
-            width: 80%;
+            display: inline-block;
+            min-width: 60px;
         }
-        .gate-btn {
-            margin-top: 15px;
-            padding: 10px 20px;
-            background: red;
+
+        /* 2048 STYLES */
+        .grid-2048 {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 5px;
+            background: #555;
+            padding: 5px;
+            border-radius: 5px;
+            margin: 10px auto;
+            width: 240px;
+            height: 240px;
+        }
+        .cell-2048 {
+            width: 55px;
+            height: 55px;
+            background: #ccc;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+            border-radius: 3px;
+        }
+        .c-0 { background: #cdc1b4; color: transparent; }
+        .c-2 { background: #eee4da; }
+        .c-4 { background: #ede0c8; }
+        .c-8 { background: #f2b179; color: #f9f6f2; }
+        .c-16 { background: #f59563; color: #f9f6f2; }
+        .c-32 { background: #f67c5f; color: #f9f6f2; }
+        .c-64 { background: #f65e3b; color: #f9f6f2; }
+        .c-128 { background: #edcf72; color: #f9f6f2; }
+        .c-256 { background: #edcc61; color: #f9f6f2; }
+        .c-512 { background: #edc850; color: #f9f6f2; }
+        .c-1024 { background: #edc53f; color: #f9f6f2; }
+        .c-2048 { background: #edc22e; color: #f9f6f2; box-shadow: 0 0 10px yellow; }
+
+        .controls-2048 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 5px;
+            max-width: 200px;
+            margin: 10px auto;
+        }
+        .btn-2048 {
+            padding: 10px;
+            background: #444;
             color: white;
-            border: none;
-            cursor: pointer;
+            border: 1px solid #777;
             font-size: 1.2em;
+            cursor: pointer;
         }
 
         /* СКРИМЕР */
@@ -178,14 +224,14 @@
         .screamer-face { font-size: 8em; animation: shake 0.1s infinite; }
         .screamer-text { color: red; font-size: 3em; font-weight: bold; }
 
-        /* Секретная зона в самом низу */
+        /* Секрет внизу */
         .secret-container {
             position: absolute;
             bottom: 50px;
             width: 100%;
         }
         .secret-text {
-            color: #240000; /* Еле видно */
+            color: #240000; 
             font-size: 14px;
             font-weight: bold;
             transition: color 0.2s;
@@ -221,7 +267,6 @@
             <div id="statusText" style="font-size: 0.8em; margin-bottom: 20px;">Удаление данных...</div>
         </div>
 
-        <!-- Контент -->
         <button id="runaway-btn" onmouseover="moveButton()">СКАЧАТЬ КООРДИНАТЫ</button>
 
         <div class="toggle-container" onclick="stopProp(event)">
@@ -244,47 +289,67 @@
             01010101 SYSTEM ERROR<br>SCROLL DOWN TO REBOOT...
         </div>
 
-        <!-- СЕКРЕТ ВНИЗУ -->
+        <!-- СЕКРЕТ -->
         <div class="secret-container" onclick="stopProp(event)">
             <p class="secret-text">
-                Поздравляю, ты прошла этот ад.<br>
+                Ты просто герой.<br>
                 Следующая подсказка приклеена скотчем<br>
                 ЗА ТВОИМ ТЕЛЕВИЗОРОМ.
             </p>
         </div>
     </div>
 
-    <!-- ГЕЙТЫ (Задания) -->
-    
-    <!-- Гейт 1: Загадка (на 15 000px) -->
+    <!-- === ГЕЙТ 1: ЗАГАДКА (Около 30 000px) === -->
     <div id="gate1" class="gate-overlay">
         <div class="gate-box">
-            <h2>ПРОВЕРКА ИНТЕЛЛЕКТА</h2>
+            <h2>ЗАЩИТА УРОВЕНЬ 1</h2>
             <p>Что поднимается вверх, но никогда не спускается?</p>
-            <input type="text" id="ans1" class="gate-input" placeholder="Ответ...">
-            <button class="gate-btn" onclick="checkGate1()">ОТВЕТИТЬ</button>
-            <p style="font-size:0.8em; margin-top:10px;">(Ошибка вернет тебя в начало)</p>
+            <input type="text" id="ans1" class="gate-input" placeholder="Ответ..." style="font-size: 1.2em; padding: 5px;">
+            <br>
+            <button class="login-btn" onclick="checkGate1()" style="margin-top:10px;">ОТВЕТИТЬ</button>
         </div>
     </div>
 
-    <!-- Гейт 2: Математика (на 45 000px) -->
+    <!-- === ГЕЙТ 2: МАТЕМАТИКА (Около 120 000px) === -->
     <div id="gate2" class="gate-overlay">
         <div class="gate-box">
-            <h2>ПРОВЕРКА ВЫЧИСЛЕНИЙ</h2>
-            <p>Реши пример:</p>
-            <h1 style="color:white">2 + 2 * 2 = ?</h1>
+            <h2>ЗАЩИТА УРОВЕНЬ 2</h2>
+            <p>Реши пример за 20 секунд!</p>
+            <div id="math-timer" class="timer-display">20</div>
+            <h1 id="math-problem" style="color:white; font-size: 2em; margin: 20px 0;">2 + 2 = ?</h1>
             <input type="number" id="ans2" class="gate-input" placeholder="Число...">
-            <button class="gate-btn" onclick="checkGate2()">ОТВЕТИТЬ</button>
+            <br>
+            <button class="login-btn" onclick="checkGate2()" style="margin-top:10px;">ОТВЕТИТЬ</button>
         </div>
     </div>
 
-    <!-- Гейт 3: Кликер (на 80 000px) -->
+    <!-- === ГЕЙТ 3: КЛИКЕР (Около 250 000px) === -->
     <div id="gate3" class="gate-overlay">
         <div class="gate-box">
-            <h2>ПРОВЕРКА РЕАКЦИИ</h2>
-            <p>Нажми на кнопку 10 раз, чтобы пройти.</p>
-            <p>Осталось нажатий: <span id="clickCount" style="color:white; font-size:1.5em;">10</span></p>
-            <button id="clickGameBtn" class="gate-btn" onclick="clickerGame()" style="position: relative;">НАЖМИ МЕНЯ</button>
+            <h2>ЗАЩИТА УРОВЕНЬ 3</h2>
+            <p>Нажми 10 раз за 3 секунды!</p>
+            <div id="click-timer" class="timer-display">3.00</div>
+            <p>Осталось: <span id="clickCount" style="color:white; font-size:1.5em;">10</span></p>
+            <div style="height: 250px; position: relative; border: 1px dashed #555;">
+                <button id="clickGameBtn" onclick="clickerGame()" style="padding: 10px; background: red; color: white; border: none; font-weight: bold; position: absolute; top: 40%; left: 40%;">ЖМИ!</button>
+            </div>
+            <button onclick="startClicker()" id="startClickBtn" style="padding: 10px; background: blue; color: white; border: none; width: 100%; margin-top: 10px;">НАЧАТЬ</button>
+        </div>
+    </div>
+
+    <!-- === ГЕЙТ 4: 2048 (Около 380 000px) === -->
+    <div id="gate4" class="gate-overlay">
+        <div class="gate-box">
+            <h2>ФИНАЛЬНЫЙ БОСС</h2>
+            <p>Собери число 2048, чтобы пройти.</p>
+            <div class="grid-2048" id="grid2048"></div>
+            <!-- Управление для телефона -->
+            <div class="controls-2048">
+                <div></div><button class="btn-2048" onclick="game2048.move('up')">⬆️</button><div></div>
+                <button class="btn-2048" onclick="game2048.move('left')">⬅️</button>
+                <button class="btn-2048" onclick="game2048.move('down')">⬇️</button>
+                <button class="btn-2048" onclick="game2048.move('right')">➡️</button>
+            </div>
         </div>
     </div>
 
@@ -305,99 +370,266 @@
                 document.getElementById("trap-screen").style.display = "flex";
                 document.body.style.backgroundColor = "#1a0000"; 
                 startFakeLoading();
-                window.addEventListener('scroll', checkScrollTraps); // Включаем слежку за скроллом
+                window.addEventListener('scroll', checkScrollTraps);
             } else {
                 document.getElementById("errorMsg").style.display = "block";
                 document.getElementById("passwordInput").value = "";
             }
         }
 
-        // --- ЛОВУШКИ СКРОЛЛА ---
+        // --- ОБРАБОТКА СКРОЛЛА ---
         let passed1 = false;
         let passed2 = false;
         let passed3 = false;
+        let passed4 = false;
 
         function checkScrollTraps() {
             let y = window.scrollY;
             
-            // Гейт 1 (около 15000px)
-            if (y > 15000 && !passed1) {
+            // 30,000px - Загадка
+            if (y > 30000 && !passed1) {
                 document.getElementById('gate1').style.display = 'flex';
-                document.body.style.overflow = 'hidden'; // Блокируем скролл пока не решит
+                document.body.style.overflow = 'hidden';
             }
-            // Гейт 2 (около 45000px)
-            if (y > 45000 && !passed2) {
+            // 120,000px - Математика
+            if (y > 120000 && !passed2) {
+                prepareMath();
                 document.getElementById('gate2').style.display = 'flex';
                 document.body.style.overflow = 'hidden';
             }
-            // Гейт 3 (около 80000px)
-            if (y > 80000 && !passed3) {
+            // 250,000px - Кликер
+            if (y > 250000 && !passed3) {
                 document.getElementById('gate3').style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+            }
+            // 380,000px - 2048
+            if (y > 380000 && !passed4) {
+                game2048.init();
+                document.getElementById('gate4').style.display = 'flex';
                 document.body.style.overflow = 'hidden';
             }
         }
 
-        // ПРОВЕРКА ГЕЙТ 1 (Загадка)
+        // === ОБЩИЙ СБРОС ===
+        function failGate(reason) {
+            alert("ОШИБКА: " + reason + "\nВОЗВРАТ В НАЧАЛО!");
+            window.scrollTo(0, 0); 
+            
+            // Скрываем все гейты
+            document.querySelectorAll('.gate-overlay').forEach(el => el.style.display = 'none');
+            document.body.style.overflow = 'auto';
+            
+            // Сброс полей
+            document.getElementById('ans1').value = "";
+            document.getElementById('ans2').value = "";
+            
+            // Сброс таймеров
+            clearInterval(mathInterval);
+            clearInterval(clickInterval);
+        }
+
+        // === ГЕЙТ 1: ЗАГАДКА ===
         function checkGate1() {
             let ans = document.getElementById('ans1').value.toLowerCase().trim();
             if (ans === "возраст" || ans === "годы" || ans === "время") {
                 passed1 = true;
                 document.getElementById('gate1').style.display = 'none';
-                document.body.style.overflow = 'auto'; // Разрешаем скролл
-                alert("Доступ разрешен. Продолжай скроллить...");
+                document.body.style.overflow = 'auto';
+                alert("ПРИНЯТО. Идем дальше...");
             } else {
-                failGate();
+                failGate("Неверный ответ");
             }
         }
 
-        // ПРОВЕРКА ГЕЙТ 2 (Математика)
+        // === ГЕЙТ 2: МАТЕМАТИКА (РАНДОМ + ТАЙМЕР) ===
+        let currentMathAnswer = 0;
+        let mathInterval;
+
+        function prepareMath() {
+            // Генерация примера
+            let types = ['+', '-', '*'];
+            let type = types[Math.floor(Math.random() * types.length)];
+            let a = Math.floor(Math.random() * 20) + 1;
+            let b = Math.floor(Math.random() * 20) + 1;
+            
+            if (type === '*') { // Чтобы не было слишком сложно
+                a = Math.floor(Math.random() * 10) + 1;
+                b = Math.floor(Math.random() * 10) + 1;
+                currentMathAnswer = a * b;
+            } else if (type === '+') {
+                currentMathAnswer = a + b;
+            } else {
+                currentMathAnswer = a - b;
+            }
+
+            document.getElementById('math-problem').innerText = `${a} ${type} ${b} = ?`;
+            
+            // Таймер 20 сек
+            let timeLeft = 20;
+            document.getElementById('math-timer').innerText = timeLeft;
+            mathInterval = setInterval(() => {
+                timeLeft--;
+                document.getElementById('math-timer').innerText = timeLeft;
+                if (timeLeft <= 0) {
+                    clearInterval(mathInterval);
+                    failGate("Время истекло");
+                }
+            }, 1000);
+        }
+
         function checkGate2() {
-            let ans = document.getElementById('ans2').value.trim();
-            // 2 + 2 * 2 = 6 (сначала умножение)
-            if (ans === "6") {
+            let ans = parseInt(document.getElementById('ans2').value);
+            if (ans === currentMathAnswer) {
+                clearInterval(mathInterval);
                 passed2 = true;
                 document.getElementById('gate2').style.display = 'none';
                 document.body.style.overflow = 'auto';
-                alert("Верно. Ты почти у цели (наверное).");
+                alert("ВЕРНО. Готовь пальцы.");
             } else {
-                failGate();
+                failGate("Неправильный ответ");
             }
         }
 
-        // ПРОВЕРКА ГЕЙТ 3 (Кликер)
+        // === ГЕЙТ 3: КЛИКЕР (3 секунды) ===
         let clicksLeft = 10;
+        let clickGameActive = false;
+        let clickInterval;
+
+        function startClicker() {
+            if(clickGameActive) return;
+            clickGameActive = true;
+            clicksLeft = 10;
+            document.getElementById('clickCount').innerText = clicksLeft;
+            document.getElementById('startClickBtn').style.display = 'none';
+
+            let timeLeft = 3.00;
+            document.getElementById('click-timer').innerText = "3.00";
+
+            clickInterval = setInterval(() => {
+                timeLeft -= 0.01;
+                document.getElementById('click-timer').innerText = timeLeft.toFixed(2);
+                if (timeLeft <= 0) {
+                    clearInterval(clickInterval);
+                    clickGameActive = false;
+                    document.getElementById('startClickBtn').style.display = 'block';
+                    failGate("Слишком медленно!");
+                }
+            }, 10);
+        }
+
         function clickerGame() {
+            if (!clickGameActive) return;
+
             clicksLeft--;
             document.getElementById('clickCount').innerText = clicksLeft;
             
-            // Кнопка прыгает при нажатии
+            // Прыжок кнопки
             let btn = document.getElementById('clickGameBtn');
             let randX = Math.random() * 200 - 100;
             let randY = Math.random() * 200 - 100;
             btn.style.transform = `translate(${randX}px, ${randY}px)`;
 
             if (clicksLeft <= 0) {
+                clearInterval(clickInterval);
+                clickGameActive = false;
                 passed3 = true;
                 document.getElementById('gate3').style.display = 'none';
                 document.body.style.overflow = 'auto';
-                alert("Финальный доступ получен. Ищи внизу.");
+                alert("УСПЕХ. Впереди последний босс.");
             }
         }
 
-        // ОБЩАЯ ФУНКЦИЯ ПРОВАЛА
-        function failGate() {
-            alert("ОШИБКА! ВОЗВРАТ НА ИСХОДНУЮ!");
-            window.scrollTo(0, 0); // Кидаем на самый верх
-            
-            // Закрываем модалки, чтобы она могла начать заново
-            document.getElementById('gate1').style.display = 'none';
-            document.getElementById('gate2').style.display = 'none';
-            document.body.style.overflow = 'auto';
-            document.getElementById('ans1').value = "";
-            document.getElementById('ans2').value = "";
-        }
+        // === ГЕЙТ 4: 2048 ===
+        const game2048 = {
+            board: [],
+            score: 0,
+            init: function() {
+                this.board = Array(4).fill().map(() => Array(4).fill(0));
+                this.spawn();
+                this.spawn();
+                this.draw();
+                // Слушаем клавиши
+                document.addEventListener('keydown', this.handleKey);
+            },
+            spawn: function() {
+                let empty = [];
+                for(let r=0; r<4; r++)
+                    for(let c=0; c<4; c++)
+                        if(this.board[r][c] === 0) empty.push({r,c});
+                
+                if(empty.length > 0) {
+                    let spot = empty[Math.floor(Math.random() * empty.length)];
+                    this.board[spot.r][spot.c] = Math.random() < 0.9 ? 2 : 4;
+                }
+            },
+            draw: function() {
+                let html = '';
+                let won = false;
+                for(let r=0; r<4; r++) {
+                    for(let c=0; c<4; c++) {
+                        let val = this.board[r][c];
+                        let cls = 'c-' + val;
+                        html += `<div class="cell-2048 ${cls}">${val > 0 ? val : ''}</div>`;
+                        if(val === 2048) won = true;
+                    }
+                }
+                document.getElementById('grid2048').innerHTML = html;
+                if(won) {
+                    setTimeout(() => {
+                        alert("ТЫ ПОБЕДИЛА! ПУТЬ ОТКРЫТ!");
+                        passed4 = true;
+                        document.getElementById('gate4').style.display = 'none';
+                        document.body.style.overflow = 'auto';
+                        document.removeEventListener('keydown', this.handleKey);
+                    }, 500);
+                }
+            },
+            move: function(dir) {
+                let moved = false;
+                // Упрощенная логика 2048
+                const rotate = matrix => matrix[0].map((val, index) => matrix.map(row => row[index]).reverse());
+                let b = this.board;
+                
+                // Нормализуем к "движению влево"
+                if(dir === 'right') b = rotate(rotate(b));
+                if(dir === 'down') b = rotate(b);
+                if(dir === 'up') b = rotate(rotate(rotate(b)));
 
-        // --- ПРОШЛЫЕ ТРОЛЛИНГИ ---
+                // Сдвиг влево
+                for(let r=0; r<4; r++) {
+                    let row = b[r].filter(x => x); // Убрать нули
+                    for(let i=0; i < row.length - 1; i++) {
+                        if(row[i] === row[i+1]) {
+                            row[i] *= 2;
+                            row[i+1] = 0;
+                        }
+                    }
+                    row = row.filter(x => x); // Снова убрать нули после слияния
+                    while(row.length < 4) row.push(0);
+                    if(b[r].join(',') !== row.join(',')) moved = true;
+                    b[r] = row;
+                }
+
+                // Возвращаем поворот
+                if(dir === 'right') b = rotate(rotate(b));
+                if(dir === 'down') b = rotate(rotate(rotate(b)));
+                if(dir === 'up') b = rotate(b);
+
+                this.board = b;
+                if(moved) {
+                    this.spawn();
+                    this.draw();
+                }
+            },
+            handleKey: function(e) {
+                if(e.key === 'ArrowUp') game2048.move('up');
+                if(e.key === 'ArrowDown') game2048.move('down');
+                if(e.key === 'ArrowLeft') game2048.move('left');
+                if(e.key === 'ArrowRight') game2048.move('right');
+            }
+        };
+
+        // --- ПРОШЛЫЕ ФУНКЦИИ ---
         function moveButton() {
             var btn = document.getElementById("runaway-btn");
             var x = Math.random() * (window.innerWidth - 200);
@@ -405,7 +637,7 @@
             var y = Math.random() * 300; 
             btn.style.position = "absolute";
             btn.style.left = x + "px";
-            btn.style.top = (y + 200) + "px"; 
+            btn.style.top = (y + 150) + "px"; 
         }
 
         function trollToggle() {
@@ -438,9 +670,7 @@
 
         function randomPopup(e) {
             if(e.target.tagName === 'BUTTON' || e.target.tagName === 'INPUT' || e.target.tagName === 'LABEL') return;
-            // Реже, чтобы не мешало скроллить
             if (Math.random() > 0.4) return; 
-
             var div = document.createElement("div");
             div.className = "popup";
             div.innerHTML = "<div class='popup-header'>System Error</div>VIRUS DETECTED<br>Sending data...";
