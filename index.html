@@ -14,10 +14,11 @@
             padding: 0;
             min-height: 100vh;
             overflow-x: hidden;
-            user-select: none; /* Чтобы не палить секрет раньше времени */
+            /* Запрещаем выделение везде, кроме секрета внизу */
+            user-select: none; 
         }
 
-        /* --- ЭКРАН 1: ВХОД (На русском) --- */
+        /* --- ЭКРАН 1: ВХОД --- */
         #login-screen {
             display: flex;
             flex-direction: column;
@@ -55,7 +56,7 @@
         button.login-btn:hover { background: #fff; }
         .error-msg { color: red; display: none; margin-top: 15px; }
 
-        /* --- ЭКРАН 2: ЛОВУШКА (Тот самый стиль) --- */
+        /* --- ЭКРАН 2: ЛОВУШКА --- */
         #trap-screen {
             display: none;
             flex-direction: column;
@@ -65,10 +66,10 @@
             width: 100%;
             position: relative;
             padding-top: 50px;
-            min-height: 100vh;
+            /* ВАЖНО: Делаем скролл огромным */
+            height: 100000px; 
         }
 
-        /* Заголовок не мигает зеленым, он красный */
         .trap-title {
             font-size: 3em;
             color: #ff0000;
@@ -76,7 +77,7 @@
             margin-bottom: 10px;
         }
 
-        /* ТРОЛЛИНГ 1: Кнопка убегает */
+        /* Элементы управления сверху */
         #runaway-btn {
             position: relative;
             margin-top: 30px;
@@ -92,20 +93,9 @@
             transition: top 0.1s, left 0.1s; 
         }
 
-        /* ТРОЛЛИНГ 2: Загрузка */
-        .fake-loader {
-            width: 300px;
-            border: 2px solid #ff3333;
-            padding: 3px;
-            margin: 20px auto;
-        }
-        .progress-bar {
-            height: 15px;
-            background-color: #ff3333;
-            width: 0%;
-        }
+        .fake-loader { width: 300px; border: 2px solid #ff3333; padding: 3px; margin: 20px auto; }
+        .progress-bar { height: 15px; background-color: #ff3333; width: 0%; }
 
-        /* ТРОЛЛИНГ 3: Свитч (из прошлого кода) */
         .toggle-container { margin: 20px; display: flex; align-items: center; justify-content: center; gap: 10px; }
         .switch { position: relative; display: inline-block; width: 50px; height: 28px; }
         .switch input { opacity: 0; width: 0; height: 0; }
@@ -114,15 +104,14 @@
         input:checked + .slider { background-color: #ff3333; }
         input:checked + .slider:before { transform: translateX(22px); background-color: white; }
 
-        /* ТРОЛЛИНГ 4: Чекбокс */
         .checkbox-container { margin-top: 15px; display: flex; align-items: center; gap: 10px; cursor: pointer; }
         .checkbox-container input { width: 20px; height: 20px; margin: 0; cursor: pointer; }
 
-        /* ТРОЛЛИНГ 5: Ссылка-скример */
+        /* Ссылка-скример (без лишнего текста) */
         .help-link { margin-top: 30px; font-size: 0.8em; color: #777; text-decoration: underline; cursor: pointer; }
         .help-link:hover { color: #fff; }
 
-        /* Фейковые окна (Popups) */
+        /* Фейковые окна */
         .popup {
             position: absolute;
             background: #ccc;
@@ -139,7 +128,43 @@
         }
         .popup-header { background: blue; color: white; padding: 2px; margin-bottom: 5px; font-weight: bold; }
 
-        /* СКРИМЕР (Overlay) */
+        /* --- ГЕЙТЫ (Блокпосты с заданиями) --- */
+        .gate-overlay {
+            display: none; /* Скрыто по умолчанию */
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.95);
+            z-index: 500;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: red;
+            border: 5px solid red;
+        }
+        .gate-box {
+            background: #220000;
+            padding: 30px;
+            border: 2px solid red;
+            max-width: 400px;
+            text-align: center;
+        }
+        .gate-input {
+            margin-top: 15px;
+            padding: 5px;
+            font-size: 1.2em;
+            width: 80%;
+        }
+        .gate-btn {
+            margin-top: 15px;
+            padding: 10px 20px;
+            background: red;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 1.2em;
+        }
+
+        /* СКРИМЕР */
         #screamer-overlay {
             display: none;
             position: fixed;
@@ -153,30 +178,21 @@
         .screamer-face { font-size: 8em; animation: shake 0.1s infinite; }
         .screamer-text { color: red; font-size: 3em; font-weight: bold; }
 
-        /* Шифр и секрет */
-        .cipher { margin-top: 50px; color: #4d0000; font-size: 0.8em; width: 80%; line-height: 1.2; opacity: 0.6; }
-        
-        .spacer {
-            height: 2500px; /* Пустота */
+        /* Секретная зона в самом низу */
+        .secret-container {
+            position: absolute;
+            bottom: 50px;
             width: 100%;
-            display: flex;
-            align-items: flex-end;
-            justify-content: center;
-            padding-bottom: 50px;
         }
-
         .secret-text {
-            /* Цвет #240000 почти сливается с фоном #1a0000. Никаких сердечек. */
-            color: #240000; 
+            color: #240000; /* Еле видно */
             font-size: 14px;
             font-weight: bold;
             transition: color 0.2s;
-            user-select: text; /* Разрешаем выделение только тут */
+            user-select: text;
         }
-        /* При выделении станет белым */
         .secret-text::selection { background: white; color: black; }
 
-        /* Анимация тряски */
         @keyframes shake {
             0% { transform: translate(1px, 1px) rotate(0deg); }
             50% { transform: translate(-1px, 2px) rotate(-1deg); }
@@ -187,29 +203,27 @@
 </head>
 <body>
 
-    <!-- ЭКРАН 1: ВХОД -->
+    <!-- ВХОД -->
     <div id="login-screen">
         <h1>СИСТЕМА НАВЕДЕНИЯ</h1>
         <div class="subtitle">ВВЕДИТЕ КОД ДЛЯ ПОЛУЧЕНИЯ КООРДИНАТ</div>
-        
         <input type="text" id="passwordInput" placeholder="КОД ДОСТУПА">
         <button class="login-btn" onclick="checkPassword()">ПОЛУЧИТЬ</button>
         <p class="error-msg" id="errorMsg">НЕВЕРНЫЙ КОД</p>
     </div>
 
-    <!-- ЭКРАН 2: ЛОВУШКА (Кликабельный для вирусов) -->
+    <!-- ОСНОВНОЙ ЭКРАН -->
     <div id="trap-screen" onclick="randomPopup(event)">
-        <div class="trap-title">ВЗЛОМ СИСТЕМЫ</div>
-        <p>ПРОТОКОЛ УНИЧТОЖЕНИЯ ЗАПУЩЕН</p>
+        <div style="position: sticky; top: 20px; z-index: 200;">
+            <div class="trap-title">ВЗЛОМ СИСТЕМЫ</div>
+            <p>ПРОТОКОЛ УНИЧТОЖЕНИЯ ЗАПУЩЕН</p>
+            <div class="fake-loader"><div class="progress-bar" id="progBar"></div></div>
+            <div id="statusText" style="font-size: 0.8em; margin-bottom: 20px;">Удаление данных...</div>
+        </div>
 
-        <!-- Загрузка -->
-        <div class="fake-loader"><div class="progress-bar" id="progBar"></div></div>
-        <div id="statusText" style="font-size: 0.8em;">Удаление данных...</div>
-
-        <!-- Кнопка -->
+        <!-- Контент -->
         <button id="runaway-btn" onmouseover="moveButton()">СКАЧАТЬ КООРДИНАТЫ</button>
 
-        <!-- Свитч -->
         <div class="toggle-container" onclick="stopProp(event)">
             <span>Сложно</span>
             <label class="switch">
@@ -219,28 +233,58 @@
             <span>Легко</span>
         </div>
 
-        <!-- Чекбокс -->
         <div class="checkbox-container" onclick="stopProp(event)">
             <input type="checkbox" id="humanCheck" onchange="noHuman(this)">
             <label for="humanCheck">Я не робот</label>
         </div>
 
-        <!-- Ссылка на скример -->
-        <div class="help-link" onclick="triggerScreamer(event)">[ ? ] Помощь / Я забыла пароль</div>
+        <div class="help-link" onclick="triggerScreamer(event)">[ ? ] Нужна помощь?</div>
 
-        <div class="cipher">
-            01010101 FATAL EXCEPTION 0xB45 SYSTEM HALTED
-            <br> TRYING TO REBOOT... FAILED.
-            <br> 001010101001010101010101001
+        <div style="margin-top: 50px; opacity: 0.5;">
+            01010101 SYSTEM ERROR<br>SCROLL DOWN TO REBOOT...
         </div>
 
-        <!-- Секретная зона -->
-        <div class="spacer" onclick="stopProp(event)">
+        <!-- СЕКРЕТ ВНИЗУ -->
+        <div class="secret-container" onclick="stopProp(event)">
             <p class="secret-text">
-                Ты слишком умная для этого.<br>
+                Поздравляю, ты прошла этот ад.<br>
                 Следующая подсказка приклеена скотчем<br>
                 ЗА ТВОИМ ТЕЛЕВИЗОРОМ.
             </p>
+        </div>
+    </div>
+
+    <!-- ГЕЙТЫ (Задания) -->
+    
+    <!-- Гейт 1: Загадка (на 15 000px) -->
+    <div id="gate1" class="gate-overlay">
+        <div class="gate-box">
+            <h2>ПРОВЕРКА ИНТЕЛЛЕКТА</h2>
+            <p>Что поднимается вверх, но никогда не спускается?</p>
+            <input type="text" id="ans1" class="gate-input" placeholder="Ответ...">
+            <button class="gate-btn" onclick="checkGate1()">ОТВЕТИТЬ</button>
+            <p style="font-size:0.8em; margin-top:10px;">(Ошибка вернет тебя в начало)</p>
+        </div>
+    </div>
+
+    <!-- Гейт 2: Математика (на 45 000px) -->
+    <div id="gate2" class="gate-overlay">
+        <div class="gate-box">
+            <h2>ПРОВЕРКА ВЫЧИСЛЕНИЙ</h2>
+            <p>Реши пример:</p>
+            <h1 style="color:white">2 + 2 * 2 = ?</h1>
+            <input type="number" id="ans2" class="gate-input" placeholder="Число...">
+            <button class="gate-btn" onclick="checkGate2()">ОТВЕТИТЬ</button>
+        </div>
+    </div>
+
+    <!-- Гейт 3: Кликер (на 80 000px) -->
+    <div id="gate3" class="gate-overlay">
+        <div class="gate-box">
+            <h2>ПРОВЕРКА РЕАКЦИИ</h2>
+            <p>Нажми на кнопку 10 раз, чтобы пройти.</p>
+            <p>Осталось нажатий: <span id="clickCount" style="color:white; font-size:1.5em;">10</span></p>
+            <button id="clickGameBtn" class="gate-btn" onclick="clickerGame()" style="position: relative;">НАЖМИ МЕНЯ</button>
         </div>
     </div>
 
@@ -251,10 +295,9 @@
     </div>
 
     <script>
-        // Предотвращаем всплытие кликов (чтобы вирусы не вылетали при клике на кнопки)
         function stopProp(e) { e.stopPropagation(); }
 
-        // ПАРОЛЬ
+        // --- ЛОГИКА ПАРОЛЯ ---
         function checkPassword() {
             var input = document.getElementById("passwordInput").value;
             if (input.toUpperCase().trim() === "КПЮЛП") {
@@ -262,13 +305,99 @@
                 document.getElementById("trap-screen").style.display = "flex";
                 document.body.style.backgroundColor = "#1a0000"; 
                 startFakeLoading();
+                window.addEventListener('scroll', checkScrollTraps); // Включаем слежку за скроллом
             } else {
                 document.getElementById("errorMsg").style.display = "block";
                 document.getElementById("passwordInput").value = "";
             }
         }
 
-        // КНОПКА БЕГАЕТ
+        // --- ЛОВУШКИ СКРОЛЛА ---
+        let passed1 = false;
+        let passed2 = false;
+        let passed3 = false;
+
+        function checkScrollTraps() {
+            let y = window.scrollY;
+            
+            // Гейт 1 (около 15000px)
+            if (y > 15000 && !passed1) {
+                document.getElementById('gate1').style.display = 'flex';
+                document.body.style.overflow = 'hidden'; // Блокируем скролл пока не решит
+            }
+            // Гейт 2 (около 45000px)
+            if (y > 45000 && !passed2) {
+                document.getElementById('gate2').style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+            }
+            // Гейт 3 (около 80000px)
+            if (y > 80000 && !passed3) {
+                document.getElementById('gate3').style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        // ПРОВЕРКА ГЕЙТ 1 (Загадка)
+        function checkGate1() {
+            let ans = document.getElementById('ans1').value.toLowerCase().trim();
+            if (ans === "возраст" || ans === "годы" || ans === "время") {
+                passed1 = true;
+                document.getElementById('gate1').style.display = 'none';
+                document.body.style.overflow = 'auto'; // Разрешаем скролл
+                alert("Доступ разрешен. Продолжай скроллить...");
+            } else {
+                failGate();
+            }
+        }
+
+        // ПРОВЕРКА ГЕЙТ 2 (Математика)
+        function checkGate2() {
+            let ans = document.getElementById('ans2').value.trim();
+            // 2 + 2 * 2 = 6 (сначала умножение)
+            if (ans === "6") {
+                passed2 = true;
+                document.getElementById('gate2').style.display = 'none';
+                document.body.style.overflow = 'auto';
+                alert("Верно. Ты почти у цели (наверное).");
+            } else {
+                failGate();
+            }
+        }
+
+        // ПРОВЕРКА ГЕЙТ 3 (Кликер)
+        let clicksLeft = 10;
+        function clickerGame() {
+            clicksLeft--;
+            document.getElementById('clickCount').innerText = clicksLeft;
+            
+            // Кнопка прыгает при нажатии
+            let btn = document.getElementById('clickGameBtn');
+            let randX = Math.random() * 200 - 100;
+            let randY = Math.random() * 200 - 100;
+            btn.style.transform = `translate(${randX}px, ${randY}px)`;
+
+            if (clicksLeft <= 0) {
+                passed3 = true;
+                document.getElementById('gate3').style.display = 'none';
+                document.body.style.overflow = 'auto';
+                alert("Финальный доступ получен. Ищи внизу.");
+            }
+        }
+
+        // ОБЩАЯ ФУНКЦИЯ ПРОВАЛА
+        function failGate() {
+            alert("ОШИБКА! ВОЗВРАТ НА ИСХОДНУЮ!");
+            window.scrollTo(0, 0); // Кидаем на самый верх
+            
+            // Закрываем модалки, чтобы она могла начать заново
+            document.getElementById('gate1').style.display = 'none';
+            document.getElementById('gate2').style.display = 'none';
+            document.body.style.overflow = 'auto';
+            document.getElementById('ans1').value = "";
+            document.getElementById('ans2').value = "";
+        }
+
+        // --- ПРОШЛЫЕ ТРОЛЛИНГИ ---
         function moveButton() {
             var btn = document.getElementById("runaway-btn");
             var x = Math.random() * (window.innerWidth - 200);
@@ -276,10 +405,9 @@
             var y = Math.random() * 300; 
             btn.style.position = "absolute";
             btn.style.left = x + "px";
-            btn.style.top = (y + 150) + "px"; 
+            btn.style.top = (y + 200) + "px"; 
         }
 
-        // СВИТЧ (ВЫКЛЮЧАЕТСЯ САМ)
         function trollToggle() {
             var chk = document.getElementById("trollSwitch");
             if (chk.checked) {
@@ -287,14 +415,12 @@
             }
         }
 
-        // ЧЕКБОКС (СНИМАЕТСЯ САМ)
         function noHuman(chk) {
             if (chk.checked) {
                 setTimeout(() => { chk.checked = false; alert("Роботам вход запрещен! 🤖"); }, 300);
             }
         }
 
-        // СКРИМЕР (МИГАНИЕ)
         function triggerScreamer(e) {
             e.stopPropagation();
             var scr = document.getElementById("screamer-overlay");
@@ -303,17 +429,17 @@
             var inter = setInterval(() => {
                 scr.style.backgroundColor = (scr.style.backgroundColor === 'black') ? 'red' : 'black';
                 count++;
-                if(count > 10) { // Длится около секунды
+                if(count > 10) { 
                     clearInterval(inter);
                     scr.style.display = "none";
                 }
             }, 100);
         }
 
-        // ВИРУСЫ (ПРИ КЛИКЕ В ПУСТОТУ)
         function randomPopup(e) {
-            // Если кликнули не по кнопкам
             if(e.target.tagName === 'BUTTON' || e.target.tagName === 'INPUT' || e.target.tagName === 'LABEL') return;
+            // Реже, чтобы не мешало скроллить
+            if (Math.random() > 0.4) return; 
 
             var div = document.createElement("div");
             div.className = "popup";
@@ -324,7 +450,6 @@
             setTimeout(() => div.remove(), 1500);
         }
 
-        // ЗАГРУЗКА
         function startFakeLoading() {
             var bar = document.getElementById("progBar");
             var width = 0;
