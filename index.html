@@ -20,170 +20,95 @@
         }
 
         /* --- ЭФФЕКТЫ ХАОСА --- */
-        
-        /* 1. Землетрясение */
-        .earthquake-mode {
-            animation: hard-shake 0.1s infinite;
-        }
+        .earthquake-mode { animation: hard-shake 0.1s infinite; }
         @keyframes hard-shake {
             0% { transform: translate(5px, 5px) rotate(0deg); }
-            25% { transform: translate(-5px, -5px) rotate(-2deg); }
-            50% { transform: translate(-5px, 5px) rotate(2deg); }
-            75% { transform: translate(5px, -5px) rotate(-2deg); }
+            50% { transform: translate(-5px, -5px) rotate(2deg); }
             100% { transform: translate(0, 0) rotate(0); }
         }
 
-        /* 2. Тако дождь */
         .taco {
-            position: fixed;
-            top: -50px;
-            font-size: 50px;
-            z-index: 9999;
-            pointer-events: none;
-            animation: fall linear forwards;
+            position: fixed; top: -50px; font-size: 50px; z-index: 9000;
+            pointer-events: none; animation: fall linear forwards;
         }
-        @keyframes fall {
-            to { transform: translateY(110vh) rotate(720deg); }
-        }
+        @keyframes fall { to { transform: translateY(110vh) rotate(720deg); } }
 
-        /* 3. Вертушка */
-        .spin-mode {
-            transform: rotate(360deg);
-            transition: transform 3s;
-        }
+        .spin-mode { transform: rotate(360deg); transition: transform 3s; }
+        .drunk-mode { transform: scaleY(-1) scaleX(-1); filter: hue-rotate(90deg); }
+        .no-cursor { cursor: none !important; }
 
-        /* 4. Блэкаут (Темнота) */
         #blackout-overlay {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: black;
-            z-index: 10000;
-            cursor: none;
-        }
-
-        /* 5. Пьяный режим (Инверсия) */
-        .drunk-mode {
-            transform: scaleY(-1) scaleX(-1);
-            filter: hue-rotate(90deg);
-        }
-
-        /* 6. Исчезновение курсора */
-        .no-cursor {
-            cursor: none !important;
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: black; z-index: 10000; pointer-events: none;
         }
 
         /* --- ОСНОВНЫЕ СТИЛИ --- */
-
-        /* МАТРИЦА ФОН (Исправлено) */
+        
+        /* МАТРИЦА (ФОН) */
         canvas {
-            display: block;
-            position: fixed;
-            top: 0; left: 0;
-            z-index: -1; /* Позади всего */
-            opacity: 0.8; /* Ярче */
+            display: block; position: fixed; top: 0; left: 0;
+            z-index: 0; opacity: 0.6; pointer-events: none; /* Важно: не блокирует клики */
         }
 
         /* ВХОД */
         #login-screen {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            z-index: 10;
-            position: relative;
-            background: #000; /* Черный фон только на входе */
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            height: 100vh; position: relative; background: #000;
+            z-index: 2000; /* Очень высокий приоритет */
         }
+        
+        /* Элементы ввода - поверх всего */
+        input, button.login-btn {
+            position: relative; z-index: 2001; 
+        }
+
         h1 { margin-bottom: 5px; text-shadow: 0 0 10px #0f0; }
         .subtitle { color: #fff; margin-bottom: 30px; font-size: 0.8em; opacity: 0.8; }
         
         input {
-            padding: 10px;
-            font-size: 1.2em;
-            background: #111;
-            border: 2px solid #0f0;
-            color: #0f0;
-            text-align: center;
-            outline: none;
-            margin-bottom: 20px;
-            border-radius: 5px;
-            width: 250px;
+            padding: 10px; font-size: 1.2em; background: #111; border: 2px solid #0f0;
+            color: #0f0; text-align: center; outline: none; margin-bottom: 20px;
+            border-radius: 5px; width: 250px;
         }
         button.login-btn {
-            padding: 10px 30px;
-            font-size: 1.2em;
-            background: #0f0;
-            color: #000;
-            border: none;
-            cursor: pointer;
-            font-weight: bold;
-            border-radius: 5px;
-            transition: 0.3s;
+            padding: 10px 30px; font-size: 1.2em; background: #0f0; color: #000;
+            border: none; cursor: pointer; font-weight: bold; border-radius: 5px; transition: 0.3s;
         }
         button.login-btn:hover { background: #fff; }
         .error-msg { color: red; display: none; margin-top: 15px; }
 
         /* ЛОВУШКА */
         #trap-screen {
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            /* Фон стал почти прозрачным, чтобы видно матрицу */
-            background-color: rgba(20, 0, 0, 0.7); 
-            color: #ff3333;
-            width: 100%;
-            position: relative;
-            padding-top: 50px;
-            z-index: 1;
-            height: 450000px; 
+            display: none; flex-direction: column; align-items: center;
+            background-color: rgba(20, 0, 0, 0.75); color: #ff3333;
+            width: 100%; position: relative; padding-top: 50px;
+            z-index: 1; height: 450000px; 
         }
 
         .trap-title {
-            font-size: 3em;
-            color: #ff0000;
-            text-shadow: 0 0 10px #800000;
-            margin-bottom: 10px;
-            background: rgba(0,0,0,0.5); /* Чтобы текст читался на матрице */
-            padding: 10px;
+            font-size: 3em; color: #ff0000; text-shadow: 0 0 10px #800000;
+            margin-bottom: 10px; background: rgba(0,0,0,0.8); padding: 10px;
         }
 
-        /* ШИФР */
         .big-cipher {
-            width: 90%;
-            word-break: break-all;
-            font-size: 10px;
-            opacity: 0.8;
-            color: #ff0000;
-            text-shadow: 0 0 5px red;
-            margin-top: 30px;
-            line-height: 10px;
-            font-family: monospace;
-            text-align: left;
-            overflow: hidden;
-            height: 200px;
+            width: 90%; word-break: break-all; font-size: 10px; opacity: 0.8;
+            color: #ff0000; text-shadow: 0 0 5px red; margin-top: 30px;
+            font-family: monospace; text-align: left; overflow: hidden; height: 200px;
             mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
+            pointer-events: none;
         }
 
         #runaway-btn {
-            position: relative;
-            margin-top: 30px;
-            padding: 15px 30px;
-            background: #ff0000;
-            color: white;
-            font-weight: bold;
-            border: 2px solid white;
-            cursor: pointer;
-            font-size: 1.2em;
-            box-shadow: 0 0 15px red;
-            z-index: 100;
+            position: relative; margin-top: 30px; padding: 15px 30px;
+            background: #ff0000; color: white; font-weight: bold; border: 2px solid white;
+            cursor: pointer; font-size: 1.2em; box-shadow: 0 0 15px red; z-index: 100;
             transition: top 0.1s, left 0.1s; 
         }
 
         .fake-loader { width: 300px; border: 2px solid #ff3333; padding: 3px; margin: 20px auto; background: black; }
         .progress-bar { height: 15px; background-color: #ff3333; width: 0%; }
 
-        .toggle-container { margin: 20px; display: flex; align-items: center; justify-content: center; gap: 10px; background: rgba(0,0,0,0.7); padding: 5px; border-radius: 10px; }
+        .toggle-container { margin: 20px; display: flex; align-items: center; justify-content: center; gap: 10px; background: rgba(0,0,0,0.8); padding: 5px; border-radius: 10px; }
         .switch { position: relative; display: inline-block; width: 50px; height: 28px; }
         .switch input { opacity: 0; width: 0; height: 0; }
         .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #330000; border: 1px solid red; transition: .4s; }
@@ -191,132 +116,61 @@
         input:checked + .slider { background-color: #ff3333; }
         input:checked + .slider:before { transform: translateX(22px); background-color: white; }
 
-        .checkbox-container { margin-top: 15px; display: flex; align-items: center; gap: 10px; cursor: pointer; background: rgba(0,0,0,0.7); padding: 5px; border-radius: 5px;}
+        .checkbox-container { margin-top: 15px; display: flex; align-items: center; gap: 10px; cursor: pointer; background: rgba(0,0,0,0.8); padding: 5px; border-radius: 5px;}
         .checkbox-container input { width: 20px; height: 20px; margin: 0; cursor: pointer; }
 
-        .help-link { margin-top: 30px; font-size: 0.8em; color: #fff; text-decoration: underline; cursor: pointer; background: black; padding: 2px;}
+        .help-link { margin-top: 30px; font-size: 0.8em; color: #fff; text-decoration: underline; cursor: pointer; background: black; padding: 5px;}
         .help-link:hover { color: red; }
 
         .popup {
-            position: absolute;
-            background: #ccc;
-            color: black;
-            border: 2px solid blue;
-            padding: 5px;
-            font-family: Arial, sans-serif;
-            font-size: 11px;
-            box-shadow: 5px 5px 10px rgba(0,0,0,0.5);
-            z-index: 50;
-            width: 180px;
-            text-align: left;
-            user-select: none;
+            position: absolute; background: #ccc; color: black; border: 2px solid blue;
+            padding: 5px; font-family: Arial, sans-serif; font-size: 11px;
+            box-shadow: 5px 5px 10px rgba(0,0,0,0.5); z-index: 50; width: 180px;
+            text-align: left; user-select: none;
         }
         .popup-header { background: blue; color: white; padding: 2px; margin-bottom: 5px; font-weight: bold; }
 
         .skip-trap-btn {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: #ffaa00;
-            color: black;
-            padding: 10px 20px;
-            font-weight: bold;
-            border: 2px solid white;
-            cursor: pointer;
-            z-index: 400;
-            display: none; 
-            box-shadow: 0 0 10px yellow;
-            animation: bounce 1s infinite;
+            position: fixed; bottom: 20px; right: 20px; background: #ffaa00; color: black;
+            padding: 10px 20px; font-weight: bold; border: 2px solid white; cursor: pointer;
+            z-index: 400; display: none; box-shadow: 0 0 10px yellow; animation: bounce 1s infinite;
         }
         @keyframes bounce { 0%, 100% {transform: translateY(0);} 50% {transform: translateY(-5px);} }
 
         /* ГЕЙТЫ */
         .gate-overlay {
-            display: none; 
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.98);
-            z-index: 500;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            color: red;
-            border: 5px solid red;
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.98); z-index: 5000; flex-direction: column;
+            align-items: center; justify-content: center; color: red; border: 5px solid red;
         }
         .gate-box {
-            background: #220000;
-            padding: 20px;
-            border: 2px solid red;
-            max-width: 90%;
-            text-align: center;
+            background: #220000; padding: 20px; border: 2px solid red;
+            max-width: 90%; text-align: center;
         }
         .timer-display {
-            font-size: 2em;
-            color: #fff;
-            font-weight: bold;
-            margin: 10px 0;
-            border: 1px solid white;
-            padding: 5px;
-            display: inline-block;
-            min-width: 60px;
+            font-size: 2em; color: #fff; font-weight: bold; margin: 10px 0;
+            border: 1px solid white; padding: 5px; display: inline-block; min-width: 60px;
         }
 
         /* 2048 STYLES */
-        .grid-2048 {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 5px;
-            background: #555;
-            padding: 5px;
-            border-radius: 5px;
-            margin: 10px auto;
-            width: 240px;
-            height: 240px;
-        }
+        .grid-2048 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; background: #555; padding: 5px; border-radius: 5px; margin: 10px auto; width: 240px; height: 240px; }
         .cell-2048 { width: 55px; height: 55px; background: #ccc; display: flex; justify-content: center; align-items: center; font-size: 18px; font-weight: bold; color: #333; border-radius: 3px; }
-        .c-0 { background: #cdc1b4; color: transparent; }
-        .c-2 { background: #eee4da; }
-        .c-4 { background: #ede0c8; }
-        .c-8 { background: #f2b179; color: #f9f6f2; }
-        .c-16 { background: #f59563; color: #f9f6f2; }
-        .c-32 { background: #f67c5f; color: #f9f6f2; }
-        .c-64 { background: #f65e3b; color: #f9f6f2; }
-        .c-128 { background: #edcf72; color: #f9f6f2; }
-        .c-256 { background: #edcc61; color: #f9f6f2; }
-        .c-512 { background: #edc850; color: #f9f6f2; }
-        .c-1024 { background: #edc53f; color: #f9f6f2; }
-        .c-2048 { background: #edc22e; color: #f9f6f2; box-shadow: 0 0 10px yellow; }
-
+        .c-0 { background: #cdc1b4; color: transparent; } .c-2 { background: #eee4da; } .c-4 { background: #ede0c8; } .c-8 { background: #f2b179; color: #f9f6f2; } .c-16 { background: #f59563; color: #f9f6f2; } .c-32 { background: #f67c5f; color: #f9f6f2; } .c-64 { background: #f65e3b; color: #f9f6f2; } .c-128 { background: #edcf72; color: #f9f6f2; } .c-256 { background: #edcc61; color: #f9f6f2; } .c-512 { background: #edc850; color: #f9f6f2; } .c-1024 { background: #edc53f; color: #f9f6f2; } .c-2048 { background: #edc22e; color: #f9f6f2; box-shadow: 0 0 10px yellow; }
         .controls-2048 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; max-width: 200px; margin: 10px auto; }
         .btn-2048 { padding: 10px; background: #444; color: white; border: 1px solid #777; font-size: 1.2em; cursor: pointer; }
 
         /* Оплата */
         #payment-modal {
-            display: none;
-            position: fixed;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            background: white;
-            color: black;
-            border: 3px solid blue;
-            padding: 20px;
-            z-index: 600;
-            width: 300px;
-            text-align: center;
-            box-shadow: 0 0 50px black;
+            display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            background: white; color: black; border: 3px solid blue; padding: 20px;
+            z-index: 6000; width: 300px; text-align: center; box-shadow: 0 0 50px black;
         }
         .pay-btn { background: green; color: white; padding: 10px; border: none; cursor: pointer; }
 
         /* Скример */
         #screamer-overlay {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: black;
-            z-index: 9999;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: black; z-index: 9999; align-items: center; justify-content: center; flex-direction: column;
         }
         .screamer-face { font-size: 8em; animation: shake 0.1s infinite; }
         .screamer-text { color: red; font-size: 3em; font-weight: bold; }
@@ -488,6 +342,7 @@
         }
         generateCipher();
 
+        // ФУНКЦИЯ ВХОДА
         function checkPassword() {
             var input = document.getElementById("passwordInput").value;
             if (input.toUpperCase().trim() === "КПЮЛП") {
@@ -496,7 +351,7 @@
                 startFakeLoading();
                 window.addEventListener('scroll', checkScrollTraps);
                 startBrokenScroll(); 
-                startChaosSystem(); // ЗАПУСК ХАОСА
+                startChaosSystem(); 
             } else {
                 document.getElementById("errorMsg").style.display = "block";
                 document.getElementById("passwordInput").value = "";
@@ -504,16 +359,18 @@
         }
 
         // ============================================
-        // === СИСТЕМА ХАОСА (НОВЫЕ ИВЕНТЫ) ===
+        // === СИСТЕМА ХАОСА ===
         // ============================================
         function startChaosSystem() {
-            // Каждые 8 секунд гарантированный хаос
             setInterval(() => {
                 triggerRandomChaos();
             }, 8000);
         }
 
         function triggerRandomChaos() {
+            // Если сейчас открыто модальное окно (гейт), хаос не запускаем, чтобы не мешать
+            if(isGateOpen) return;
+
             let rand = Math.random();
             if (rand < 0.2) startTacoRain();
             else if (rand < 0.4) triggerEarthquake();
@@ -522,9 +379,8 @@
             else triggerFreeze();
         }
 
-        // 1. ТАКО ДОЖДЬ
         function startTacoRain() {
-            for(let i=0; i<50; i++) { // Больше тако!
+            for(let i=0; i<50; i++) {
                 let taco = document.createElement("div");
                 taco.innerText = "🌮";
                 taco.className = "taco";
@@ -534,34 +390,25 @@
                 setTimeout(() => taco.remove(), 4000);
             }
         }
-
-        // 2. ЗЕМЛЕТРЯСЕНИЕ
         function triggerEarthquake() {
             document.body.classList.add("earthquake-mode");
             setTimeout(() => document.body.classList.remove("earthquake-mode"), 5000);
         }
-
-        // 3. ВЕРТУШКА
         function triggerSpin() {
             document.body.classList.add("spin-mode");
             setTimeout(() => document.body.classList.remove("spin-mode"), 3000);
         }
-
-        // 4. БЛЭКАУТ
         function triggerBlackout() {
             document.getElementById("blackout-overlay").style.display = "block";
             setTimeout(() => document.getElementById("blackout-overlay").style.display = "none", 2000);
         }
-
-        // 5. ЗАМОРОЗКА (Только курсор)
         function triggerFreeze() {
             document.body.classList.add("no-cursor");
             setTimeout(() => document.body.classList.remove("no-cursor"), 3000);
         }
 
-        // === ПЬЯНЫЙ РЕЖИМ (Отдельно, реже) ===
         setInterval(() => {
-            if (Math.random() > 0.8) {
+            if(!isGateOpen && Math.random() > 0.8) {
                 document.body.classList.add('drunk-mode');
                 setTimeout(() => document.body.classList.remove('drunk-mode'), 5000);
             }
@@ -575,8 +422,14 @@
         let passedClicker = false;
         let passed2048 = false;
         let passedPayment = false;
+        
+        // ВАЖНО: Флаг, блокирующий дублирование таймеров
+        let isGateOpen = false; 
 
         function checkScrollTraps() {
+            // Если какое-то задание уже открыто, мы игнорируем скролл
+            if(isGateOpen) return;
+
             let y = window.scrollY;
             let skipBtn = document.getElementById("skipTrapBtn");
 
@@ -584,27 +437,31 @@
             else if (y > 200000 && y < 205000) skipBtn.style.display = 'block';
             else skipBtn.style.display = 'none';
             
+            // Проверка условий открытия окон
             if (y > 20000 && !riddleFlags[0]) openRiddleGate(0);
-            if (y > 160000 && !riddleFlags[1]) openRiddleGate(1);
-            if (y > 340000 && !riddleFlags[2]) openRiddleGate(2);
+            else if (y > 160000 && !riddleFlags[1]) openRiddleGate(1);
+            else if (y > 340000 && !riddleFlags[2]) openRiddleGate(2);
 
-            if (y > 50000 && mathStage < 1) openMathGate(1);
+            else if (y > 50000 && mathStage < 1) openMathGate(1);
             else if (y > 100000 && mathStage < 2) openMathGate(2);
             else if (y > 180000 && mathStage < 3) openMathGate(3); 
             else if (y > 260000 && mathStage < 4) openMathGate(4); 
             else if (y > 360000 && mathStage < 5) openMathGate(5); 
 
-            if (y > 130000 && !passedPayment) {
+            else if (y > 130000 && !passedPayment) {
+                isGateOpen = true;
                 document.getElementById('payment-modal').style.display = 'block';
                 document.body.style.overflow = 'hidden';
             }
 
-            if (y > 300000 && !passedClicker) {
+            else if (y > 300000 && !passedClicker) {
+                isGateOpen = true;
                 document.getElementById('gate3').style.display = 'flex';
                 document.body.style.overflow = 'hidden';
             }
 
-            if (y > 400000 && !passed2048) {
+            else if (y > 400000 && !passed2048) {
+                isGateOpen = true;
                 game2048.init();
                 document.getElementById('gate4').style.display = 'flex';
                 document.body.style.overflow = 'hidden';
@@ -613,7 +470,7 @@
 
         function startBrokenScroll() {
             window.addEventListener('scroll', function() {
-                if(Math.random() > 0.99) window.scrollBy(0, -200);
+                if(!isGateOpen && Math.random() > 0.99) window.scrollBy(0, -200);
             });
         }
 
@@ -631,26 +488,33 @@
         }
         function closePayment() {
             passedPayment = true;
+            isGateOpen = false;
             document.getElementById('payment-modal').style.display = 'none';
             document.body.style.overflow = 'auto';
             alert("Платеж не прошел. Ладно, проходи бесплатно.");
         }
 
         function failGate(reason) {
+            // Очищаем все таймеры
+            clearInterval(mathInterval);
+            clearInterval(clickInterval);
+            
             alert("ОШИБКА: " + reason + "\nПОЛНЫЙ СБРОС СИСТЕМЫ!\nНАЧИНАЙ СНАЧАЛА!");
             window.scrollTo(0, 0); 
+            
+            // Сброс всех переменных
             riddleFlags = [false, false, false];
             mathStage = 0;
             passedClicker = false;
             passed2048 = false;
             passedPayment = false;
+            isGateOpen = false;
+
             document.querySelectorAll('.gate-overlay').forEach(el => el.style.display = 'none');
             document.getElementById('payment-modal').style.display = 'none';
             document.body.style.overflow = 'auto';
             document.getElementById('ans1').value = "";
             document.getElementById('ans2').value = "";
-            clearInterval(mathInterval);
-            clearInterval(clickInterval);
         }
 
         const riddles = [
@@ -665,6 +529,7 @@
         let activeRiddleStage = 0;
 
         function openRiddleGate(stage) {
+            isGateOpen = true;
             activeRiddleStage = stage;
             currentRiddleIndex = Math.floor(Math.random() * riddles.length);
             document.getElementById('riddle-text').innerText = riddles[currentRiddleIndex].q;
@@ -678,6 +543,7 @@
             let correctAnswers = riddles[currentRiddleIndex].a;
             if (correctAnswers.includes(ans)) {
                 riddleFlags[activeRiddleStage] = true;
+                isGateOpen = false;
                 document.getElementById('gate1').style.display = 'none';
                 document.body.style.overflow = 'auto';
                 alert("Верно.");
@@ -691,6 +557,7 @@
         let currentMathLevel = 0;
 
         function openMathGate(level) {
+            isGateOpen = true;
             currentMathLevel = level;
             document.getElementById('math-title').innerText = `МАТЕМАТИКА ${level}/5`;
             let timeLimit = 20;
@@ -724,6 +591,9 @@
             document.getElementById('gate2').style.display = 'flex';
             document.body.style.overflow = 'hidden';
 
+            // Сбрасываем старый интервал на всякий случай
+            if(mathInterval) clearInterval(mathInterval);
+
             mathInterval = setInterval(() => {
                 timeLimit--;
                 document.getElementById('math-timer').innerText = timeLimit;
@@ -739,6 +609,7 @@
             if (ans === currentMathAnswer) {
                 clearInterval(mathInterval);
                 mathStage = currentMathLevel; 
+                isGateOpen = false;
                 document.getElementById('gate2').style.display = 'none';
                 document.body.style.overflow = 'auto';
                 if(mathStage < 5) alert("Уровень пройден.");
@@ -760,6 +631,9 @@
             document.getElementById('startClickBtn').style.display = 'none';
             let timeLeft = 5.00;
             document.getElementById('click-timer').innerText = "5.00";
+            
+            if(clickInterval) clearInterval(clickInterval);
+
             clickInterval = setInterval(() => {
                 timeLeft -= 0.01;
                 document.getElementById('click-timer').innerText = timeLeft.toFixed(2);
@@ -784,6 +658,7 @@
                 clearInterval(clickInterval);
                 clickGameActive = false;
                 passedClicker = true;
+                isGateOpen = false;
                 document.getElementById('gate3').style.display = 'none';
                 document.body.style.overflow = 'auto';
                 alert("Руки быстрые.");
@@ -822,6 +697,7 @@
                     setTimeout(() => {
                         alert("ПОБЕДА! ПУТЬ СВОБОДЕН!");
                         passed2048 = true;
+                        isGateOpen = false;
                         document.getElementById('gate4').style.display = 'none';
                         document.body.style.overflow = 'auto';
                         document.removeEventListener('keydown', this.handleKey);
@@ -877,4 +753,35 @@
         }
         function triggerScreamer(e) {
             e.stopPropagation();
-            var 
+            var scr = document.getElementById("screamer-overlay");
+            scr.style.display = "flex";
+            var count = 0;
+            var inter = setInterval(() => {
+                scr.style.backgroundColor = (scr.style.backgroundColor === 'black') ? 'red' : 'black';
+                count++;
+                if(count > 10) { clearInterval(inter); scr.style.display = "none"; }
+            }, 100);
+        }
+        function randomPopup(e) {
+            if(e.target.tagName === 'BUTTON' || e.target.tagName === 'INPUT' || e.target.tagName === 'LABEL') return;
+            if (Math.random() > 0.4) return; 
+            var div = document.createElement("div");
+            div.className = "popup";
+            div.innerHTML = "<div class='popup-header'>System Error</div>VIRUS DETECTED<br>Sending data...";
+            div.style.left = (e.clientX) + "px";
+            div.style.top = (e.clientY + window.scrollY) + "px";
+            document.body.appendChild(div);
+            setTimeout(() => div.remove(), 1500);
+        }
+        function startFakeLoading() {
+            var bar = document.getElementById("progBar");
+            var width = 0;
+            setInterval(() => {
+                if (width >= 100) width = 0;
+                else width += 2;
+                bar.style.width = width + '%';
+            }, 50);
+        }
+    </script>
+</body>
+</html>
