@@ -3,29 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SECURE ACCESS</title>
+    <title>SYSTEM CRITICAL</title>
     <style>
         body {
             background-color: #000;
-            color: #0f0; /* Хакерский зеленый */
+            color: #0f0;
             font-family: 'Courier New', Courier, monospace;
             text-align: center;
             margin: 0;
             padding: 0;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
+            min-height: 100vh;
             overflow-x: hidden;
         }
 
-        /* --- Стили для Страницы 1 (Вход) --- */
+        /* --- ЭКРАН 1: ПАРОЛЬ --- */
         #login-screen {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            height: 100%;
+            height: 100vh;
+            transition: opacity 1s;
         }
         input {
             padding: 10px;
@@ -48,150 +46,267 @@
             font-weight: bold;
             border-radius: 5px;
         }
-        button.login-btn:hover {
-            background: #fff;
-        }
-
-        /* --- Стили для Страницы 2 (Ловушка) --- */
-        #trap-screen {
-            display: none; /* Скрыто по умолчанию */
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-            position: relative;
-        }
-        
-        .alert-box {
-            border: 2px solid red;
-            color: red;
-            padding: 20px;
-            margin-top: 50px;
-            font-size: 1.5em;
-            font-weight: bold;
-            animation: blink 1s infinite;
-        }
-
-        /* Кнопка, которая убегает */
-        #runaway-btn {
-            position: relative;
-            margin-top: 50px;
-            padding: 15px 30px;
-            background: red;
-            color: white;
-            font-weight: bold;
-            border: none;
-            cursor: pointer;
-            font-size: 1.2em;
-            transition: 0.1s; /* Чтобы она двигалась резко */
-        }
-
-        .cipher {
-            margin-top: 50px;
-            color: #333; /* Темно-серый, чтобы выглядело как мусор */
-            font-size: 0.8em;
-            word-wrap: break-word;
-            width: 80%;
-            line-height: 1.2;
-        }
-
-        /* Секретный подвал */
-        .footer-secret {
-            margin-top: auto; /* Прижимает к низу */
-            width: 100%;
-            background-color: white; /* Белый фон, как ты просил */
-            padding: 30px 0;
-            margin-bottom: 0;
-        }
-        
-        .secret-text {
-            color: #e0e0e0; /* Очень светло-серый, почти не видно на белом */
-            font-size: 10px;
-            user-select: none; /* Чтобы нельзя было случайно выделить */
-        }
-        
-        /* Если навести мышкой, текст станет чуть темнее (опционально, можно убрать hover) */
-        .secret-text:hover {
-            color: #bbb; 
-        }
-
-        @keyframes blink {
-            50% { opacity: 0; }
-        }
-        
         .error-msg {
             color: red;
             display: none;
             margin-top: 10px;
         }
+
+        /* --- ЭКРАН 2: ЛОВУШКА --- */
+        #trap-screen {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            background-color: #1a0000; /* Темно-кровавый фон */
+            color: #ff3333;
+            width: 100%;
+            position: relative;
+            padding-top: 50px;
+        }
+
+        /* Троллинг 1: Кнопка убегает */
+        #runaway-btn {
+            position: relative; /* Важно для js */
+            margin-top: 30px;
+            padding: 15px 30px;
+            background: #ff0000;
+            color: white;
+            font-weight: bold;
+            border: 2px solid white;
+            cursor: pointer;
+            font-size: 1.2em;
+            box-shadow: 0 0 15px red;
+            z-index: 100;
+            transition: top 0.1s, left 0.1s; 
+        }
+
+        /* Троллинг 2: Фейковая загрузка */
+        .fake-loader {
+            width: 300px;
+            border: 2px solid #ff3333;
+            padding: 5px;
+            margin: 30px auto;
+        }
+        .progress-bar {
+            height: 20px;
+            background-color: #ff3333;
+            width: 0%;
+            transition: width 0.2s;
+        }
+        .status-text {
+            font-size: 0.8em;
+            margin-top: 5px;
+            min-height: 1.2em;
+        }
+
+        /* Троллинг 3: Бесполезный переключатель */
+        .toggle-container {
+            margin: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #330000;
+            border: 1px solid red;
+            transition: .4s;
+        }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 3px;
+            background-color: red;
+            transition: .4s;
+        }
+        input:checked + .slider { background-color: #ff3333; }
+        input:checked + .slider:before { transform: translateX(26px); background-color: white; }
+
+        /* Шифр и мусор */
+        .cipher {
+            margin-top: 50px;
+            color: #4d0000; /* Еле видный текст */
+            font-size: 0.8em;
+            word-wrap: break-word;
+            width: 80%;
+            line-height: 1.2;
+            opacity: 0.7;
+        }
+
+        /* --- СЕКРЕТНАЯ ЗОНА --- */
+        /* Огромный отступ, чтобы нужно было скроллить */
+        .spacer {
+            height: 2000px; /* Пустота */
+            width: 100%;
+            display: flex;
+            align-items: flex-end; /* Текст в самом низу */
+            justify-content: center;
+            padding-bottom: 50px;
+        }
+
+        .secret-text {
+            /* Цвет почти совпадает с фоном #1a0000 */
+            color: #240000; 
+            font-size: 14px;
+            font-weight: bold;
+            text-align: center;
+            transition: color 0.5s;
+            cursor: text;
+        }
+        
+        /* Если выделить текст мышкой - он станет белым */
+        .secret-text::selection {
+            background: white;
+            color: black;
+        }
+        
+        /* Небольшая подсказка при наведении (можно убрать, если хочешь хардкор) */
+        .secret-text:hover {
+            color: #330000; 
+        }
+
     </style>
 </head>
 <body>
 
-    <!-- СТРАНИЦА 1: ВВОД ПАРОЛЯ -->
+    <!-- ЭКРАН 1 -->
     <div id="login-screen">
-        <h1>ВВЕДИТЕ КОД ДОСТУПА</h1>
-        <input type="text" id="passwordInput" placeholder="Введите пароль">
-        <button class="login-btn" onclick="checkPassword()">ВОЙТИ</button>
-        <p class="error-msg" id="errorMsg">НЕВЕРНЫЙ КОД ДОСТУПА</p>
+        <h1 style="text-shadow: 0 0 10px #0f0;">SECURE LOGIN</h1>
+        <input type="text" id="passwordInput" placeholder="ПАРОЛЬ">
+        <button class="login-btn" onclick="checkPassword()">ACCESS</button>
+        <p class="error-msg" id="errorMsg">ОШИБКА ДОСТУПА</p>
     </div>
 
-    <!-- СТРАНИЦА 2: ЛОВУШКА -->
+    <!-- ЭКРАН 2 (ЛОВУШКА) -->
     <div id="trap-screen">
-        <div class="alert-box">
-            ВНИМАНИЕ! СИСТЕМА ПОВРЕЖДЕНА!<br>
-            ЧТОБЫ ПОЛУЧИТЬ КООРДИНАТЫ,<br>НАЖМИ НА КНОПКУ НИЖЕ
+        <h1 style="font-size: 3em; animation: blink 0.2s infinite;">ERROR 404</h1>
+        <p>СИСТЕМА ЗАБЛОКИРОВАНА</p>
+        
+        <!-- Троллинг: Фейковый загрузчик -->
+        <div class="fake-loader">
+            <div class="progress-bar" id="progBar"></div>
         </div>
+        <div class="status-text" id="statusText">Инициализация вируса...</div>
 
-        <!-- Кнопка-обманка -->
-        <button id="runaway-btn" onmouseover="moveButton()" onclick="moveButton()">СКАЧАТЬ КООРДИНАТЫ</button>
+        <!-- Троллинг: Кнопка -->
+        <p>Нажми кнопку, чтобы разблокировать:</p>
+        <button id="runaway-btn" onmouseover="moveButton()">РАЗБЛОКИРОВАТЬ</button>
+
+        <!-- Троллинг: Свитч -->
+        <div class="toggle-container">
+            <span>Сложный режим</span>
+            <label class="switch">
+                <input type="checkbox" id="trollSwitch" onchange="trollToggle()">
+                <span class="slider"></span>
+            </label>
+            <span>Легкий режим</span>
+        </div>
 
         <div class="cipher">
-            01010101 ERROR 404 SYSTEM FAILURE XJ-9 001101001 FATAL ERROR
-            KERNEL PANIC 0xE4532 DETECTED. UNAUTHORIZED ACCESS.
-            INITIATING SELF-DESTRUCT SEQUENCE... 99... 98...
-            x86_64 NULL POINTER EXCEPTION @ 0x00000000
-            01001000 01000101 01001100 01010000
-            [SYSTEM HALTED]
+            01010101 FATAL EXCEPTION 0xB45 SYSTEM HALTED
+            <br><br>
+            TRYING TO REBOOT... FAILED.
+            <br>
+            DELETING C:/WINDOWS/SYSTEM32...
+            <br>
+            UPLOADING PERSONAL DATA TO SKYNET...
+            <br><br>
+            001010101001010101010101001
         </div>
 
-        <!-- Реальная подсказка -->
-        <div class="footer-secret">
+        <!-- Пустота и секрет -->
+        <div class="spacer">
             <p class="secret-text">
-                Ты слишком умная для этих глупостей. Следующая подсказка приклеена скотчем за твоим телевизором.
+                Ладно, ты победила, хакер.<br>
+                Подсказка приклеена скотчем<br>
+                ЗА ТВОИМ ТЕЛЕВИЗОРОМ.
             </p>
         </div>
     </div>
 
     <script>
-        // Функция проверки пароля
+        // --- Логика пароля ---
         function checkPassword() {
             var input = document.getElementById("passwordInput").value;
-            var error = document.getElementById("errorMsg");
-            
-            // Сравниваем пароль (приводим к верхнему регистру, чтобы работало и кпюлп, и КПЮЛП)
+            // Проверка КПЮЛП (без учета регистра)
             if (input.toUpperCase().trim() === "КПЮЛП") {
-                // Если верно - скрываем вход, показываем ловушку
                 document.getElementById("login-screen").style.display = "none";
                 document.getElementById("trap-screen").style.display = "flex";
-                document.body.style.backgroundColor = "#100"; // Меняем фон на темно-красный для атмосферы
+                document.body.style.backgroundColor = "#1a0000"; 
+                startFakeLoading(); // Запускаем анимацию загрузки
             } else {
-                // Если неверно
-                error.style.display = "block";
+                document.getElementById("errorMsg").style.display = "block";
                 document.getElementById("passwordInput").value = "";
             }
         }
 
-        // Функция бегающей кнопки
+        // --- Логика бегающей кнопки ---
         function moveButton() {
             var btn = document.getElementById("runaway-btn");
-            // Вычисляем случайную позицию
             var x = Math.random() * (window.innerWidth - 200);
-            var y = Math.random() * (window.innerHeight - 300);
+            if (x < 0) x = 0;
+            var y = Math.random() * 500; // Кнопка прыгает только в верхней части
             
-            // Применяем новые координаты
             btn.style.position = "absolute";
             btn.style.left = x + "px";
-            btn.style.top = y + "px";
+            btn.style.top = (y + 100) + "px"; 
+        }
+
+        // --- Логика фейкового свитча ---
+        function trollToggle() {
+            var checkbox = document.getElementById("trollSwitch");
+            if (checkbox.checked) {
+                // Если она включила - ждем 300мс и выключаем обратно
+                setTimeout(function() {
+                    checkbox.checked = false;
+                    alert("Отказано в доступе. Легких путей не ищем!");
+                }, 300);
+            }
+        }
+
+        // --- Логика фейковой загрузки ---
+        function startFakeLoading() {
+            var bar = document.getElementById("progBar");
+            var text = document.getElementById("statusText");
+            var width = 0;
+            var messages = [
+                "Скачивание интернета...", 
+                "Удаление косметики...", 
+                "Взлом пентагона...", 
+                "Ой, что-то сломалось...", 
+                "Повторная попытка...",
+                "Майнинг биткоинов...",
+                "Загрузка котиков..."
+            ];
+
+            setInterval(function() {
+                if (width >= 99) {
+                    width = 10; // Сброс
+                    text.innerText = "ОШИБКА! ПОВТОР...";
+                    text.style.color = "white";
+                } else {
+                    width++; 
+                    bar.style.width = width + '%';
+                    
+                    // Меняем текст иногда
+                    if (width % 15 === 0) {
+                        text.innerText = messages[Math.floor(Math.random() * messages.length)];
+                    }
+                }
+            }, 50); // Скорость загрузки
         }
     </script>
 
