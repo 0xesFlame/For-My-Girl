@@ -16,6 +16,13 @@
             overflow-x: hidden;
             user-select: none; 
             touch-action: pan-y;
+            transition: transform 0.5s; /* Для переворота экрана */
+        }
+
+        /* Эффект пьяного экрана */
+        .drunk-mode {
+            transform: scaleY(-1) scaleX(-1);
+            filter: hue-rotate(90deg);
         }
 
         /* МАТРИЦА ФОН */
@@ -23,8 +30,8 @@
             display: block;
             position: fixed;
             top: 0; left: 0;
-            z-index: 0; /* На самом заднем плане */
-            opacity: 0.2; /* Чтобы не мешало читать */
+            z-index: 0; 
+            opacity: 0.2; 
         }
 
         /* --- ЭКРАН 1: ВХОД --- */
@@ -36,7 +43,7 @@
             height: 100vh;
             z-index: 10;
             position: relative;
-            background: black; /* Чтобы перекрыть матрицу */
+            background: black; 
         }
         h1 { margin-bottom: 5px; text-shadow: 0 0 10px #0f0; }
         .subtitle { color: #fff; margin-bottom: 30px; font-size: 0.8em; opacity: 0.8; }
@@ -72,14 +79,13 @@
             display: none;
             flex-direction: column;
             align-items: center;
-            /* Фон прозрачный, чтобы видно матрицу, но затемненный */
             background-color: rgba(26, 0, 0, 0.85); 
             color: #ff3333;
             width: 100%;
             position: relative;
             padding-top: 50px;
             z-index: 1;
-            height: 450000px; /* Еще длиннее */
+            height: 450000px; 
         }
 
         .trap-title {
@@ -105,7 +111,6 @@
             mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
         }
 
-        /* Элементы управления */
         #runaway-btn {
             position: relative;
             margin-top: 30px;
@@ -155,12 +160,31 @@
         }
         .popup-header { background: blue; color: white; padding: 2px; margin-bottom: 5px; font-weight: bold; }
 
+        /* КНОПКА ЛОВУШКА (ПРОПУСТИТЬ) */
+        .skip-trap-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #ffaa00;
+            color: black;
+            padding: 10px 20px;
+            font-weight: bold;
+            border: 2px solid white;
+            cursor: pointer;
+            z-index: 400;
+            display: none; /* Скрыта по умолчанию */
+            box-shadow: 0 0 10px yellow;
+            animation: bounce 1s infinite;
+        }
+
+        @keyframes bounce { 0%, 100% {transform: translateY(0);} 50% {transform: translateY(-5px);} }
+
         /* --- ГЕЙТЫ --- */
         .gate-overlay {
             display: none; 
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.95);
+            background: rgba(0,0,0,0.98);
             z-index: 500;
             flex-direction: column;
             align-items: center;
@@ -238,6 +262,23 @@
             font-size: 1.2em;
             cursor: pointer;
         }
+
+        /* Окно оплаты */
+        #payment-modal {
+            display: none;
+            position: fixed;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            color: black;
+            border: 3px solid blue;
+            padding: 20px;
+            z-index: 600;
+            width: 300px;
+            text-align: center;
+            box-shadow: 0 0 50px black;
+        }
+        .pay-btn { background: green; color: white; padding: 10px; border: none; cursor: pointer; }
 
         /* СКРИМЕР */
         #screamer-overlay {
@@ -317,6 +358,9 @@
 
         <div class="help-link" onclick="triggerScreamer(event)">[ ? ] Нужна помощь?</div>
 
+        <!-- КНОПКА ЛОВУШКА -->
+        <button class="skip-trap-btn" id="skipTrapBtn" onclick="activateSkipTrap()">⏩ ПРОПУСТИТЬ УРОВЕНЬ</button>
+
         <!-- ОГРОМНЫЙ ШИФР -->
         <div class="big-cipher" id="cipherBlock"></div>
 
@@ -333,7 +377,7 @@
     <!-- === ГЕЙТ 1: ЗАГАДКА === -->
     <div id="gate1" class="gate-overlay">
         <div class="gate-box">
-            <h2>ЗАЩИТА УРОВЕНЬ 1</h2>
+            <h2>ЗАЩИТА: ЗАГАДКА</h2>
             <p id="riddle-text">Загрузка загадки...</p>
             <input type="text" id="ans1" class="gate-input" placeholder="Ответ..." style="font-size: 1.2em; padding: 5px;">
             <br>
@@ -345,7 +389,7 @@
     <div id="gate2" class="gate-overlay">
         <div class="gate-box">
             <h2 id="math-title">МАТЕМАТИКА 1/5</h2>
-            <p>Реши пример за 20 секунд!</p>
+            <p id="math-instr">Реши пример за 20 секунд!</p>
             <div id="math-timer" class="timer-display">20</div>
             <h1 id="math-problem" style="color:white; font-size: 2em; margin: 20px 0;">2 + 2 = ?</h1>
             <input type="number" id="ans2" class="gate-input" placeholder="Число...">
@@ -357,9 +401,9 @@
     <!-- === ГЕЙТ 3: КЛИКЕР === -->
     <div id="gate3" class="gate-overlay">
         <div class="gate-box">
-            <h2>ЗАЩИТА УРОВЕНЬ 3</h2>
-            <p>Нажми 10 раз за 4 секунды!</p>
-            <div id="click-timer" class="timer-display">4.00</div>
+            <h2>ЗАЩИТА: КЛИКЕР</h2>
+            <p>Нажми 10 раз за 5 секунд!</p>
+            <div id="click-timer" class="timer-display">5.00</div>
             <p>Осталось: <span id="clickCount" style="color:white; font-size:1.5em;">10</span></p>
             <div style="height: 250px; position: relative; border: 1px dashed #555;">
                 <button id="clickGameBtn" onclick="clickerGame()" style="padding: 10px; background: red; color: white; border: none; font-weight: bold; position: absolute; top: 40%; left: 40%;">ЖМИ!</button>
@@ -380,6 +424,16 @@
                 <button class="btn-2048" onclick="game2048.move('down')">⬇️</button>
                 <button class="btn-2048" onclick="game2048.move('right')">➡️</button>
             </div>
+        </div>
+    </div>
+
+    <!-- ОКНО ОПЛАТЫ -->
+    <div id="payment-modal" onclick="stopProp(event)">
+        <h3>ТРЕБУЕТСЯ ОПЛАТА</h3>
+        <p>Для дальнейшего спуска оплатите комиссию.</p>
+        <div style="margin-top: 20px; display: flex; justify-content: space-around;">
+            <button class="pay-btn" id="payBtn" onmouseover="movePayBtn()">ОПЛАТИТЬ 5000₽</button>
+            <button style="padding: 10px;" onclick="closePayment()">Я нищая, решить задачу</button>
         </div>
     </div>
 
@@ -437,6 +491,8 @@
                 document.getElementById("trap-screen").style.display = "flex";
                 startFakeLoading();
                 window.addEventListener('scroll', checkScrollTraps);
+                startDrunkMode(); // Запуск пьяного режима
+                startBrokenScroll(); // Запуск сломанного скролла
             } else {
                 document.getElementById("errorMsg").style.display = "block";
                 document.getElementById("passwordInput").value = "";
@@ -445,33 +501,46 @@
 
         // --- ОБРАБОТКА СКРОЛЛА ---
         // Состояние прохождения
-        let passedRiddle = false;
+        let riddleFlags = [false, false, false]; // 3 загадки
         let mathStage = 0; // 0 to 5
         let passedClicker = false;
         let passed2048 = false;
+        let passedPayment = false;
 
         function checkScrollTraps() {
             let y = window.scrollY;
+            let skipBtn = document.getElementById("skipTrapBtn");
+
+            // Показываем кнопку-ловушку иногда
+            if (y > 70000 && y < 75000) skipBtn.style.display = 'block';
+            else if (y > 200000 && y < 205000) skipBtn.style.display = 'block';
+            else skipBtn.style.display = 'none';
             
-            // 1. ЗАГАДКА (20 000px)
-            if (y > 20000 && !passedRiddle) {
-                openRiddleGate();
+            // 1. ЗАГАДКИ (Разбросаны)
+            if (y > 20000 && !riddleFlags[0]) openRiddleGate(0);
+            if (y > 160000 && !riddleFlags[1]) openRiddleGate(1);
+            if (y > 340000 && !riddleFlags[2]) openRiddleGate(2);
+
+            // 2. МАТЕМАТИКА (5 уровней)
+            if (y > 50000 && mathStage < 1) openMathGate(1);
+            else if (y > 100000 && mathStage < 2) openMathGate(2);
+            else if (y > 180000 && mathStage < 3) openMathGate(3); // Hard
+            else if (y > 260000 && mathStage < 4) openMathGate(4); // Hard
+            else if (y > 360000 && mathStage < 5) openMathGate(5); // Hard
+
+            // 3. ОПЛАТА
+            if (y > 130000 && !passedPayment) {
+                document.getElementById('payment-modal').style.display = 'block';
+                document.body.style.overflow = 'hidden';
             }
 
-            // 2. МАТЕМАТИКА (5 уровней: 60k, 100k, 140k, 180k, 220k)
-            if (y > 60000 && mathStage < 1) openMathGate(1);
-            else if (y > 100000 && mathStage < 2) openMathGate(2);
-            else if (y > 140000 && mathStage < 3) openMathGate(3);
-            else if (y > 180000 && mathStage < 4) openMathGate(4);
-            else if (y > 220000 && mathStage < 5) openMathGate(5);
-
-            // 3. КЛИКЕР (300 000px)
+            // 4. КЛИКЕР (300 000px)
             if (y > 300000 && !passedClicker) {
                 document.getElementById('gate3').style.display = 'flex';
                 document.body.style.overflow = 'hidden';
             }
 
-            // 4. 2048 (400 000px)
+            // 5. 2048 (400 000px)
             if (y > 400000 && !passed2048) {
                 game2048.init();
                 document.getElementById('gate4').style.display = 'flex';
@@ -479,19 +548,64 @@
             }
         }
 
+        // === СЛОМАННЫЙ СКРОЛЛ ===
+        function startBrokenScroll() {
+            window.addEventListener('scroll', function() {
+                // 1% шанс дернуться вверх при скролле
+                if(Math.random() > 0.99) {
+                    window.scrollBy(0, -200);
+                }
+            });
+        }
+
+        // === ПЬЯНЫЙ РЕЖИМ (ИНВЕРСИЯ) ===
+        function startDrunkMode() {
+            setInterval(() => {
+                // Каждые 40-60 сек шанс переворота
+                if (Math.random() > 0.6) {
+                    document.body.classList.add('drunk-mode');
+                    setTimeout(() => document.body.classList.remove('drunk-mode'), 5000);
+                }
+            }, 40000);
+        }
+
+        // === КНОПКА ПРОПУСТИТЬ (ЛОВУШКА) ===
+        function activateSkipTrap() {
+            alert("Ага, размечталась! ШТРАФ ЗА ЛЕНЬ!");
+            window.scrollBy(0, -50000);
+            document.getElementById("skipTrapBtn").style.display = 'none';
+        }
+
+        // === ОПЛАТА ===
+        function movePayBtn() {
+            let btn = document.getElementById("payBtn");
+            btn.style.position = "relative";
+            btn.style.left = (Math.random()*200 - 100) + "px";
+            btn.style.top = (Math.random()*100 - 50) + "px";
+        }
+        function closePayment() {
+            passedPayment = true;
+            document.getElementById('payment-modal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+            alert("Платеж не прошел. Ладно, проходи бесплатно.");
+        }
+
+
         // === ПОЛНЫЙ СБРОС (ХАРДКОР) ===
         function failGate(reason) {
             alert("ОШИБКА: " + reason + "\nПОЛНЫЙ СБРОС СИСТЕМЫ!\nНАЧИНАЙ СНАЧАЛА!");
             window.scrollTo(0, 0); 
             
-            // Сбрасываем ВСЕ флаги
-            passedRiddle = false;
+            // Сброс флагов
+            riddleFlags = [false, false, false];
             mathStage = 0;
             passedClicker = false;
             passed2048 = false;
+            passedPayment = false;
 
             // Закрываем окна
             document.querySelectorAll('.gate-overlay').forEach(el => el.style.display = 'none');
+            document.getElementById('payment-modal').style.display = 'none';
             document.body.style.overflow = 'auto';
             
             // Чистим поля
@@ -502,19 +616,23 @@
             clearInterval(clickInterval);
         }
 
-        // === ГЕЙТ 1: ЗАГАДКИ (РАНДОМ) ===
+        // === ГЕЙТ 1: ЗАГАДКИ ===
         const riddles = [
             { q: "Что поднимается вверх, но никогда не спускается?", a: ["возраст", "годы"] },
             { q: "Зимой и летом одним цветом?", a: ["елка", "ёлка", "ель", "сосна"] },
             { q: "Не лает, не кусает, а в дом не пускает?", a: ["замок"] },
             { q: "Сидит дед, во сто шуб одет, кто его раздевает, тот слезы проливает?", a: ["лук"] },
-            { q: "Висит груша, нельзя скушать?", a: ["лампочка", "лампа"] }
+            { q: "Висит груша, нельзя скушать?", a: ["лампочка", "лампа"] },
+            { q: "Что можно сломать, даже если не трогать?", a: ["обещание", "слово"] }
         ];
         let currentRiddleIndex = 0;
+        let activeRiddleStage = 0;
 
-        function openRiddleGate() {
+        function openRiddleGate(stage) {
+            activeRiddleStage = stage;
             currentRiddleIndex = Math.floor(Math.random() * riddles.length);
             document.getElementById('riddle-text').innerText = riddles[currentRiddleIndex].q;
+            document.getElementById('ans1').value = "";
             document.getElementById('gate1').style.display = 'flex';
             document.body.style.overflow = 'hidden';
         }
@@ -524,16 +642,16 @@
             let correctAnswers = riddles[currentRiddleIndex].a;
             
             if (correctAnswers.includes(ans)) {
-                passedRiddle = true;
+                riddleFlags[activeRiddleStage] = true;
                 document.getElementById('gate1').style.display = 'none';
                 document.body.style.overflow = 'auto';
-                alert("Верно. Но это было легко.");
+                alert("Верно.");
             } else {
                 failGate("Неверный ответ на загадку");
             }
         }
 
-        // === ГЕЙТ 2: МАТЕМАТИКА (5 ШТУК) ===
+        // === ГЕЙТ 2: МАТЕМАТИКА (СЛОЖНЕЕ И СЛОЖНЕЕ) ===
         let currentMathAnswer = 0;
         let mathInterval;
         let currentMathLevel = 0;
@@ -542,30 +660,50 @@
             currentMathLevel = level;
             document.getElementById('math-title').innerText = `МАТЕМАТИКА ${level}/5`;
             
-            // Генерация примера
-            let types = ['+', '-', '*'];
-            let type = types[Math.floor(Math.random() * types.length)];
+            let timeLimit = 20;
+            let probText = "";
+            
+            // ЛОГИКА ГЕНЕРАЦИИ
             let a = Math.floor(Math.random() * 20) + 1;
             let b = Math.floor(Math.random() * 20) + 1;
-            
-            if (type === '*') { a = Math.floor(Math.random() * 9) + 2; b = Math.floor(Math.random() * 9) + 2; currentMathAnswer = a * b; }
-            else if (type === '+') { currentMathAnswer = a + b; }
-            else { currentMathAnswer = a - b; }
+            let c = Math.floor(Math.random() * 10) + 1;
 
-            document.getElementById('math-problem').innerText = `${a} ${type} ${b} = ?`;
-            document.getElementById('ans2').value = ""; // Очистка
+            if (level <= 2) {
+                // Легкие уровни (2 числа)
+                let types = ['+', '-'];
+                let type = types[Math.floor(Math.random() * types.length)];
+                if (type === '+') currentMathAnswer = a + b;
+                else currentMathAnswer = a - b;
+                probText = `${a} ${type} ${b} = ?`;
+            } else {
+                // Сложные уровни (3 числа)
+                // Добавляем время
+                timeLimit = 35 + (level - 3) * 5; 
+                let types = ['+', '-', '*'];
+                let t1 = types[Math.floor(Math.random() * types.length)];
+                let t2 = types[Math.floor(Math.random() * types.length)];
+                
+                // Чтобы не было слишком жесткого умножения
+                if (t1 === '*') a = Math.floor(Math.random() * 5) + 1;
+                if (t2 === '*') b = Math.floor(Math.random() * 5) + 1;
+
+                probText = `${a} ${t1} ${b} ${t2} ${c} = ?`;
+                // Вычисляем через eval (безопасно тут)
+                currentMathAnswer = eval(`${a} ${t1} ${b} ${t2} ${c}`);
+            }
+
+            document.getElementById('math-instr').innerText = `Реши пример за ${timeLimit} секунд!`;
+            document.getElementById('math-problem').innerText = probText;
+            document.getElementById('ans2').value = ""; 
             
-            // Таймер
-            let timeLeft = 20;
-            document.getElementById('math-timer').innerText = timeLeft;
-            
+            document.getElementById('math-timer').innerText = timeLimit;
             document.getElementById('gate2').style.display = 'flex';
             document.body.style.overflow = 'hidden';
 
             mathInterval = setInterval(() => {
-                timeLeft--;
-                document.getElementById('math-timer').innerText = timeLeft;
-                if (timeLeft <= 0) {
+                timeLimit--;
+                document.getElementById('math-timer').innerText = timeLimit;
+                if (timeLimit <= 0) {
                     clearInterval(mathInterval);
                     failGate("Время вышло");
                 }
@@ -576,17 +714,17 @@
             let ans = parseInt(document.getElementById('ans2').value);
             if (ans === currentMathAnswer) {
                 clearInterval(mathInterval);
-                mathStage = currentMathLevel; // Запоминаем уровень
+                mathStage = currentMathLevel; 
                 document.getElementById('gate2').style.display = 'none';
                 document.body.style.overflow = 'auto';
-                if(mathStage < 5) alert("Уровень пройден. Скролль дальше.");
-                else alert("Все примеры решены. Готовься к худшему.");
+                if(mathStage < 5) alert("Уровень пройден.");
+                else alert("Твой мозг еще не вскипел?");
             } else {
                 failGate("Ошибка в вычислениях");
             }
         }
 
-        // === ГЕЙТ 3: КЛИКЕР (4 секунды) ===
+        // === ГЕЙТ 3: КЛИКЕР (5 секунд) ===
         let clicksLeft = 10;
         let clickGameActive = false;
         let clickInterval;
@@ -598,8 +736,8 @@
             document.getElementById('clickCount').innerText = clicksLeft;
             document.getElementById('startClickBtn').style.display = 'none';
 
-            let timeLeft = 4.00;
-            document.getElementById('click-timer').innerText = "4.00";
+            let timeLeft = 5.00;
+            document.getElementById('click-timer').innerText = "5.00";
 
             clickInterval = setInterval(() => {
                 timeLeft -= 0.01;
@@ -630,7 +768,7 @@
                 passedClicker = true;
                 document.getElementById('gate3').style.display = 'none';
                 document.body.style.overflow = 'auto';
-                alert("Руки быстрые. А ум?");
+                alert("Руки быстрые.");
             }
         }
 
