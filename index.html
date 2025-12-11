@@ -26,10 +26,10 @@
             animation: hard-shake 0.1s infinite;
         }
         @keyframes hard-shake {
-            0% { transform: translate(2px, 2px) rotate(0deg); }
-            25% { transform: translate(-2px, -2px) rotate(-1deg); }
-            50% { transform: translate(-2px, 2px) rotate(1deg); }
-            75% { transform: translate(2px, -2px) rotate(-1deg); }
+            0% { transform: translate(5px, 5px) rotate(0deg); }
+            25% { transform: translate(-5px, -5px) rotate(-2deg); }
+            50% { transform: translate(-5px, 5px) rotate(2deg); }
+            75% { transform: translate(5px, -5px) rotate(-2deg); }
             100% { transform: translate(0, 0) rotate(0); }
         }
 
@@ -37,7 +37,7 @@
         .taco {
             position: fixed;
             top: -50px;
-            font-size: 40px;
+            font-size: 50px;
             z-index: 9999;
             pointer-events: none;
             animation: fall linear forwards;
@@ -49,6 +49,7 @@
         /* 3. Вертушка */
         .spin-mode {
             transform: rotate(360deg);
+            transition: transform 3s;
         }
 
         /* 4. Блэкаут (Темнота) */
@@ -74,13 +75,13 @@
 
         /* --- ОСНОВНЫЕ СТИЛИ --- */
 
-        /* МАТРИЦА ФОН */
+        /* МАТРИЦА ФОН (Исправлено) */
         canvas {
             display: block;
             position: fixed;
             top: 0; left: 0;
-            z-index: 0; 
-            opacity: 0.2; 
+            z-index: -1; /* Позади всего */
+            opacity: 0.8; /* Ярче */
         }
 
         /* ВХОД */
@@ -92,7 +93,7 @@
             height: 100vh;
             z-index: 10;
             position: relative;
-            background: black; 
+            background: #000; /* Черный фон только на входе */
         }
         h1 { margin-bottom: 5px; text-shadow: 0 0 10px #0f0; }
         .subtitle { color: #fff; margin-bottom: 30px; font-size: 0.8em; opacity: 0.8; }
@@ -128,7 +129,8 @@
             display: none;
             flex-direction: column;
             align-items: center;
-            background-color: rgba(26, 0, 0, 0.85); 
+            /* Фон стал почти прозрачным, чтобы видно матрицу */
+            background-color: rgba(20, 0, 0, 0.7); 
             color: #ff3333;
             width: 100%;
             position: relative;
@@ -142,6 +144,8 @@
             color: #ff0000;
             text-shadow: 0 0 10px #800000;
             margin-bottom: 10px;
+            background: rgba(0,0,0,0.5); /* Чтобы текст читался на матрице */
+            padding: 10px;
         }
 
         /* ШИФР */
@@ -149,8 +153,9 @@
             width: 90%;
             word-break: break-all;
             font-size: 10px;
-            opacity: 0.6;
-            color: #500;
+            opacity: 0.8;
+            color: #ff0000;
+            text-shadow: 0 0 5px red;
             margin-top: 30px;
             line-height: 10px;
             font-family: monospace;
@@ -175,10 +180,10 @@
             transition: top 0.1s, left 0.1s; 
         }
 
-        .fake-loader { width: 300px; border: 2px solid #ff3333; padding: 3px; margin: 20px auto; }
+        .fake-loader { width: 300px; border: 2px solid #ff3333; padding: 3px; margin: 20px auto; background: black; }
         .progress-bar { height: 15px; background-color: #ff3333; width: 0%; }
 
-        .toggle-container { margin: 20px; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .toggle-container { margin: 20px; display: flex; align-items: center; justify-content: center; gap: 10px; background: rgba(0,0,0,0.7); padding: 5px; border-radius: 10px; }
         .switch { position: relative; display: inline-block; width: 50px; height: 28px; }
         .switch input { opacity: 0; width: 0; height: 0; }
         .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #330000; border: 1px solid red; transition: .4s; }
@@ -186,11 +191,11 @@
         input:checked + .slider { background-color: #ff3333; }
         input:checked + .slider:before { transform: translateX(22px); background-color: white; }
 
-        .checkbox-container { margin-top: 15px; display: flex; align-items: center; gap: 10px; cursor: pointer; }
+        .checkbox-container { margin-top: 15px; display: flex; align-items: center; gap: 10px; cursor: pointer; background: rgba(0,0,0,0.7); padding: 5px; border-radius: 5px;}
         .checkbox-container input { width: 20px; height: 20px; margin: 0; cursor: pointer; }
 
-        .help-link { margin-top: 30px; font-size: 0.8em; color: #777; text-decoration: underline; cursor: pointer; }
-        .help-link:hover { color: #fff; }
+        .help-link { margin-top: 30px; font-size: 0.8em; color: #fff; text-decoration: underline; cursor: pointer; background: black; padding: 2px;}
+        .help-link:hover { color: red; }
 
         .popup {
             position: absolute;
@@ -318,7 +323,7 @@
 
         /* Секрет */
         .secret-container { position: absolute; bottom: 50px; width: 100%; }
-        .secret-text { color: #240000; font-size: 14px; font-weight: bold; transition: color 0.2s; user-select: text; }
+        .secret-text { color: #330000; font-size: 14px; font-weight: bold; transition: color 0.2s; user-select: text; }
         .secret-text::selection { background: white; color: black; }
 
         @keyframes shake { 0% { transform: translate(1px, 1px) rotate(0deg); } 50% { transform: translate(-1px, 2px) rotate(-1deg); } 100% { transform: translate(1px, -1px) rotate(1deg); } }
@@ -327,6 +332,7 @@
 </head>
 <body>
     
+    <!-- МАТРИЦА (ФОН) -->
     <canvas id="matrix"></canvas>
 
     <!-- БЛЭКАУТ (ЭФФЕКТ) -->
@@ -343,9 +349,9 @@
     <div id="trap-screen" onclick="randomPopup(event)">
         <div style="position: sticky; top: 20px; z-index: 200;">
             <div class="trap-title">ВЗЛОМ СИСТЕМЫ</div>
-            <p>ПРОТОКОЛ УНИЧТОЖЕНИЯ ЗАПУЩЕН</p>
+            <p style="background: rgba(0,0,0,0.5)">ПРОТОКОЛ УНИЧТОЖЕНИЯ ЗАПУЩЕН</p>
             <div class="fake-loader"><div class="progress-bar" id="progBar"></div></div>
-            <div id="statusText" style="font-size: 0.8em; margin-bottom: 20px;">Удаление данных...</div>
+            <div id="statusText" style="font-size: 0.8em; margin-bottom: 20px; background: rgba(0,0,0,0.5)">Удаление данных...</div>
         </div>
 
         <button id="runaway-btn" onmouseover="moveButton()">СКАЧАТЬ КООРДИНАТЫ</button>
@@ -501,12 +507,10 @@
         // === СИСТЕМА ХАОСА (НОВЫЕ ИВЕНТЫ) ===
         // ============================================
         function startChaosSystem() {
+            // Каждые 8 секунд гарантированный хаос
             setInterval(() => {
-                // Каждые 25 секунд 40% шанс срабатывания события
-                if(Math.random() < 0.4) {
-                    triggerRandomChaos();
-                }
-            }, 25000);
+                triggerRandomChaos();
+            }, 8000);
         }
 
         function triggerRandomChaos() {
@@ -520,12 +524,12 @@
 
         // 1. ТАКО ДОЖДЬ
         function startTacoRain() {
-            for(let i=0; i<30; i++) {
+            for(let i=0; i<50; i++) { // Больше тако!
                 let taco = document.createElement("div");
                 taco.innerText = "🌮";
                 taco.className = "taco";
                 taco.style.left = Math.random() * window.innerWidth + "px";
-                taco.style.animationDuration = (Math.random() * 2 + 2) + "s";
+                taco.style.animationDuration = (Math.random() * 2 + 1) + "s";
                 document.body.appendChild(taco);
                 setTimeout(() => taco.remove(), 4000);
             }
@@ -873,35 +877,4 @@
         }
         function triggerScreamer(e) {
             e.stopPropagation();
-            var scr = document.getElementById("screamer-overlay");
-            scr.style.display = "flex";
-            var count = 0;
-            var inter = setInterval(() => {
-                scr.style.backgroundColor = (scr.style.backgroundColor === 'black') ? 'red' : 'black';
-                count++;
-                if(count > 10) { clearInterval(inter); scr.style.display = "none"; }
-            }, 100);
-        }
-        function randomPopup(e) {
-            if(e.target.tagName === 'BUTTON' || e.target.tagName === 'INPUT' || e.target.tagName === 'LABEL') return;
-            if (Math.random() > 0.4) return; 
-            var div = document.createElement("div");
-            div.className = "popup";
-            div.innerHTML = "<div class='popup-header'>System Error</div>VIRUS DETECTED<br>Sending data...";
-            div.style.left = (e.clientX) + "px";
-            div.style.top = (e.clientY + window.scrollY) + "px";
-            document.body.appendChild(div);
-            setTimeout(() => div.remove(), 1500);
-        }
-        function startFakeLoading() {
-            var bar = document.getElementById("progBar");
-            var width = 0;
-            setInterval(() => {
-                if (width >= 100) width = 0;
-                else width += 2;
-                bar.style.width = width + '%';
-            }, 50);
-        }
-    </script>
-</body>
-</html>
+            var 
