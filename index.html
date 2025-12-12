@@ -5,6 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SECURE ARCHIVE</title>
     <style>
+        /* СКРЫВАЕМ ПОЛОСУ ПРОКРУТКИ (ЧТОБЫ НЕЛЬЗЯ БЫЛО ТЯНУТЬ) */
+        ::-webkit-scrollbar {
+            display: none; /* Chrome, Safari */
+        }
+        body {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
+
         body {
             background-color: #000;
             color: #ff3333;
@@ -31,7 +40,7 @@
         }
 
         .fly {
-            position: fixed; font-size: 24px; z-index: 9999; pointer-events: none; transition: top 0.5s, left 0.5s;
+            position: fixed; font-size: 30px; z-index: 9999; pointer-events: none; transition: top 0.2s, left 0.2s;
         }
 
         .chat-notification {
@@ -217,13 +226,13 @@
         </div>
     </div>
 
-    <!-- АДСКИЙ ПОЛЗУНОК -->
+    <!-- АДСКИЙ ПОЛЗУНОК V2 -->
     <div id="gateSlider" class="gate-overlay">
         <div class="gate-box">
             <h2>ТОЧНОСТЬ</h2>
-            <p>Установи ползунок ровно на <b>77</b>.</p>
+            <p>Установи ползунок ровно на <b id="sliderTargetText">77</b>.</p>
             <p id="sliderVal" style="font-size: 2em; color: white;">0</p>
-            <input type="range" id="hellSlider" min="0" max="100" value="0" oninput="updateSlider(this.value)">
+            <input type="range" id="hellSlider" min="0" max="100" value="0" oninput="updateSlider(this.value)" data-current-val="0">
             <br><button class="login-btn" onclick="checkSlider()" style="margin-top:10px;">ГОТОВО</button>
         </div>
     </div>
@@ -341,7 +350,6 @@
                 window.addEventListener('scroll', checkScrollTraps);
                 startBrokenScroll(); 
                 startChaosSystem(); 
-                startFly();
             } else {
                 document.getElementById("errorMsg").style.display = "block";
                 document.getElementById("passwordInput").value = "";
@@ -366,8 +374,9 @@
             else if (rand < 0.6) triggerBlur();
             else if (rand < 0.7) triggerInvert();
             else if (rand < 0.8) triggerPulse();
-            else if (rand < 0.9) triggerChat();
-            else if (rand < 0.95) triggerZoom();
+            else if (rand < 0.85) triggerChat();
+            else if (rand < 0.9) triggerZoom();
+            else if (rand < 0.95) triggerFly(); // Теперь муха это рандом
             else triggerMultiCursor();
         }
 
@@ -395,7 +404,6 @@
                 c.style.top = Math.random() * window.innerHeight + "px";
                 document.body.appendChild(c);
                 
-                // Двигаем их
                 let interval = setInterval(() => {
                     c.style.left = (parseFloat(c.style.left) + (Math.random()*20-10)) + "px";
                     c.style.top = (parseFloat(c.style.top) + (Math.random()*20-10)) + "px";
@@ -405,18 +413,20 @@
             }
         }
 
-        function startFly() {
+        function triggerFly() {
             let fly = document.createElement("div");
             fly.innerText = "🪰";
             fly.className = "fly";
             document.body.appendChild(fly);
             
-            setInterval(() => {
+            let flyInt = setInterval(() => {
                 let x = Math.random() * window.innerWidth;
                 let y = Math.random() * window.innerHeight;
                 fly.style.left = x + "px";
-                fly.style.top = (y + window.scrollY) + "px"; // Летает относительно скролла
-            }, 500);
+                fly.style.top = (y + window.scrollY) + "px"; 
+            }, 300);
+
+            setTimeout(() => { clearInterval(flyInt); fly.remove(); }, 5000); // Улетает через 5 сек
         }
 
         // --- СТАРЫЕ ХАОС ФУНКЦИИ ---
@@ -447,7 +457,6 @@
         let passed2048 = false;
         let passedPayment = false;
         
-        // НОВЫЕ ФЛАГИ
         let passedStroop = false;
         let passedSlider = false;
         let passedType = false;
@@ -483,7 +492,7 @@
             else if (y > 210000 && !passedType) openTypeGate();
             else if (y > 280000 && !passedDontPress) openDontPressGate();
 
-            else if (y > 130000 && !passedPayment && passedSlider) { // Оплата после слайдера
+            else if (y > 130000 && !passedPayment && passedSlider) { 
                 isGateOpen = true;
                 document.getElementById('payment-modal').style.display = 'block';
                 document.body.style.overflow = 'hidden';
@@ -553,7 +562,6 @@
             document.getElementById('payment-modal').style.display = 'none';
             document.body.style.overflow = 'auto';
             
-            // Clean inputs
             document.getElementById('ans1').value = "";
             document.getElementById('ans2').value = "";
             document.getElementById('hellSlider').value = 0;
@@ -570,21 +578,17 @@
             let colors = ["КРАСНЫЙ", "ЗЕЛЕНЫЙ", "СИНИЙ", "ЖЕЛТЫЙ"];
             let cssColors = ["red", "lime", "blue", "yellow"];
             
-            // Генерируем текст и цвет
             let textIdx = Math.floor(Math.random() * 4);
             let colorIdx = Math.floor(Math.random() * 4);
-            while(textIdx === colorIdx) colorIdx = Math.floor(Math.random() * 4); // Чтобы не совпадали
+            while(textIdx === colorIdx) colorIdx = Math.floor(Math.random() * 4); 
 
             let wordEl = document.getElementById('stroopWord');
             wordEl.innerText = colors[textIdx];
             wordEl.style.color = cssColors[colorIdx];
-            stroopCorrectColor = cssColors[colorIdx]; // Правильный ответ - это ЦВЕТ (css)
+            stroopCorrectColor = cssColors[colorIdx];
 
-            // Кнопки
             let btnContainer = document.getElementById('stroopButtons');
             btnContainer.innerHTML = "";
-            
-            // Перемешиваем варианты
             let shuffled = [...cssColors].sort(() => 0.5 - Math.random());
             
             shuffled.forEach(c => {
@@ -612,25 +616,43 @@
             }
         }
 
-        // 2. HELL SLIDER
+        // 2. HELL SLIDER V2 (RANDOM & JITTER)
+        let sliderTarget = 50;
         function openSliderGate() {
             isGateOpen = true;
             document.getElementById('gateSlider').style.display = 'flex';
             document.body.style.overflow = 'hidden';
+            
+            // Random target between 10 and 90
+            sliderTarget = Math.floor(Math.random() * 80) + 10;
+            document.getElementById('sliderTargetText').innerText = sliderTarget;
+
             document.getElementById('hellSlider').value = 0;
-            updateSlider(0);
+            document.getElementById('sliderVal').innerText = "0";
+            document.getElementById('hellSlider').dataset.currentVal = 0;
         }
-        function updateSlider(val) { document.getElementById('sliderVal').innerText = val; }
+        
+        function updateSlider(val) { 
+            // Add chaos/jitter
+            let jitter = Math.floor(Math.random() * 15) - 7; // -7 to +7 jitter
+            let finalVal = parseInt(val) + jitter;
+            if(finalVal < 0) finalVal = 0;
+            if(finalVal > 100) finalVal = 100;
+
+            document.getElementById('sliderVal').innerText = finalVal; 
+            document.getElementById('hellSlider').dataset.currentVal = finalVal;
+        }
+
         function checkSlider() {
-            let val = document.getElementById('hellSlider').value;
-            if(val == 77) {
+            let val = parseInt(document.getElementById('hellSlider').dataset.currentVal);
+            if(val == sliderTarget) {
                 passedSlider = true;
                 isGateOpen = false;
                 document.getElementById('gateSlider').style.display = 'none';
                 document.body.style.overflow = 'auto';
                 alert("Снайперская точность.");
             } else {
-                failGate("Нужно ровно 77. У тебя " + val);
+                failGate("Нужно ровно " + sliderTarget + ". У тебя " + val);
             }
         }
 
