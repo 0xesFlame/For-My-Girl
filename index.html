@@ -3,20 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SYSTEM FAILURE: WAKE UP</title>
+    <title>СБОЙ СИСТЕМЫ: ПРОСНИСЬ</title>
     <style>
-        /* ================= СТИЛИ (CSS) ================= */
         @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
 
         :root {
-            --primary: #ff0000; /* Красный */
+            --primary: #ff0000;
             --bg: #000000;
-            --glass: rgba(20, 0, 0, 0.9);
         }
 
         body.green-mode {
-            --primary: #00ff00; /* Зеленый */
-            --glass: rgba(0, 20, 0, 0.9);
+            --primary: #00ff00;
         }
 
         body {
@@ -26,614 +23,883 @@
             color: var(--primary);
             font-family: 'VT323', monospace;
             font-size: 24px;
-            /* ОГРОМНАЯ ВЫСОТА ДЛЯ СКРОЛЛА */
-            height: 1250000px; 
+            height: 1250000px;
             overflow-x: hidden;
             cursor: crosshair;
             transition: filter 1s ease;
+            user-select: none;
         }
 
-        /* Скрываем скроллбар */
-        body::-webkit-scrollbar {
-            width: 0px;
-            background: transparent;
-        }
+        body::-webkit-scrollbar { width: 0; }
 
-        /* МАТРИЦА ФОН */
+        /* МАТРИЦА */
         #matrixCanvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            z-index: -1;
-            opacity: 0.25;
+            position: fixed; top: 0; left: 0; z-index: -1; opacity: 0.25;
         }
 
-        /* UI ВЕРХ */
+        /* UI HEADER */
         #ui-layer {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            height: 60px;
+            position: fixed; top: 0; width: 100%; height: 60px;
             background: black;
             border-bottom: 2px solid var(--primary);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            z-index: 100;
-            padding: 0 20px;
-            box-sizing: border-box;
+            display: flex; justify-content: space-between; align-items: center;
+            z-index: 2500; padding: 0 20px; box-sizing: border-box;
         }
 
         .cyber-btn {
-            background: transparent;
-            border: 1px solid var(--primary);
-            color: var(--primary);
-            font-family: 'VT323', monospace;
-            font-size: 20px;
-            padding: 5px 15px;
-            cursor: pointer;
-            text-transform: uppercase;
-            transition: 0.2s;
+            background: black; border: 1px solid var(--primary); color: var(--primary);
+            font-family: 'VT323', monospace; font-size: 20px; padding: 5px 15px;
+            cursor: pointer; text-transform: uppercase; transition: 0.2s;
+            box-shadow: 0 0 5px var(--primary);
+        }
+        .cyber-btn:hover { background: var(--primary); color: black; }
+
+        .loader-bar { width: 150px; height: 10px; border: 1px solid var(--primary); margin: 5px auto; overflow: hidden; }
+        .loader-fill { height: 100%; background: repeating-linear-gradient(45deg, var(--primary), var(--primary) 10px, black 10px, black 20px); width: 200%; animation: load 1s linear infinite; }
+        @keyframes load { from { transform: translateX(0); } to { transform: translateX(-28px); } }
+
+        /* ЭКРАНЫ */
+        .full-screen-msg {
+            height: 100vh; display: flex; flex-direction: column; 
+            justify-content: center; align-items: center; text-align: center;
+        }
+        #final-msg {
+            position: absolute; top: 1249500px;
+            width: 100%; height: 100vh;
         }
 
-        .cyber-btn:hover {
-            background: var(--primary);
-            color: black;
-            box-shadow: 0 0 10px var(--primary);
-        }
-
-        .loader-bar {
-            width: 200px;
-            height: 10px;
-            border: 1px solid var(--primary);
-            margin-top: 5px;
-        }
-        .loader-fill {
-            height: 100%;
-            width: 100%;
-            background: repeating-linear-gradient(45deg, var(--primary), var(--primary) 10px, black 10px, black 20px);
-            animation: loadAnim 2s linear infinite;
-        }
-
-        @keyframes loadAnim { from { background-position: 0 0; } to { background-position: 40px 0; } }
-
-        /* Стартовый экран */
-        .start-screen {
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-        }
-
-        #runaway-btn {
-            padding: 15px 30px;
-            font-size: 24px;
-            background: black;
-            color: var(--primary);
-            border: 2px solid var(--primary);
-            position: relative;
-            cursor: pointer;
-        }
-
-        /* ОКНА */
+        /* ОВЕРЛЕЙ */
         .overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.95);
-            backdrop-filter: blur(5px);
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9);
+            display: flex; justify-content: center; align-items: center;
             z-index: 1000;
         }
         .hidden { display: none !important; }
 
         .cyber-window {
-            width: 90%;
-            max-width: 500px;
-            background: black;
-            border: 2px solid var(--primary);
-            box-shadow: 0 0 20px var(--primary);
-            padding: 20px;
-            text-align: center;
+            background: black; border: 2px solid var(--primary);
+            box-shadow: 0 0 20px var(--primary); padding: 20px;
+            text-align: center; max-width: 600px; width: 95%;
             position: relative;
         }
 
-        .window-header {
-            background: var(--primary);
-            color: black;
-            font-weight: bold;
-            padding: 5px;
-            margin-bottom: 20px;
+        /* МАГАЗИН И АДМИНКА */
+        #shop-container {
+            position: fixed; top: 70px; left: 20px;
+            width: 320px; background: black; border: 2px solid var(--primary);
+            z-index: 3000; padding: 10px; display: none;
+            max-height: 80vh; overflow-y: auto;
         }
-
-        /* МАГАЗИН */
         .shop-item {
-            border: 1px solid var(--primary);
-            margin: 10px 0;
-            padding: 10px;
-            cursor: pointer;
-            transition: 0.2s;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
+            border: 1px solid var(--primary); margin-bottom: 8px; padding: 5px;
+            display: flex; justify-content: space-between; align-items: center; cursor: pointer;
+            font-size: 18px;
         }
-        .shop-item:hover { background: rgba(255,0,0,0.2); }
-        body.green-mode .shop-item:hover { background: rgba(0,255,0,0.2); }
+        .shop-item:hover { background: rgba(255,0,0,0.3); }
 
-        .item-name { font-weight: bold; width: 100%; text-align: left;}
-        .item-desc { font-size: 16px; opacity: 0.7; text-align: left; width: 70%;}
-        .item-price { font-weight: bold; width: 30%; text-align: right; }
+        #admin-panel {
+            position: fixed; top: 70px; right: 20px;
+            width: 300px; background: black; border: 2px solid var(--primary);
+            z-index: 3000; padding: 10px; display: none;
+        }
 
-        /* ЭЛЕМЕНТЫ ВВОДА */
-        input {
-            background: black;
-            border: 1px solid var(--primary);
-            color: var(--primary);
-            font-family: inherit;
-            font-size: 24px;
+        /* ИГРОВЫЕ СТИЛИ */
+        input { background: black; border: 1px solid var(--primary); color: var(--primary); font-size: 24px; text-align: center; padding: 5px; width: 70%; font-family: inherit; }
+        input[type=range] { width: 100%; cursor: pointer; }
+
+        /* 2048 Стили */
+        .game-2048-container {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 5px;
+            width: 300px;
+            height: 300px;
+            margin: 0 auto;
+            background: #222;
             padding: 5px;
-            text-align: center;
-            margin: 10px 0;
-            width: 80%;
+            border: 1px solid var(--primary);
         }
-        .close-btn { margin-top: 15px; }
+        .tile-2048 {
+            display: flex; justify-content: center; align-items: center;
+            background: #111; color: var(--primary);
+            font-weight: bold; font-size: 18px;
+            border: 1px solid #444;
+            transition: all 0.1s;
+        }
+        .tile-val-2 { background: #300; }
+        .tile-val-4 { background: #500; }
+        .tile-val-8 { background: #700; border-color: red;}
+        .tile-val-16 { background: #900; border-color: red;}
+        .tile-val-32 { background: #b00; border-color: red;}
+        .tile-val-64 { background: #d00; color: white; border-color: red;}
+        .tile-val-128 { background: #f00; color: black; border-color: white;}
+        /* Сапер Стили */
+        .mines-grid {
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            gap: 2px;
+            width: 320px;
+            margin: 0 auto;
+            background: #333;
+            border: 1px solid var(--primary);
+        }
+        .mine-cell {
+            width: 38px; height: 38px;
+            background: #111;
+            border: 1px solid #444;
+            display: flex; justify-content: center; align-items: center;
+            font-weight: bold; font-size: 20px;
+            cursor: pointer;
+        }
+        .mine-cell:hover { background: #222; }
+        .mine-cell.revealed { background: black; border: 1px solid #222; cursor: default; }
 
-        /* ХАОС ЭФФЕКТЫ */
-        .shake-screen { animation: shake 0.5s infinite; }
-        .invert-colors { filter: invert(1); }
-        
-        @keyframes shake {
-            0% { transform: translate(1px, 1px) rotate(0deg); }
-            10% { transform: translate(-1px, -2px) rotate(-1deg); }
-            20% { transform: translate(-3px, 0px) rotate(1deg); }
-            30% { transform: translate(3px, 2px) rotate(0deg); }
-            40% { transform: translate(1px, -1px) rotate(1deg); }
-            50% { transform: translate(-1px, 2px) rotate(-1deg); }
-            60% { transform: translate(-3px, 1px) rotate(0deg); }
-            70% { transform: translate(3px, 1px) rotate(-1deg); }
-            80% { transform: translate(-1px, -1px) rotate(1deg); }
-            90% { transform: translate(1px, 2px) rotate(0deg); }
-            100% { transform: translate(1px, -2px) rotate(-1deg); }
+        /* УВЕДОМЛЕНИЕ */
+        #chaos-warn {
+            position: fixed; right: -100vw; top: 100px;
+            background: var(--primary); color: black; border: 2px solid white;
+            padding: 15px 30px; font-weight: bold; font-size: 28px;
+            transition: right 0.5s ease-out; z-index: 4000;
         }
 
-        .color-grid { display: flex; gap: 10px; justify-content: center; margin-top: 10px;}
-        .color-btn { width: 50px; height: 50px; border: 2px solid white; cursor: pointer; }
+        /* ЭФФЕКТЫ */
+        .shake { animation: shake 0.5s infinite; }
+        .darkness { filter: brightness(0); }
+        .invert { filter: invert(1); }
+        .no-cursor { cursor: none !important; }
+        @keyframes shake { 0% { transform: translate(2px, 2px); } 50% { transform: translate(-2px, -2px); } 100% { transform: translate(2px, 2px); } }
+        .falling-obj { position: fixed; top: -50px; font-size: 40px; animation: fall 3s linear forwards; z-index: 5000; pointer-events: none;}
+        @keyframes fall { to { top: 110vh; } }
+        .fake-cursor {
+            position: fixed; width: 20px; height: 20px; 
+            background: white; clip-path: polygon(0 0, 0% 100%, 100% 50%);
+            z-index: 9999; pointer-events: none; transition: 0.1s;
+        }
+
     </style>
 </head>
 <body>
-
-    <!-- Фон: Матрица -->
     <canvas id="matrixCanvas"></canvas>
 
-    <!-- UI: Верхняя панель -->
+    <!-- UI HEADER -->
     <div id="ui-layer">
-        <div class="ui-left">
-            <button class="cyber-btn" onclick="toggleShop()">🛒 MARKET [<span id="money-display">0</span>$]</button>
+        <div style="width: 250px;">
+            <button class="cyber-btn" id="shop-btn" onclick="toggleShop()">🛒 МАГАЗИН [0$]</button>
         </div>
-        <div class="ui-center">
-            <div style="font-size: 20px; font-weight: bold;">CRITICAL ERROR</div>
+        <div style="text-align: center;">
+            <div style="font-size: 20px; font-weight: bold;">КРИТИЧЕСКАЯ ОШИБКА</div>
             <div class="loader-bar"><div class="loader-fill"></div></div>
         </div>
-        <div class="ui-right" id="admin-trigger" style="cursor: pointer;">
-            SYSTEM: <span id="progress-display">0.00</span>%
+        <div style="width: 250px; text-align: right; cursor: pointer;" id="admin-trigger">
+            Прогресс взлома: <span id="pct-disp">0.00</span>%
         </div>
     </div>
 
-    <!-- Контент: Стартовый экран -->
-    <div class="scroll-container">
-        <div class="start-screen">
-            <h1 style="font-size: 60px;">ACCESS DENIED</h1>
-            <p>Чтобы получить данные, прокрути систему до конца.</p>
-            <br>
-            <button id="runaway-btn">>> ВЗЛОМАТЬ <<</button>
+    <!-- МАГАЗИН -->
+    <div id="shop-container">
+        <h3 style="text-align: center; border-bottom: 1px solid var(--primary); margin-top: 0;">МАГАЗИН</h3>
+        <div class="shop-item" onclick="buy('skip')"><span>🧨 Пропуск</span> <span>5000$</span></div>
+        <div class="shop-item" onclick="buy('shield')"><span>🛡️ Щит (2 мин)</span> <span>2000$</span></div>
+        <div class="shop-item" onclick="buy('insurance')"><span>💾 Страховка</span> <span>3000$</span></div>
+        <div class="shop-item" onclick="buy('case')"><span>💼 Кейс удачи</span> <span>10000$</span></div>
+        <div class="shop-item" onclick="buy('x2')"><span>💰 Доход x2</span> <span>15000$</span></div>
+        <div class="shop-item" onclick="buy('x3')"><span>💰 Доход x3</span> <span>30000$</span></div>
+        <div class="shop-item" onclick="buy('x4')"><span>💰 Доход x4</span> <span>50000$</span></div>
+        <div class="shop-item" onclick="buy('x5')"><span>💰 Доход x5</span> <span>100000$</span></div>
+        <button class="cyber-btn" onclick="toggleShop()" style="width: 100%; margin-top: 10px;">ЗАКРЫТЬ</button>
+    </div>
+
+    <!-- АДМИНКА -->
+    <div id="admin-panel">
+        <h3 style="margin-top:0;">GOD MODE</h3>
+        <input id="admin-pass" type="password" placeholder="Пароль" style="width: 90%;">
+        <button class="cyber-btn" onclick="authAdmin()" style="width:100%; margin-top:5px;">ВОЙТИ</button>
+        
+        <div id="admin-controls" class="hidden">
+            <hr style="border-color: var(--primary);">
+            <button class="cyber-btn" onclick="state.money+=100000; updateUI();" style="width:100%">+100,000$</button>
+            <button class="cyber-btn" onclick="forceSkip()" style="width:100%; margin-top:5px;">Пропустить Задание</button>
+            <button class="cyber-btn" onclick="resetGame()" style="width:100%; margin-top:5px; color:red; border-color:red;">СБРОС ПРОГРЕССА</button>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 5px; margin-top: 10px;">
+                <button class="cyber-btn" onclick="tpTo(0)">0%</button>
+                <button class="cyber-btn" onclick="tpTo(50)">50%</button>
+                <button class="cyber-btn" onclick="tpTo(99)">99%</button>
+                <button class="cyber-btn" onclick="tpTo(150)">150%</button>
+                <button class="cyber-btn" onclick="tpTo(199)">199%</button>
+                <button class="cyber-btn" onclick="tpTo(249)">249%</button>
+            </div>
+            
+            <p style="margin: 5px 0;">Вызвать событие:</p>
+            <select id="chaos-sel" style="background:black; color:var(--primary); width:100%; padding: 5px;">
+                <option value="tacos">Тако</option>
+                <option value="quake">Землетрясение</option>
+                <option value="dark">Темнота</option>
+                <option value="freeze">Заморозка</option>
+                <option value="invert">Инверсия</option>
+                <option value="msg">Чат</option>
+                <option value="fly">Муха</option>
+                <option value="multi">Мульти-курсор</option>
+                <option value="twilight">Сумерки (No Cursor)</option>
+            </select>
+            <button class="cyber-btn" onclick="forceChaos()" style="width:100%; margin-top:5px;">ВЫЗВАТЬ</button>
+            <button class="cyber-btn" onclick="document.getElementById('admin-panel').style.display='none'" style="width: 100%; margin-top: 10px;">ЗАКРЫТЬ</button>
         </div>
     </div>
 
-    <!-- Окно Задания -->
+    <!-- УВЕДОМЛЕНИЕ -->
+    <div id="chaos-warn">⚠️ ВНИМАНИЕ: СБОЙ В СИСТЕМЕ!!!</div>
+
+    <!-- ГЛАВНЫЙ ЭКРАН -->
+    <div class="full-screen-msg">
+        <h1 style="font-size: 60px;">ДОСТУП ЗАПРЕЩЕН</h1>
+        <p>Листай вниз для взлома...</p>
+        <button class="cyber-btn" id="runaway-btn" style="position:relative;">ВЗЛОМАТЬ</button>
+    </div>
+
+    <!-- ФИНАЛ -->
+    <div id="final-msg" class="full-screen-msg">
+        <h1 style="font-size: 50px;">СИСТЕМА ПОЛНОСТЬЮ ВЗЛОМАНА</h1>
+        <div style="background: black; border: 4px dashed var(--primary); padding: 40px;">
+            <h2 style="margin: 0;">СЛЕДУЮЩАЯ ПОДСКАЗКА ПРИКЛЕЕНА<br>СКОТЧЕМ ЗА ТВОИМ ТЕЛЕВИЗОРОМ</h2>
+        </div>
+    </div>
+
+    <!-- ОКНО ЗАДАНИЯ -->
     <div id="task-overlay" class="overlay hidden">
         <div class="cyber-window">
-            <div class="window-header">SECURITY PROTOCOL</div>
-            <div id="task-container"></div>
-            <div id="task-message" style="margin-top:10px; color:red;"></div>
+            <h2 id="task-title">ЗАГРУЗКА...</h2>
+            <div id="task-timer" style="color:yellow; font-weight:bold; font-size: 30px; margin-bottom: 10px;"></div>
+            <div id="task-body" style="margin: 20px 0;"></div>
         </div>
     </div>
 
-    <!-- Окно Магазина -->
-    <div id="shop-overlay" class="overlay hidden">
-        <div class="cyber-window">
-            <div class="window-header">DARKNET STORE</div>
-            <div class="window-content">
-                <div class="shop-item" onclick="buyItem('skip')">
-                    <div class="item-name">🧨 Взлом Протокола</div>
-                    <div class="item-desc">Пропуск задания</div>
-                    <div class="item-price">5000 $</div>
-                </div>
-                <div class="shop-item" onclick="buyItem('shield')">
-                    <div class="item-name">🛡️ Firewall</div>
-                    <div class="item-desc">Защита от сбоев (2 мин)</div>
-                    <div class="item-price">2000 $</div>
-                </div>
-                <div class="shop-item" onclick="buyItem('insurance')">
-                    <div class="item-name">💾 Backup</div>
-                    <div class="item-desc">Спасает от отката назад</div>
-                    <div class="item-price">3000 $</div>
-                </div>
-            </div>
-            <button class="cyber-btn close-btn" onclick="toggleShop()">ЗАКРЫТЬ</button>
-        </div>
-    </div>
+<script>
+/* ================== CONFIG ================== */
+const TOTAL_HEIGHT = 1250000;
+const SCROLL_FACTOR = TOTAL_HEIGHT / 250; 
+let state = {
+    locked: false,
+    money: 0,
+    multiplier: 1,
+    progress: 0,
+    checkpoint: 0,
+    activeTask: null,
+    inventory: { shield: false, insurance: false },
+    tasksSolved: []
+};
+let currentTimer = null;
 
-    <!-- Админ Панель -->
-    <div id="admin-overlay" class="overlay hidden">
-        <div class="cyber-window">
-            <h3>GOD MODE</h3>
-            <input type="password" id="admin-pass" placeholder="Password">
-            <button class="cyber-btn" onclick="checkAdmin()">LOGIN</button>
-            <div id="admin-tools" class="hidden" style="margin-top: 20px;">
-                <hr style="border: 1px solid var(--primary)">
-                <button class="cyber-btn" onclick="skipTask()">Skip Task</button>
-                <button class="cyber-btn" onclick="addMoney(10000)">+10k $</button>
-                <button class="cyber-btn" onclick="teleportTo(99)">Goto 99%</button>
-                <button class="cyber-btn" onclick="teleportTo(199)">Goto 199%</button>
-            </div>
-            <button class="cyber-btn close-btn" onclick="document.getElementById('admin-overlay').classList.add('hidden')">X</button>
-        </div>
-    </div>
+// ПУЛ ЗАГАДОК
+const RIDDLES_POOL = [
+    {q: 'Зимой и летом одним цветом?', a: 'елка'},
+    {q: 'Не лает, не кусает, а в дом не пускает?', a: 'замок'},
+    {q: 'Всегда во рту, а не проглотишь?', a: 'язык'},
+    {q: 'Висит груша - нельзя скушать?', a: 'лампочка'},
+    {q: 'Что можно сломать, если назвать?', a: 'тишина'},
+    {q: 'Без рук, без ног, а рисовать умеет?', a: 'мороз'},
+    {q: 'У кого есть шапка без головы?', a: 'гриб'}
+];
 
-    <script>
-        /* ================= СКРИПТ (JS) ================= */
+// ПУЛ СТРАШНЫХ СООБЩЕНИЙ
+const CREEPY_MSGS = [
+    "👁️ Я ВИЖУ ТЕБЯ...", "ОБЕРНИСЬ...", "ТЫ НЕ ОДНА...", 
+    "СИСТЕМА СЛЕДИТ...", "НЕ СПАТЬ...", "ВРЕМЯ ИСТЕКАЕТ..."
+];
+
+const TASKS = [
+    { pct: 10, type: 'riddle', t: 30 },
+    { pct: 20, type: 'math', lvl: 1, t: 20 },
+    { pct: 25, type: 'memory', t: 10 },
+    { pct: 30, type: 'color', t: 20 },
+    { pct: 35, type: 'math', lvl: 2, t: 20 },
+    { pct: 40, type: 'slider', t: 15 },
+    { pct: 45, type: 'riddle', t: 30 },
+    { pct: 50, type: 'math', lvl: 3, t: 20 },
+    { pct: 55, type: 'findOdd', t: 15 },
+    { pct: 60, type: 'typing', t: 20 },
+    { pct: 65, type: 'math', lvl: 4, t: 20 },
+    { pct: 70, type: 'dontPress', t: 10 },
+    { pct: 75, type: 'clicker', t: 5 },
+    { pct: 80, type: 'riddle', t: 30 },
+    { pct: 85, type: 'math', lvl: 5, t: 20 },
+    { pct: 90, type: '2048', t: 0 },
+    { pct: 95, type: 'mines', t: 0 },
+    { pct: 100, type: 'checkpoint' },
+    // ПУСТОШЬ
+    { pct: 150, type: 'quiz', t: 0 },
+    { pct: 195, type: 'colorChange' },
+    { pct: 200, type: 'checkpoint' },
+    { pct: 210, type: 'sheep', count: 3, t: 0 },
+    { pct: 220, type: 'flags', t: 0 },
+    { pct: 230, type: 'sheep', count: 6, t: 0 },
+    { pct: 250, type: 'final' }
+];
+
+/* ================== START ================== */
+window.onload = () => {
+    initMatrix();
+    initRunaway();
+    setInterval(economyLoop, 60000);
+    setInterval(chaosLoop, 30000);
+    
+    // Глобальный слушатель для 2048
+    document.addEventListener('keydown', handleGlobalKey);
+};
+
+/* ================== SCROLL ENGINE ================== */
+window.onscroll = () => {
+    let y = window.scrollY;
+    let pct = y / SCROLL_FACTOR;
+    state.progress = pct;
+    document.getElementById('pct-disp').innerText = pct.toFixed(2);
+    
+    if (pct >= 195) document.body.classList.add('green-mode');
+    else document.body.classList.remove('green-mode');
+
+    if (state.locked && state.activeTask) {
+        let taskY = state.activeTask.pct * SCROLL_FACTOR;
+        if (Math.abs(y - taskY) > 50) window.scrollTo(0, taskY);
+        return;
+    }
+    checkTaskTrigger(pct);
+};
+
+function checkTaskTrigger(pct) {
+    let task = TASKS.find(t => pct >= t.pct && pct < t.pct + 0.1);
+    
+    if (task) {
+        if (state.tasksSolved.includes(task.pct)) return;
+
+        if (task.type === 'checkpoint') {
+            state.checkpoint = task.pct;
+            notify("🚩 ЧЕКПОИНТ СОХРАНЕН!");
+            state.tasksSolved.push(task.pct);
+        } else if (task.type === 'colorChange') {
+            // Visual
+        } else if (task.type === 'final') {
+            // End
+        } else {
+            triggerTask(task);
+        }
+    }
+}
+
+function triggerTask(task) {
+    if (state.locked) return;
+    state.locked = true;
+    state.activeTask = task;
+    document.body.style.overflow = 'hidden';
+    document.getElementById('task-overlay').classList.remove('hidden');
+    renderTask(task);
+}
+
+function unlock() {
+    state.locked = false;
+    document.body.style.overflow = 'auto';
+    document.getElementById('task-overlay').classList.add('hidden');
+    if (currentTimer) clearInterval(currentTimer);
+    
+    if (state.activeTask) {
+        state.tasksSolved.push(state.activeTask.pct);
+        state.money += 100;
+        updateUI();
+        notify("ЗАДАНИЕ ВЫПОЛНЕНО (+100$)");
+        window.scrollBy(0, 300); 
+    }
+    state.activeTask = null;
+}
+
+function failTask(msg) {
+    if (currentTimer) clearInterval(currentTimer);
+
+    if (state.inventory.insurance) {
+        state.inventory.insurance = false;
+        notify("🛡️ СТРАХОВКА СПАСЛА ВАС!");
+        state.locked = false;
+        document.body.style.overflow = 'auto';
+        document.getElementById('task-overlay').classList.add('hidden');
+        window.scrollBy(0, -100);
+        return;
+    }
+
+    alert(msg || "ОШИБКА! СИСТЕМА ПЕРЕЗАГРУЖАЕТСЯ...");
+    state.tasksSolved = state.tasksSolved.filter(pct => pct <= state.checkpoint);
+    state.locked = false;
+    state.activeTask = null;
+    document.body.style.overflow = 'auto';
+    document.getElementById('task-overlay').classList.add('hidden');
+    window.scrollTo(0, state.checkpoint * SCROLL_FACTOR);
+}
+
+/* ================== ЗАДАНИЯ ================== */
+function renderTask(t) {
+    let body = document.getElementById('task-body');
+    let title = document.getElementById('task-title');
+    let timerDiv = document.getElementById('task-timer');
+    body.innerHTML = '';
+    title.innerText = "ВЗЛОМ ПРОТОКОЛА";
+    timerDiv.innerText = '';
+
+    if (t.t > 0 && t.type !== 'dontPress') {
+        let time = t.t;
+        timerDiv.innerText = time;
+        currentTimer = setInterval(() => {
+            time--;
+            timerDiv.innerText = time;
+            if (time <= 0) failTask("ВРЕМЯ ИСТЕКЛО!");
+        }, 1000);
+    }
+
+    if (t.type === 'math') {
+        let n1 = Math.floor(Math.random()*10*t.lvl)+5;
+        let n2 = Math.floor(Math.random()*10*t.lvl)+5;
+        let ans = n1+n2;
+        body.innerHTML = `<h3>${n1} + ${n2} = ?</h3><input id="ans" type="number"><br><br><button class="cyber-btn" onclick="checkAns(${ans})">OK</button>`;
+    }
+    else if (t.type === 'riddle') {
+        let r = RIDDLES_POOL[Math.floor(Math.random() * RIDDLES_POOL.length)];
+        body.innerHTML = `<p>${r.q}</p><input id="ans"><br><br><button class="cyber-btn" onclick="checkStr('${r.a}')">OK</button>`;
+    }
+    else if (t.type === 'color') {
+        let colors = ['red','green','blue','yellow'];
+        let trueC = colors[Math.floor(Math.random()*4)];
+        let textC = colors[Math.floor(Math.random()*4)].toUpperCase();
+        let ru = {'red':'КРАСНЫЙ','green':'ЗЕЛЕНЫЙ','blue':'СИНИЙ','yellow':'ЖЕЛТЫЙ'};
+        body.innerHTML = `<h1 style="color:${trueC};font-size:50px;">${ru[textC]||textC}</h1><p>Нажми на кнопку цвета <b>ТЕКСТА</b></p>`;
+        let d = document.createElement('div');
+        colors.forEach(c => {
+            let b = document.createElement('button');
+            b.style.backgroundColor = c; b.style.width='60px'; b.style.height='60px'; b.style.margin='10px'; b.style.border='2px solid white';
+            b.onclick = () => { if(c===trueC) unlock(); else failTask("НЕ ТОТ ЦВЕТ!"); };
+            d.appendChild(b);
+        });
+        body.appendChild(d);
+    }
+    else if (t.type === 'dontPress') {
+        body.innerHTML = `<h3>НЕ НАЖИМАЙ 10 СЕКУНД</h3><button id="bad-btn" class="cyber-btn" style="color:red;border-color:red; padding:20px;">Я НЕ МОГУ ТЕРПЕТЬ</button>`;
+        let btn = document.getElementById('bad-btn');
+        // Логика: если нажал сразу - смерть
+        btn.onclick = () => failTask('ТЫ НЕ ВЫТЕРПЕЛА!');
         
-        const TOTAL_HEIGHT = 1250000; 
-        const PX_PER_PERCENT = TOTAL_HEIGHT / 250; 
-        let state = {
-            money: 0,
-            progress: 0,
-            locked: false,
-            activeTask: null,
-            checkpoint: 0,
-            shield: false,
-            insurance: false
+        let time = 10;
+        timerDiv.innerText = time;
+        currentTimer = setInterval(() => {
+            time--;
+            timerDiv.innerText = time;
+            if (time <= 0) {
+                clearInterval(currentTimer);
+                btn.innerText = "ВЗЛОМАТЬ";
+                btn.style.color = "#0f0";
+                btn.style.borderColor = "#0f0";
+                btn.onclick = unlock; // Теперь кнопка выигрывает
+            }
+        }, 1000);
+    }
+    else if (t.type === 'clicker') {
+        let count = 0;
+        body.innerHTML = `<h3>КЛИКНИ 10 РАЗ!</h3><button id="click-btn" class="cyber-btn">ЖМИ (0/10)</button>`;
+        let b = document.getElementById('click-btn');
+        b.onclick = () => {
+            count++; b.innerText = `ЖМИ (${count}/10)`;
+            b.style.position = 'relative';
+            b.style.left = (Math.random()*300 - 150)+'px';
+            b.style.top = (Math.random()*100 - 50)+'px';
+            if(count>=10) unlock();
         };
+    }
+    else if (t.type === 'typing') {
+        let phrases = ["я люблю тебя", "системный сбой", "матрица", "доступ", "код 1379"];
+        let p = phrases[Math.floor(Math.random()*phrases.length)];
+        body.innerHTML = `<p>Напечатай: <b>${p}</b></p><input id="ans"><button class="cyber-btn" onclick="checkStr('${p}')">OK</button>`;
+    }
+    else if (t.type === 'findOdd') {
+        let grid = document.createElement('div');
+        grid.style.display = 'grid'; grid.style.gridTemplateColumns='repeat(5,1fr)';
+        let odd = Math.floor(Math.random()*25);
+        for(let i=0; i<25; i++) {
+            let s = document.createElement('span');
+            s.style.fontSize='30px'; s.style.cursor='pointer';
+            s.innerText = (i===odd) ? '🤑' : '😎';
+            s.onclick = () => { if(i===odd) unlock(); else failTask('НЕ ТОТ!'); };
+            grid.appendChild(s);
+        }
+        body.appendChild(grid);
+    }
+    else if (t.type === 'memory') {
+        let n = Math.floor(Math.random()*9000)+1000;
+        body.innerHTML = `<h1>${n}</h1>`;
+        setTimeout(() => {
+            body.innerHTML = `<input type="number" id="ans" placeholder="Число?"><button class="cyber-btn" onclick="checkAns(${n})">OK</button>`;
+        }, 2000);
+    }
+    else if (t.type === 'slider') {
+        let target = Math.floor(Math.random()*100);
+        let randomMin = Math.floor(Math.random() * 50) - 50; 
+        let randomMax = Math.floor(Math.random() * 100) + 100;
+        
+        body.innerHTML = `
+            <p>Выставь значение ровно на: <b>${target}</b></p>
+            <div style="font-size:40px; color:yellow" id="slider-val">0</div>
+            <input type="range" min="${randomMin}" max="${randomMax}" value="${randomMin}" id="rng">
+            <br><br>
+            <button class="cyber-btn" id="slider-stop">СТОП</button>
+        `;
+        let rng = document.getElementById('rng');
+        let disp = document.getElementById('slider-val');
+        rng.oninput = function() { disp.innerText = this.value; }
+        document.getElementById('slider-stop').onclick = function() {
+            if(parseInt(rng.value) === target) unlock();
+            else failTask('МИМО! (' + rng.value + ')');
+        }
+    }
+    else if (t.type === '2048') {
+        init2048(body);
+    }
+    else if (t.type === 'mines') {
+        initMines(body);
+    }
+    else if (t.type === 'sheep') {
+        initSheep(body, t.count);
+    }
+    else if (t.type === 'flags') {
+        initFlags(body);
+    }
+    else if (t.type === 'quiz') {
+        let qs = [{q:"Столица Франции?", a:"париж"}, {q:"2+2*2?", a:"6"}];
+        let curr = 0;
+        function showQ() {
+            if(curr>=qs.length) { unlock(); return; }
+            body.innerHTML = `<p>${qs[curr].q}</p><input id="qans"><button class="cyber-btn" onclick="checkQ()">OK</button>`;
+        }
+        window.checkQ = () => { if(document.getElementById('qans').value.toLowerCase().trim() === qs[curr].a) { curr++; showQ(); } else failTask("ОШИБКА!"); }
+        showQ();
+    }
+}
 
-        // --- СПИСОК ЗАДАНИЙ ---
-        const TASKS = [
-            { pct: 10, type: 'riddle', q: 'Что можно сломать, если назвать?', a: 'тишина' },
-            { pct: 15, type: 'math', level: 1 },
-            { pct: 25, type: 'memory' },
-            { pct: 30, type: 'color' },
-            { pct: 40, type: 'math', level: 2 },
-            { pct: 70, type: 'dont_press' },
-            { pct: 100, type: 'checkpoint' },
-            { pct: 150, type: 'math', level: 3 },
-            { pct: 200, type: 'checkpoint' },
-            { pct: 250, type: 'final' }
-        ];
+window.checkAns = (c) => { if(parseInt(document.getElementById('ans').value)===c) unlock(); else failTask("НЕВЕРНО!"); }
+window.checkStr = (c) => { if(document.getElementById('ans').value.toLowerCase().trim().includes(c)) unlock(); else failTask("НЕВЕРНО!"); }
 
-        window.onload = () => {
-            initMatrix();
-            initRunawayBtn();
-            loadGame();
-            
-            // Зарплата
-            setInterval(() => {
-                state.money += 900;
-                updateUI();
-                notify("💰 Майнинг: +900$");
-            }, 60000); 
+/* ================== ИГРА 2048 (ДВИЖОК) ================== */
+let grid2048 = [];
+function init2048(container) {
+    // 6x6 grid = 36 cells
+    grid2048 = Array(36).fill(0);
+    spawn2048(); spawn2048();
+    render2048(container);
+    // Инструкция
+    let p = document.createElement('p');
+    p.innerText = "Используй стрелочки на клавиатуре. Собери 2048.";
+    container.appendChild(p);
+}
 
-            // Хаос
-            setInterval(chaosRoutine, 30000);
+function spawn2048() {
+    let empty = grid2048.map((v,i) => v===0 ? i : -1).filter(v => v !== -1);
+    if(empty.length > 0) {
+        let idx = empty[Math.floor(Math.random()*empty.length)];
+        grid2048[idx] = Math.random() > 0.9 ? 4 : 2;
+    }
+}
+
+function render2048(container) {
+    let div = container.querySelector('.game-2048-container');
+    if(!div) {
+        div = document.createElement('div');
+        div.className = 'game-2048-container';
+        container.insertBefore(div, container.firstChild);
+    }
+    div.innerHTML = '';
+    grid2048.forEach(v => {
+        let tile = document.createElement('div');
+        tile.className = `tile-2048 tile-val-${v}`;
+        tile.innerText = v || '';
+        div.appendChild(tile);
+    });
+}
+
+function handleGlobalKey(e) {
+    if(!state.activeTask || state.activeTask.type !== '2048') return;
+    
+    // Влево = 0, Вверх = 1, Вправо = 2, Вниз = 3 (для упрощения)
+    // Но так как логика сложная, сделаем просто по кнопкам
+    let moved = false;
+    
+    if(e.key === 'ArrowLeft') moved = move2048(0);
+    else if(e.key === 'ArrowUp') moved = move2048(1);
+    else if(e.key === 'ArrowRight') moved = move2048(2);
+    else if(e.key === 'ArrowDown') moved = move2048(3);
+    
+    if(moved) {
+        spawn2048();
+        render2048(document.getElementById('task-body'));
+        if(grid2048.includes(2048)) unlock();
+        if(!grid2048.includes(0)) {
+            // Check if moves possible
+            // Simplified check: fail if full
+             failTask("НЕТ ХОДОВ!");
+        }
+    }
+}
+
+// Простой движок сдвига массива
+function move2048(dir) {
+    // dir: 0-left, 1-up, 2-right, 3-down
+    // Преобразуем 1d массив в 2d (6x6) для обработки
+    let size = 6;
+    let matrix = [];
+    for(let i=0; i<size; i++) matrix.push(grid2048.slice(i*size, (i+1)*size));
+    
+    // Поворачиваем матрицу так, чтобы мы всегда сдвигали ВЛЕВО
+    let rotations = 0;
+    if(dir === 1) rotations = 3; // Up -> Rotate 270 (or 3 times 90)
+    if(dir === 2) rotations = 2; // Right -> Rotate 180
+    if(dir === 3) rotations = 1; // Down -> Rotate 90
+    
+    for(let k=0; k<rotations; k++) matrix = rotateMatrix(matrix);
+    
+    let changed = false;
+    // Сдвиг влево
+    for(let i=0; i<size; i++) {
+        let row = matrix[i].filter(v => v); // Убрать нули
+        for(let j=0; j<row.length-1; j++) {
+            if(row[j] === row[j+1]) {
+                row[j] *= 2;
+                row[j+1] = 0;
+            }
+        }
+        row = row.filter(v => v); // Снова убрать нули после слияния
+        while(row.length < size) row.push(0); // Дополнить нулями
+        if(matrix[i].join(',') !== row.join(',')) changed = true;
+        matrix[i] = row;
+    }
+    
+    // Поворачиваем обратно
+    let backRotations = (4 - rotations) % 4;
+    for(let k=0; k<backRotations; k++) matrix = rotateMatrix(matrix);
+    
+    // Возвращаем в 1d массив
+    grid2048 = matrix.flat();
+    return changed;
+}
+
+function rotateMatrix(m) {
+    // Поворот 90 градусов по часовой
+    let n = m.length;
+    let res = Array.from({length:n}, ()=>Array(n).fill(0));
+    for(let i=0; i<n; i++) {
+        for(let j=0; j<n; j++) {
+            res[j][n-1-i] = m[i][j];
+        }
+    }
+    return res;
+}
+
+/* ================== САПЕР (ДВИЖОК) ================== */
+let minesGrid = [];
+let minesData = []; // -1 mine, 0-8 count
+function initMines(container) {
+    // 8x8 grid = 64 cells
+    minesData = Array(64).fill(0);
+    let bombCount = 12;
+    let bombs = 0;
+    while(bombs < bombCount) {
+        let idx = Math.floor(Math.random()*64);
+        if(minesData[idx] !== -1) {
+            minesData[idx] = -1;
+            bombs++;
+        }
+    }
+    
+    // Calculate numbers
+    for(let i=0; i<64; i++) {
+        if(minesData[i] === -1) continue;
+        let x = i % 8;
+        let y = Math.floor(i / 8);
+        let count = 0;
+        // Check neighbors
+        for(let dx=-1; dx<=1; dx++) {
+            for(let dy=-1; dy<=1; dy++) {
+                let nx = x+dx; let ny = y+dy;
+                if(nx>=0 && nx<8 && ny>=0 && ny<8) {
+                    if(minesData[ny*8+nx] === -1) count++;
+                }
+            }
+        }
+        minesData[i] = count;
+    }
+    
+    // HTML
+    container.innerHTML = `<div class="mines-grid"></div><p>Открой 40 безопасных клеток</p>`;
+    let gridDiv = container.querySelector('.mines-grid');
+    for(let i=0; i<64; i++) {
+        let c = document.createElement('div');
+        c.className = 'mine-cell';
+        c.onclick = () => revealMine(i, c);
+        gridDiv.appendChild(c);
+    }
+    state.safeCount = 0;
+}
+
+function revealMine(idx, el) {
+    if(el.classList.contains('revealed')) return;
+    
+    let val = minesData[idx];
+    if(val === -1) {
+        el.style.background = 'red';
+        el.innerText = '💣';
+        failTask("ТЫ ПОДОРВАЛАСЬ!");
+    } else {
+        el.classList.add('revealed');
+        el.style.color = val === 1 ? 'cyan' : val === 2 ? 'lime' : val >= 3 ? 'red' : 'gray';
+        el.innerText = val > 0 ? val : '';
+        state.safeCount++;
+        if(state.safeCount >= 40) unlock();
+    }
+}
+
+function initSheep(container, count) {
+    container.innerHTML = `<div id="pasture" style="width:100%;height:200px;border:1px dashed green;position:relative;"></div><p>Кликни овечек чтобы покормить</p>`;
+    let fed = 0;
+    for(let i=0; i<count; i++) {
+        let s = document.createElement('div'); s.innerText = '🐑'; s.style.position='absolute';
+        s.style.left=Math.random()*90+'%'; s.style.top=Math.random()*80+'%'; s.style.fontSize='30px'; s.style.cursor='pointer';
+        s.onclick = function() { this.innerText='🍖'; fed++; if(fed>=count) unlock(); this.onclick=null;}
+        document.getElementById('pasture').appendChild(s);
+    }
+}
+
+function initFlags(container) {
+    let f = [{c:'Франция',f:'🇫🇷'},{c:'Япония',f:'🇯🇵'},{c:'США',f:'🇺🇸'}];
+    let curr=0;
+    function next() {
+        if(curr>=f.length) { unlock(); return; }
+        container.innerHTML = `<h1 style="font-size:60px">${f[curr].f}</h1>`;
+        f.forEach(item => {
+            let b = document.createElement('button'); b.className='cyber-btn'; b.innerText=item.c; b.style.margin='5px';
+            b.onclick = () => { if(item.c===f[curr].c) { curr++; next(); } else failTask("НЕВЕРНО!"); }
+            container.appendChild(b);
+        });
+    }
+    next();
+}
+
+/* ================== ECONOMY ================== */
+function economyLoop() {
+    let inc = 900 * state.multiplier;
+    state.money += inc;
+    updateUI();
+    notify(`💰 ЗП: +${inc}$`);
+}
+function updateUI() {
+    document.getElementById('shop-btn').innerText = `🛒 МАГАЗИН [${state.money}$]`;
+}
+function toggleShop() {
+    let s = document.getElementById('shop-container'); s.style.display = s.style.display==='block'?'none':'block';
+}
+function buy(item) {
+    let costs = { 'skip': 5000, 'shield': 2000, 'insurance': 3000, 'case': 10000, 'x2': 15000, 'x3': 30000, 'x4': 50000, 'x5': 100000 };
+    if (state.money >= costs[item]) {
+        state.money -= costs[item];
+        if (item === 'skip') { if(state.locked) unlock(); else notify("Куплено."); }
+        else if (item === 'shield') { state.inventory.shield = true; notify("Щит (2 мин)"); setTimeout(()=>state.inventory.shield=false, 120000); }
+        else if (item === 'insurance') { state.inventory.insurance = true; notify("Страховка активна"); }
+        else if (item.startsWith('x')) { state.multiplier = parseInt(item[1]); notify(`Доход x${item[1]}`); }
+        else if (item === 'case') { Math.random()>0.5 ? (state.money+=20000, notify("ВЫИГРЫШ: +20k$")) : notify("ПУСТО..."); }
+        updateUI();
+    } else alert("НЕТ ДЕНЕГ");
+}
+
+/* ================== CHAOS ================== */
+function chaosLoop() {
+    if(state.locked || state.inventory.shield) return;
+    let w = document.getElementById('chaos-warn');
+    w.style.right = '20px'; 
+    setTimeout(() => {
+        w.style.right = '-100vw'; 
+        let effects = ['tacos','quake','dark','freeze','invert','msg','fly','multi','twilight'];
+        triggerChaosEffect(effects[Math.floor(Math.random()*effects.length)]);
+    }, 3000);
+}
+
+function triggerChaosEffect(eff) {
+    if(eff==='tacos') spawnEmoji('🌮');
+    if(eff==='fly') spawnEmoji('🪰');
+    if(eff==='quake') { document.body.classList.add('shake'); setTimeout(()=>document.body.classList.remove('shake'), 4000); }
+    if(eff==='dark') { document.body.classList.add('darkness'); setTimeout(()=>document.body.classList.remove('darkness'), 5000); }
+    if(eff==='invert') { document.body.classList.add('invert'); setTimeout(()=>document.body.classList.remove('invert'), 5000); }
+    if(eff==='freeze') { document.body.style.overflow='hidden'; setTimeout(()=>document.body.style.overflow='auto', 3000); }
+    if(eff==='msg') {
+        let txt = CREEPY_MSGS[Math.floor(Math.random() * CREEPY_MSGS.length)];
+        notify(txt);
+    }
+    if(eff==='twilight') { document.body.classList.add('no-cursor'); setTimeout(()=>document.body.classList.remove('no-cursor'), 5000); }
+    if(eff==='multi') {
+        let fakes = [];
+        for(let i=0; i<10; i++) {
+            let f = document.createElement('div'); f.className='fake-cursor';
+            document.body.appendChild(f); fakes.push(f);
+        }
+        document.onmousemove = (e) => {
+            fakes.forEach((f,i) => {
+                setTimeout(() => { f.style.left=e.clientX+'px'; f.style.top=e.clientY+'px'; }, i*50);
+            });
         };
+        setTimeout(()=> { fakes.forEach(f=>f.remove()); document.onmousemove=null; }, 5000);
+    }
+}
 
-        window.onscroll = () => {
-            let y = window.scrollY;
-            
-            // Если заблокировано, возвращаем назад (эмуляция стены)
-            if (state.locked && state.activeTask) {
-                let targetY = state.activeTask.pct * PX_PER_PERCENT;
-                if (Math.abs(y - targetY) > 50) {
-                    window.scrollTo(0, targetY);
-                }
-                return;
-            }
+function spawnEmoji(char) {
+    for(let i=0; i<20; i++) {
+        let e = document.createElement('div'); e.className = 'falling-obj'; e.innerText = char;
+        e.style.left = Math.random()*100 + 'vw'; e.style.animationDuration = (2+Math.random()*3)+'s';
+        document.body.appendChild(e); setTimeout(()=>e.remove(), 5000);
+    }
+}
 
-            let p = y / PX_PER_PERCENT;
-            state.progress = p;
-            document.getElementById('progress-display').innerText = p.toFixed(2);
+/* ================== UTILS ================== */
+let ac = 0;
+document.getElementById('admin-trigger').onclick = () => {
+    ac++; if(ac===5) { document.getElementById('admin-panel').style.display='block'; ac=0; }
+    setTimeout(()=>ac=0, 2000);
+}
+function authAdmin() { if(document.getElementById('admin-pass').value==='1379') document.getElementById('admin-controls').classList.remove('hidden'); }
+function forceSkip() { if(state.locked) unlock(); }
+function resetGame() { localStorage.clear(); location.reload(); }
+function tpTo(p) { state.locked=false; document.getElementById('task-overlay').classList.add('hidden'); document.body.style.overflow='auto'; window.scrollTo(0, p * SCROLL_FACTOR); }
+function forceChaos() { triggerChaosEffect(document.getElementById('chaos-sel').value); }
+function notify(txt) {
+    let n = document.createElement('div'); n.innerText = txt;
+    n.style = "position:fixed;bottom:20px;right:20px;background:var(--primary);color:black;padding:10px;font-weight:bold;z-index:9000;border:1px solid var(--primary);";
+    document.body.appendChild(n); setTimeout(()=>n.remove(), 3000);
+}
 
-            if (p >= 195) document.body.classList.add('green-mode');
-            else document.body.classList.remove('green-mode');
+function initMatrix() {
+    let c = document.getElementById('matrixCanvas');
+    let ctx = c.getContext('2d');
+    c.width = window.innerWidth; c.height = window.innerHeight;
+    let cols = Math.floor(c.width/20);
+    let drops = Array(cols).fill(1);
+    function draw() {
+        ctx.fillStyle = 'rgba(0,0,0,0.05)'; ctx.fillRect(0,0,c.width,c.height);
+        ctx.fillStyle = document.body.classList.contains('green-mode')?'#0f0':'#f00';
+        ctx.font = '15px monospace';
+        drops.forEach((y,i)=>{
+            ctx.fillText(String.fromCharCode(0x30A0+Math.random()*96), i*20, y*20);
+            if(y*20>c.height && Math.random()>0.975) drops[i]=0;
+            drops[i]++;
+        });
+    }
+    setInterval(draw, 50);
+}
 
-            checkTasks(p);
-        };
-
-        function checkTasks(currentPct) {
-            let task = TASKS.find(t => currentPct >= t.pct && currentPct < t.pct + 0.1);
-            let lastTaskPct = state.activeTask ? state.activeTask.pct : -1;
-
-            if (task && !state.locked && Math.floor(task.pct) !== Math.floor(lastTaskPct)) {
-                if (task.type === 'checkpoint') {
-                    state.checkpoint = task.pct;
-                    notify("🚩 ЧЕКПОИНТ СОХРАНЕН!");
-                    saveGame();
-                } else {
-                    startTask(task);
-                }
-            }
-        }
-
-        function startTask(task) {
-            state.locked = true;
-            state.activeTask = task;
-            document.getElementById('task-overlay').classList.remove('hidden');
-            document.body.style.overflow = 'hidden'; 
-            
-            let container = document.getElementById('task-container');
-            container.innerHTML = '';
-            document.getElementById('task-message').innerText = '';
-
-            if (task.type === 'riddle') {
-                container.innerHTML = `
-                    <p style="font-size: 28px;">${task.q}</p>
-                    <input id="ans-input" placeholder="Ответ...">
-                    <br><br>
-                    <button class="cyber-btn" onclick="checkRiddle('${task.a}')">ПРОВЕРИТЬ</button>
-                `;
-            }
-            else if (task.type === 'math') {
-                let n1 = Math.floor(Math.random() * 10 * task.level) + 5;
-                let n2 = Math.floor(Math.random() * 10 * task.level) + 5;
-                let ans = n1 + n2;
-                container.innerHTML = `
-                    <h2>${n1} + ${n2} = ?</h2>
-                    <input id="ans-input" type="number">
-                    <br><br>
-                    <button class="cyber-btn" onclick="checkMath(${ans})">ВВОД</button>
-                `;
-            }
-            else if (task.type === 'memory') {
-                let secret = Math.floor(1000 + Math.random() * 9000);
-                container.innerHTML = `<h2>ЗАПОМНИ: <span style="color:white; font-size: 40px;">${secret}</span></h2>`;
-                setTimeout(() => {
-                    container.innerHTML = `
-                        <p>Введите число:</p>
-                        <input id="ans-input" type="number">
-                        <br><br>
-                        <button class="cyber-btn" onclick="checkMath(${secret})">ВВОД</button>
-                    `;
-                }, 2000);
-            }
-            else if (task.type === 'color') {
-                let colors = ['red', 'green', 'blue', 'yellow'];
-                let trueColor = colors[Math.floor(Math.random() * colors.length)];
-                let textVal = colors[Math.floor(Math.random() * colors.length)].toUpperCase();
-                let ruNames = {'red':'КРАСНЫЙ', 'green':'ЗЕЛЕНЫЙ', 'blue':'СИНИЙ', 'yellow':'ЖЕЛТЫЙ'};
-                
-                container.innerHTML = `
-                    <p>Нажми кнопку, цвет которой соответствует <br> <b>ЦВЕТУ ТЕКСТА</b> (а не слову):</p>
-                    <h1 style="color:${trueColor}; font-size: 50px; text-shadow: 2px 2px 0px white;">${ruNames[textVal] || textVal}</h1>
-                    <div class="color-grid">
-                        <div class="color-btn" style="background:red" onclick="checkColor('red', '${trueColor}')"></div>
-                        <div class="color-btn" style="background:green" onclick="checkColor('green', '${trueColor}')"></div>
-                        <div class="color-btn" style="background:blue" onclick="checkColor('blue', '${trueColor}')"></div>
-                        <div class="color-btn" style="background:yellow" onclick="checkColor('yellow', '${trueColor}')"></div>
-                    </div>
-                `;
-            }
-            else if (task.type === 'dont_press') {
-                container.innerHTML = `
-                    <h3>НЕ НАЖИМАЙ КНОПКУ 10 СЕКУНД</h3>
-                    <button id="danger-btn" class="cyber-btn" style="border-color:red; color:red; padding: 20px;" onclick="failTask()">Я НЕ ВЫДЕРЖАЛА</button>
-                    <h1 id="timer">10</h1>
-                `;
-                let timeLeft = 10;
-                let timer = setInterval(() => {
-                    if(!state.locked) { clearInterval(timer); return; }
-                    timeLeft--;
-                    let tElem = document.getElementById('timer');
-                    if(tElem) tElem.innerText = timeLeft;
-                    
-                    if(timeLeft <= 0) {
-                        clearInterval(timer);
-                        let btn = document.getElementById('danger-btn');
-                        if(btn) {
-                            btn.innerText = "ТЕПЕРЬ МОЖНО";
-                            btn.style.borderColor = "#0f0";
-                            btn.style.color = "#0f0";
-                            btn.onclick = completeTask;
-                        }
-                    }
-                }, 1000);
-            }
-            else if (task.type === 'final') {
-                container.innerHTML = `
-                    <h1>СИСТЕМА ВЗЛОМАНА</h1>
-                    <p style="font-size:30px; color:white;">ПОДСКАЗКА: Загляни за телевизор...</p>
-                `;
-            }
-        }
-
-        /* === ПРОВЕРКИ === */
-        window.checkRiddle = (correct) => {
-            let val = document.getElementById('ans-input').value.toLowerCase().trim();
-            if (val.includes(correct)) completeTask();
-            else failTask();
-        }
-
-        window.checkMath = (correct) => {
-            let val = parseInt(document.getElementById('ans-input').value);
-            if (val === correct) completeTask();
-            else failTask();
-        }
-
-        window.checkColor = (picked, correct) => {
-            if (picked === correct) completeTask();
-            else failTask();
-        }
-
-        function completeTask() {
-            state.money += 100;
-            state.locked = false;
-            document.getElementById('task-overlay').classList.add('hidden');
-            document.body.style.overflow = 'auto';
-            updateUI();
-            notify("✅ ДОСТУП РАЗРЕШЕН (+100$)");
-            window.scrollBy(0, 500);
-        }
-
-        window.failTask = () => {
-            if (state.insurance) {
-                state.insurance = false;
-                notify("🛡️ СТРАХОВКА СПАСЛА ВАС!");
-                updateUI();
-                return;
-            }
-
-            notify("⛔ ОШИБКА! СИСТЕМА ПЕРЕЗАГРУЖАЕТСЯ...");
-            state.locked = false;
-            document.getElementById('task-overlay').classList.add('hidden');
-            document.body.style.overflow = 'auto';
-            
-            setTimeout(() => {
-                window.scrollTo(0, state.checkpoint * PX_PER_PERCENT);
-            }, 100);
-        }
-
-        /* === МАГАЗИН И UI === */
-        window.toggleShop = () => {
-            document.getElementById('shop-overlay').classList.toggle('hidden');
-        }
-
-        window.buyItem = (item) => {
-            let cost = { 'skip': 5000, 'shield': 2000, 'insurance': 3000 }[item];
-            
-            if (state.money >= cost) {
-                state.money -= cost;
-                updateUI();
-                if (item === 'skip') {
-                    if (state.locked) completeTask();
-                    else notify("Куплено. Но задания сейчас нет.");
-                }
-                if (item === 'shield') {
-                    state.shield = true;
-                    notify("Щит активирован (2 мин)");
-                    setTimeout(() => state.shield = false, 120000);
-                }
-                if (item === 'insurance') {
-                    state.insurance = true;
-                    notify("Страховка активирована");
-                }
-                toggleShop(); 
-            } else {
-                alert("НЕДОСТАТОЧНО ДЕНЕГ!");
-            }
-        }
-
-        function updateUI() {
-            document.getElementById('money-display').innerText = state.money;
-        }
-
-        function notify(text) {
-            let div = document.createElement('div');
-            div.style = "position:fixed; bottom:20px; right:20px; background:var(--primary); color:black; padding:10px; z-index:9999; font-weight:bold; border: 1px solid white;";
-            div.innerText = text;
-            document.body.appendChild(div);
-            setTimeout(() => div.remove(), 3000);
-        }
-
-        /* === ХАОС === */
-        function chaosRoutine() {
-            if (state.shield || state.locked) return;
-            
-            let events = ['shake', 'invert'];
-            let ev = events[Math.floor(Math.random() * events.length)];
-            
-            notify("⚠️ СБОЙ СИСТЕМЫ: " + ev.toUpperCase());
-
-            if (ev === 'shake') {
-                document.body.classList.add('shake-screen');
-                setTimeout(() => document.body.classList.remove('shake-screen'), 2000);
-            }
-            if (ev === 'invert') {
-                document.body.classList.add('invert-colors');
-                setTimeout(() => document.body.classList.remove('invert-colors'), 5000);
-            }
-        }
-
-        /* === МАТРИЦА И КНОПКА === */
-        function initMatrix() {
-            const c = document.getElementById('matrixCanvas');
-            const ctx = c.getContext('2d');
-            c.width = window.innerWidth;
-            c.height = window.innerHeight;
-            const cols = Math.floor(c.width / 20);
-            const drops = Array(cols).fill(1);
-            
-            function draw() {
-                ctx.fillStyle = 'rgba(0,0,0,0.05)';
-                ctx.fillRect(0,0,c.width,c.height);
-                ctx.fillStyle = document.body.classList.contains('green-mode') ? '#0f0' : '#f00';
-                ctx.font = '15px monospace';
-                for(let i=0; i<drops.length; i++) {
-                    let txt = String.fromCharCode(0x30A0 + Math.random()*96);
-                    ctx.fillText(txt, i*20, drops[i]*20);
-                    if(drops[i]*20 > c.height && Math.random()>0.975) drops[i]=0;
-                    drops[i]++;
-                }
-            }
-            setInterval(draw, 50);
-        }
-
-        function initRunawayBtn() {
-            const b = document.getElementById('runaway-btn');
-            b.onmouseover = () => {
-                let x = Math.random() * (window.innerWidth - 200);
-                let y = Math.random() * (window.innerHeight - 100);
-                b.style.position = 'absolute';
-                b.style.left = x + 'px';
-                b.style.top = y + 'px';
-            };
-        }
-
-        /* === АДМИНКА === */
-        let adminClicks = 0;
-        document.getElementById('admin-trigger').onclick = () => {
-            adminClicks++;
-            if(adminClicks >= 5) {
-                document.getElementById('admin-overlay').classList.remove('hidden');
-                adminClicks = 0;
-            }
-            setTimeout(() => adminClicks=0, 2000);
-        };
-
-        window.checkAdmin = () => {
-            if(document.getElementById('admin-pass').value === '1379') {
-                document.getElementById('admin-tools').classList.remove('hidden');
-            }
-        };
-
-        window.addMoney = (n) => { state.money += n; updateUI(); };
-        window.skipTask = () => completeTask();
-        window.teleportTo = (pct) => window.scrollTo(0, pct * PX_PER_PERCENT);
-
-        /* === СОХРАНЕНИЯ === */
-        function saveGame() {
-            localStorage.setItem('gfQuest', JSON.stringify(state));
-        }
-        function loadGame() {
-            let d = localStorage.getItem('gfQuest');
-            if(d) {
-                let s = JSON.parse(d);
-                state.money = s.money;
-                state.checkpoint = s.checkpoint;
-                updateUI();
-                if(state.checkpoint > 0) teleportTo(state.checkpoint);
-            }
-        }
-    </script>
+function initRunaway() {
+    let b = document.getElementById('runaway-btn');
+    b.onmouseenter = () => {
+        b.style.top = (Math.random()*300)+'px';
+        b.style.left = (Math.random()*300-150)+'px';
+    }
+}
+</script>
 </body>
 </html>
