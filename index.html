@@ -23,7 +23,7 @@
             text-shadow: 2px 2px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
         }
 
-        /* ИНДИКАТОР ПРОГРЕССА */
+        /* ИНДИКАТОР ПРОГРЕССА (КЛИКАБЕЛЬНЫЙ) */
         #progress-indicator {
             position: fixed; top: 10px; right: 10px;
             background: rgba(0,0,0,0.8); color: #0f0; border: 1px solid #0f0;
@@ -32,14 +32,15 @@
         }
         #progress-indicator:active { background: #004400; }
 
-        /* АДМИН МЕНЮ */
+        /* АДМИН МЕНЮ (СПРАВА СНИЗУ) */
         #admin-modal {
-            display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            background: #111; border: 2px solid #0f0; color: #0f0; padding: 20px; z-index: 99999;
-            width: 300px; text-align: center; box-shadow: 0 0 20px #0f0;
+            display: none; position: fixed; bottom: 20px; right: 20px;
+            background: #111; border: 2px solid #0f0; color: #0f0; padding: 15px; z-index: 99999;
+            width: 250px; text-align: center; box-shadow: 0 0 20px #0f0;
         }
-        .admin-btn { background: #003300; color: #0f0; border: 1px solid #0f0; width: 100%; padding: 10px; margin: 5px 0; cursor: pointer; }
-        .admin-input { background: black; color: white; border: 1px solid #0f0; padding: 5px; width: 50%; }
+        .admin-btn { background: #003300; color: #0f0; border: 1px solid #0f0; width: 100%; padding: 8px; margin: 5px 0; cursor: pointer; font-size: 12px; }
+        .admin-btn:hover { background: #005500; }
+        .admin-input { background: black; color: white; border: 1px solid #0f0; padding: 5px; width: 60px; }
 
         /* МАГАЗИН */
         #shop-container {
@@ -54,7 +55,7 @@
         }
         .shop-btn:hover { background: #555; }
 
-        /* АНИМАЦИЯ КЕЙСА */
+        /* АНИМАЦИЯ КЕЙСА (10 СЕКУНД) */
         #case-modal {
             display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
             background: #222; border: 4px solid gold; width: 300px; height: 150px; z-index: 9500;
@@ -66,7 +67,7 @@
         }
         .case-strip {
             display: flex; height: 100%; position: absolute; left: 0; top: 0;
-            transition: transform 4s cubic-bezier(0.1, 1, 0.1, 1); /* Эффект замедления */
+            transition: transform 10s cubic-bezier(0.1, 1, 0.1, 1); /* 10 СЕКУНД */
         }
         .case-item {
             width: 96px; height: 96px; border-right: 4px solid #000;
@@ -83,6 +84,11 @@
             position: fixed; width: 20px; height: 30px; 
             background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="30" viewBox="0 0 320 512"><path fill="white" d="M302.189 329.126H196.105l55.831 135.993c3.889 9.428-.555 19.999-9.444 23.999l-49.165 21.427c-9.165 4-19.443-.571-23.332-9.714l-53.053-129.136-86.664 89.138C18.729 472.71 0 463.554 0 447.977V18.299C0 1.899 19.921-6.096 30.277 5.443l284.412 292.542c11.472 11.179 6.407 31.141-12.5 31.141z"/></svg>') no-repeat;
             z-index: 9998; pointer-events: none; transition: 0.1s;
+        }
+        .fake-cursor-img {
+            position: fixed; width: 20px; height: 30px; 
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="30" viewBox="0 0 320 512"><path fill="white" d="M302.189 329.126H196.105l55.831 135.993c3.889 9.428-.555 19.999-9.444 23.999l-49.165 21.427c-9.165 4-19.443-.571-23.332-9.714l-53.053-129.136-86.664 89.138C18.729 472.71 0 463.554 0 447.977V18.299C0 1.899 19.921-6.096 30.277 5.443l284.412 292.542c11.472 11.179 6.407 31.141-12.5 31.141z"/></svg>') no-repeat;
+            z-index: 9999; pointer-events: none; transition: 0.05s;
         }
         .fly { position: fixed; font-size: 30px; z-index: 9999; pointer-events: none; transition: top 0.2s, left 0.2s; }
         .chat-notification {
@@ -142,7 +148,13 @@
         .skip-trap-btn { position: fixed; bottom: 20px; right: 20px; background: #ffaa00; color: black; padding: 10px 20px; font-weight: bold; border: 2px solid white; cursor: pointer; z-index: 400; display: none; box-shadow: 0 0 10px yellow; animation: bounce 1s infinite; text-shadow: none; }
         @keyframes bounce { 0%, 100% {transform: translateY(0);} 50% {transform: translateY(-5px);} }
         
-        .gate-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 5000; flex-direction: column; align-items: center; justify-content: center; color: red; border: 5px solid red; text-shadow: none; }
+        /* GATES (Полупрозрачный фон) */
+        .gate-overlay { 
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: rgba(0,0,0,0.85); /* ТЕПЕРЬ ВИДНО ФОН */
+            z-index: 5000; flex-direction: column; align-items: center; justify-content: center; 
+            color: red; border: 5px solid red; text-shadow: none; 
+        }
         .gate-box { background: #220000; padding: 20px; border: 2px solid red; max-width: 90%; text-align: center; }
         .timer-display { font-size: 2em; color: #fff; font-weight: bold; margin: 10px 0; border: 1px solid white; padding: 5px; display: inline-block; min-width: 60px; }
         
@@ -172,10 +184,19 @@
         #hellSlider { width: 100%; margin: 20px 0; }
         #dontPressBtn { width: 150px; height: 150px; border-radius: 50%; background: red; color: white; font-weight: bold; font-size: 1.5em; border: 5px solid darkred; cursor: pointer; box-shadow: 0 0 20px red; text-shadow: none; }
 
-        #maze-container { width: 300px; height: 300px; background: #fff; position: relative; margin: 0 auto; cursor: crosshair; }
-        .maze-wall { position: absolute; background: red; }
-        .maze-start { position: absolute; top: 0; left: 0; width: 30px; height: 30px; background: lime; color: black; font-size: 10px; display: flex; align-items: center; justify-content: center; }
-        .maze-end { position: absolute; bottom: 0; right: 0; width: 30px; height: 30px; background: lime; color: black; font-size: 10px; display: flex; align-items: center; justify-content: center; }
+        /* MAZE STYLES (UPDATED) */
+        #maze-container { 
+            width: 300px; height: 300px; 
+            background: #fff; /* БЕЛЫЙ = СМЕРТЬ */
+            position: relative; margin: 0 auto; cursor: crosshair; 
+        }
+        /* PATH IS RED (SAFE) */
+        .maze-path { 
+            position: absolute; background: red; /* КРАСНЫЙ = ПУТЬ */
+            z-index: 5;
+        }
+        .maze-start { position: absolute; top: 0; left: 0; width: 30px; height: 30px; background: lime; color: black; font-size: 10px; display: flex; align-items: center; justify-content: center; z-index: 10; }
+        .maze-end { position: absolute; bottom: 0; right: 0; width: 30px; height: 30px; background: lime; color: black; font-size: 10px; display: flex; align-items: center; justify-content: center; z-index: 10; }
 
         .odd-grid { display: grid; grid-template-columns: repeat(10, 1fr); gap: 2px; width: 300px; margin: 0 auto; }
         .odd-cell { font-size: 20px; cursor: pointer; user-select: none; }
@@ -199,7 +220,7 @@
         <button class="admin-btn" onclick="cheatSkipGate()">ПРОПУСТИТЬ ТЕКУЩЕЕ</button>
         <button class="admin-btn" onclick="cheatAddMoney()">+100 000 МОНЕТ</button>
         <div style="margin-top: 10px;">
-            <input type="number" id="teleportPercent" class="admin-input" placeholder="% (0-100)">
+            <input type="number" id="teleportPercent" class="admin-input" placeholder="%" min="0" max="100">
             <button class="admin-btn" style="width: auto; display: inline-block;" onclick="cheatTeleport()">TP</button>
         </div>
         <button class="admin-btn" style="margin-top: 15px; background: #330000;" onclick="document.getElementById('admin-modal').style.display='none'">ЗАКРЫТЬ</button>
@@ -209,9 +230,7 @@
     <div id="case-modal">
         <div class="case-window">
             <div class="case-marker"></div>
-            <div class="case-strip" id="caseStrip">
-                <!-- ITEMS GENERATED BY JS -->
-            </div>
+            <div class="case-strip" id="caseStrip"></div>
         </div>
     </div>
 
@@ -276,7 +295,8 @@
 
     <!-- === ГЕЙТЫ === -->
     <div id="gate1" class="gate-overlay"><div class="gate-box"><h2>ЗАГАДКА</h2><p id="riddle-text">...</p><input type="text" id="ans1" class="gate-input" placeholder="Ответ..."><br><button class="login-btn" onclick="checkGate1()" style="margin-top:10px;">ОТВЕТИТЬ</button></div></div>
-    <div id="gateMaze" class="gate-overlay"><div class="gate-box"><h2>ЛАБИРИНТ</h2><p>Проведи мышку по белому!</p><div id="maze-container" onmouseleave="failGate('Вышла за пределы!')"></div></div></div>
+    <!-- ЛАБИРИНТ: ОБРАБОТЧИК НА КОНТЕЙНЕРЕ (СМЕРТЬ) -->
+    <div id="gateMaze" class="gate-overlay"><div class="gate-box"><h2>ЛАБИРИНТ</h2><p>Иди по КРАСНОМУ! Белый = смерть.</p><div id="maze-container" onmouseover="checkMazeFail(event)"></div></div></div>
     <div id="gate2" class="gate-overlay"><div class="gate-box"><h2 id="math-title">МАТЕМАТИКА</h2><p id="math-instr">Реши пример!</p><div id="math-timer" class="timer-display">20</div><h1 id="math-problem" style="color:white; font-size: 2em; margin: 20px 0;">?</h1><input type="number" id="ans2" class="gate-input" placeholder="Число..."><br><button class="login-btn" onclick="checkGateMath()" style="margin-top:10px;">ОТВЕТИТЬ</button></div></div>
     <div id="gateMemory" class="gate-overlay"><div class="gate-box"><h2>ПАМЯТЬ РЫБКИ</h2><p>Запомни число!</p><h1 id="memNumber" style="font-size:3em; color:yellow;">123456</h1><div id="memInputDiv" style="display:none;"><input type="number" id="memInput" class="gate-input" placeholder="Число?"><br><button class="login-btn" onclick="checkMemory()" style="margin-top:10px;">ПРОВЕРИТЬ</button></div></div></div>
     <div id="gateStroop" class="gate-overlay"><div class="gate-box"><h2>ТЕСТ МОЗГА</h2><p>Нажми кнопку, цвет которой совпадает с <b>ЦВЕТОМ ТЕКСТА</b>!</p><h1 id="stroopWord" style="font-size: 3em; background: #000; padding: 10px;">ТЕКСТ</h1><div class="stroop-grid" id="stroopButtons"></div></div></div>
@@ -323,6 +343,7 @@
         }
         setInterval(drawMatrix, 30);
 
+        // --- ГЕНЕРАЦИЯ ШИФРА ---
         function generateCipher() {
             let chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ@#$%&*<>";
             let str = "";
@@ -336,7 +357,7 @@
 
         // --- ВХОД И ИНИЦИАЛИЗАЦИЯ ---
         let coins = 0;
-        let currentGateId = ""; // Для пропуска за монеты
+        let currentGateId = ""; 
 
         function checkPassword() {
             var input = document.getElementById("passwordInput").value;
@@ -368,15 +389,24 @@
         function grantReward() {
             coins += 100;
             updateShopUI();
-            // Маленькое уведомление можно добавить, но не обязательно
+        }
+
+        function smartTeleport(percent) {
+            let target = document.body.scrollHeight * percent;
+            // Пропускаем все задания до этого места
+            skipGatesUpTo(target);
+            window.scrollTo(0, target);
         }
 
         function buyProgress() {
             if(coins >= 10000) {
                 coins -= 10000; updateShopUI();
                 alert("УСКОРИТЕЛЬ КУПЛЕН! ВЖУХ!");
-                let target = window.scrollY + (document.body.scrollHeight * 0.2);
-                window.scrollTo(0, target);
+                // Текущая позиция + 20% от всей высоты
+                let currentPct = window.scrollY / document.body.scrollHeight;
+                let newPct = currentPct + 0.2;
+                if(newPct > 1) newPct = 1;
+                smartTeleport(newPct);
             } else { alert("Недостаточно средств!"); }
         }
 
@@ -390,7 +420,7 @@
             } else { alert("Сейчас нет активного задания."); }
         }
 
-        // --- АНИМАЦИЯ КЕЙСА (CS:GO STYLE) ---
+        // --- АНИМАЦИЯ КЕЙСА (10 СЕКУНД) ---
         function openCaseAnimation() {
             if(coins < 3000) { alert("Недостаточно средств (3000)!"); return; }
             coins -= 3000; updateShopUI();
@@ -399,11 +429,9 @@
             let strip = document.getElementById('caseStrip');
             modal.style.display = 'block';
             strip.innerHTML = "";
-            strip.style.transform = "translateX(0px)"; // Reset
+            strip.style.transform = "translateX(0px)"; 
 
-            // Generate items (mostly bad/mid, one result at ~index 35)
-            // Yellow = +10%, Red = -10%, Green = +20%
-            // Result is pre-determined
+            // Result logic
             let rand = Math.random();
             let resultType = ""; // 'green', 'yellow', 'red'
             let resultColor = "";
@@ -412,7 +440,7 @@
             else if(rand < 0.6) { resultType = "yellow"; resultColor = "yellow"; }
             else { resultType = "red"; resultColor = "red"; }
 
-            // Build strip: ~40 items. Winner is at index 35.
+            // Build strip
             for(let i=0; i<45; i++) {
                 let div = document.createElement('div');
                 div.className = 'case-item';
@@ -420,7 +448,6 @@
                     div.style.backgroundColor = resultColor;
                     div.innerText = (resultType==='green' ? "+20%" : (resultType==='yellow' ? "+10%" : "-10%"));
                 } else {
-                    // Random filler
                     let r = Math.random();
                     if(r<0.4) { div.style.backgroundColor = 'red'; div.innerText="-10%"; }
                     else if(r<0.8) { div.style.backgroundColor = 'yellow'; div.innerText="+10%"; }
@@ -430,37 +457,33 @@
             }
 
             // Animate
-            // Item width 96 + border 4 = 100px. 
-            // Center is 150px. 35th item pos = 3500px.
-            // We want 35th item centered. TranslateX should move strip left.
-            // Formula: -(ItemIndex * 100) + (WindowWidth/2 - ItemWidth/2)
-            // -(3500) + (150 - 50) = -3400
-            // Add some random offset within the item (-40 to +40)
             let offset = -3400 + Math.floor(Math.random() * 60 - 30);
-            
             setTimeout(() => {
                 strip.style.transform = `translateX(${offset}px)`;
             }, 100);
 
-            // Finish
+            // Finish after 10.5s
             setTimeout(() => {
                 modal.style.display = 'none';
+                let currentPct = window.scrollY / document.body.scrollHeight;
                 if(resultType === 'green') {
                     alert("ЛЕГЕНДАРНЫЙ ДРОП! +20% ПРОГРЕССА!");
-                    window.scrollBy(0, document.body.scrollHeight * 0.2);
+                    smartTeleport(currentPct + 0.2);
                 } else if(resultType === 'yellow') {
                     alert("ОБЫЧНЫЙ ДРОП. +10% ПРОГРЕССА.");
-                    window.scrollBy(0, document.body.scrollHeight * 0.1);
+                    smartTeleport(currentPct + 0.1);
                 } else {
                     alert("СКАМ! -10% ПРОГРЕССА! АХАХА!");
-                    window.scrollBy(0, -(document.body.scrollHeight * 0.1));
+                    let newPct = currentPct - 0.1;
+                    if(newPct < 0) newPct = 0;
+                    window.scrollTo(0, document.body.scrollHeight * newPct);
                 }
-            }, 4500); // Wait for transition
+            }, 10500); 
         }
 
 
         // --- СЧЕТЧИК ПРОГРЕССА & ЧИТ-РИТМ ---
-        let clickTimes = []; // Хранит время кликов
+        let clickTimes = []; 
         let progressEl = document.getElementById('progress-indicator');
         
         window.addEventListener('scroll', function() {
@@ -471,30 +494,21 @@
             progressEl.innerText = "SYSTEM PROGRESS: " + percent.toFixed(2) + "%";
         });
 
-        // НОВАЯ ЛОГИКА РИТМА: 4 -> wait(1s) -> 4
+        // ЛОГИКА РИТМА: 4 -> wait(1s) -> 4
         progressEl.addEventListener('click', function() {
             let now = Date.now();
             clickTimes.push(now);
-            
-            // Очищаем старые клики (старше 5 сек)
             clickTimes = clickTimes.filter(t => now - t < 5000);
 
             if (clickTimes.length >= 8) {
-                // Берем последние 8 кликов
                 let recent = clickTimes.slice(-8);
-                
-                // Проверяем паттерн
-                // Группа 1: индексы 0,1,2,3 должны быть быстрыми (< 800ms between first and last)
-                // Группа 2: индексы 4,5,6,7 должны быть быстрыми
-                // Пауза: между index 3 и 4 должно быть > 800ms и < 2000ms
-                
                 let group1Time = recent[3] - recent[0];
                 let group2Time = recent[7] - recent[4];
                 let pauseTime = recent[4] - recent[3];
 
                 if (group1Time < 1000 && group2Time < 1000 && pauseTime > 800 && pauseTime < 2500) {
                     document.getElementById('admin-modal').style.display = 'block';
-                    clickTimes = []; // сброс
+                    clickTimes = []; 
                 }
             }
         });
@@ -503,27 +517,42 @@
         function cheatSkipGate() {
             if(isGateOpen && currentGateId) {
                 completeGate(currentGateId);
-                document.getElementById('admin-modal').style.display='none';
+                // НЕ закрываем модалку
             } else { alert("Нет активного задания"); }
         }
         function cheatAddMoney() {
             coins += 100000; updateShopUI();
             alert("Богатство!");
-            document.getElementById('admin-modal').style.display='none';
         }
         function cheatTeleport() {
             let val = parseFloat(document.getElementById('teleportPercent').value);
             if(!isNaN(val)) {
-                window.scrollTo(0, document.body.scrollHeight * (val / 100));
-                document.getElementById('admin-modal').style.display='none';
+                smartTeleport(val / 100);
             }
+        }
+
+        // --- УМНЫЙ ПРОПУСК ЗАДАНИЙ ---
+        function skipGatesUpTo(targetY) {
+            if (targetY > 20000) riddleFlags[0] = true;
+            if (targetY > 40000) passedMaze = true;
+            if (targetY > 50000) mathStage = 5;
+            if (targetY > 70000) passedMemory = true;
+            if (targetY > 80000) passedStroop = true;
+            if (targetY > 130000) { passedSlider = true; passedPayment = true; }
+            if (targetY > 160000) riddleFlags[1] = true;
+            if (targetY > 195000) passedOdd = true;
+            if (targetY > 210000) passedType = true;
+            if (targetY > 280000) passedDontPress = true;
+            if (targetY > 300000) { passedClicker = true; checkpointReached = true; }
+            if (targetY > 340000) riddleFlags[2] = true;
+            if (targetY > 400000) passed2048 = true;
+            if (targetY > 430000) passedMines = true;
         }
 
         // --- HELPER TO COMPLETE GATES ---
         function completeGate(gateId) {
-            // Флаги прохождения
             if(gateId === 'gate1') riddleFlags[0] = true;
-            else if(gateId === 'gate2') mathStage = 5; // Сразу всё
+            else if(gateId === 'gate2') mathStage = 5; 
             else if(gateId === 'gateStroop') passedStroop = true;
             else if(gateId === 'gateSlider') passedSlider = true;
             else if(gateId === 'gateOdd') passedOdd = true;
@@ -534,14 +563,14 @@
             else if(gateId === 'gateMines') passedMines = true;
             else if(gateId === 'gateMaze') passedMaze = true;
             else if(gateId === 'gateMemory') passedMemory = true;
+            else if(gateId === 'payment') passedPayment = true;
 
-            // Очистка
             isGateOpen = false;
             currentGateId = "";
             document.getElementById(gateId).style.display = 'none';
+            document.getElementById('payment-modal').style.display = 'none';
             document.body.style.overflow = 'auto';
             
-            // Таймеры
             clearInterval(mathInterval); clearInterval(clickInterval); clearInterval(typeInterval); clearInterval(dontInterval); clearInterval(oddInterval);
         }
 
@@ -563,6 +592,7 @@
         let lastChaosTime = 0;
         function scheduleNextChaos() {
             let now = Date.now();
+            // Хаос работает всегда, но если открыт гейт - реже (30с), иначе часто (15с)
             let delay = isGateOpen ? 30000 : 15000;
             if (now - lastChaosTime > delay) {
                 triggerRandomChaos();
@@ -585,6 +615,8 @@
             else if (rand < 0.95) triggerGravity();
             else triggerMultiCursor();
         }
+
+        // Effects
         function triggerZoom() { document.body.classList.add(Math.random()>0.5?'zoom-in-mode':'zoom-out-mode'); setTimeout(()=>document.body.classList.remove('zoom-in-mode','zoom-out-mode'), 3000); }
         function triggerChat() { let msgs = ["Я вижу тебя...", "Включаю камеру...", "Ты красивая...", "Пароль украден...", "Удаляю фото...", "Кто стоит сзади?"]; let box = document.getElementById('chat-box'); box.innerText = "⚠️ СИСТЕМА: " + msgs[Math.floor(Math.random()*msgs.length)]; box.style.right = "20px"; setTimeout(()=>{box.style.right="-300px"}, 4000); }
         function triggerMultiCursor() { for(let i=0;i<10;i++){ let c=document.createElement("div");c.className="fake-cursor"; c.style.left=Math.random()*window.innerWidth+"px";c.style.top=Math.random()*window.innerHeight+"px"; document.body.appendChild(c); let int=setInterval(()=>{c.style.left=(parseFloat(c.style.left)+(Math.random()*20-10))+"px";c.style.top=(parseFloat(c.style.top)+(Math.random()*20-10))+"px";},100); setTimeout(()=>{clearInterval(int);c.remove()},4000); } }
@@ -676,8 +708,28 @@
         function openMazeGate() {
             isGateOpen = true; currentGateId='gateMaze'; document.getElementById('gateMaze').style.display = 'flex'; document.body.style.overflow = 'hidden';
             let cont = document.getElementById('maze-container'); cont.innerHTML = '<div class="maze-start">START</div><div class="maze-end" onmouseenter="winMaze()">END</div>';
-            let walls = [ {top:0, left:30, w:270, h:50}, {top:100, left:0, w:250, h:50}, {top:200, left:50, w:250, h:50}, {top:50, left:100, w:50, h:100}, {top:150, left:200, w:50, h:100} ];
-            walls.forEach(w => { let d = document.createElement('div'); d.className='maze-wall'; d.style.top=w.top+'px'; d.style.left=w.left+'px'; d.style.width=w.w+'px'; d.style.height=w.h+'px'; d.onmouseenter = () => failGate("Коснулась стены!"); cont.appendChild(d); });
+            // Maze Paths (RED = SAFE)
+            let paths = [
+                {top:0, left:0, w:30, h:100}, // Start down
+                {top:75, left:0, w:150, h:25}, // Right
+                {top:75, left:125, w:25, h:150}, // Down
+                {top:200, left:50, w:100, h:25}, // Left
+                {top:200, left:50, w:25, h:80}, // Down
+                {top:260, left:50, w:250, h:25}, // Right to end
+                {top:260, left:270, w:30, h:40} // End
+            ];
+            paths.forEach(p => {
+                let d = document.createElement('div'); d.className='maze-path';
+                d.style.top=p.top+'px'; d.style.left=p.left+'px'; d.style.width=p.w+'px'; d.style.height=p.h+'px';
+                // Mouse over red path doesn't kill you. Mouse over white container kills you.
+                cont.appendChild(d);
+            });
+        }
+        function checkMazeFail(e) {
+            // If checking the container itself (white background) and not a path (child)
+            if(e.target.id === 'maze-container') {
+                failGate("Упала в пропасть!");
+            }
         }
         function winMaze() { grantReward(); completeGate('gateMaze'); alert("Лабиринт пройден."); }
 
