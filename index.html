@@ -23,15 +23,15 @@
             text-shadow: 2px 2px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
         }
 
-        /* ИНДИКАТОР ПРОГРЕССА */
+        /* ИНДИКАТОР ПРОГРЕССА (КЛИКАБЕЛЬНЫЙ) */
         #progress-indicator {
             position: fixed; top: 10px; right: 10px;
             background: rgba(0,0,0,0.8); color: #0f0; border: 1px solid #0f0;
             padding: 5px 10px; font-weight: bold; z-index: 9000;
-            font-size: 14px; display: none; /* Скрыт до входа */
+            font-size: 14px; display: none; cursor: pointer;
         }
 
-        /* --- ХАОС --- */
+        /* --- ХАОС ЭФФЕКТЫ --- */
         .zoom-in-mode { transform: scale(1.8); }
         .zoom-out-mode { transform: scale(0.4); }
         .fake-cursor {
@@ -99,32 +99,53 @@
         .gate-box { background: #220000; padding: 20px; border: 2px solid red; max-width: 90%; text-align: center; }
         .timer-display { font-size: 2em; color: #fff; font-weight: bold; margin: 10px 0; border: 1px solid white; padding: 5px; display: inline-block; min-width: 60px; }
         
-        .grid-2048 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; background: #555; padding: 5px; border-radius: 5px; margin: 10px auto; width: 240px; height: 240px; }
-        .cell-2048 { width: 55px; height: 55px; background: #ccc; display: flex; justify-content: center; align-items: center; font-size: 18px; font-weight: bold; color: #333; border-radius: 3px; text-shadow: none; }
+        /* 2048 STYLES (UPDATED 7x7) */
+        .grid-2048 { 
+            display: grid; 
+            grid-template-columns: repeat(7, 1fr); /* 7 КОЛОНОК */
+            gap: 2px; background: #555; padding: 5px; border-radius: 5px; 
+            margin: 10px auto; width: 300px; height: 300px; /* ЧУТЬ БОЛЬШЕ */
+        }
+        .cell-2048 { 
+            width: 38px; height: 38px; /* КЛЕТКИ МЕНЬШЕ */
+            background: #ccc; display: flex; justify-content: center; 
+            align-items: center; font-size: 12px; font-weight: bold; 
+            color: #333; border-radius: 3px; text-shadow: none; 
+        }
         .c-0 { background: #cdc1b4; color: transparent; } .c-2 { background: #eee4da; } .c-4 { background: #ede0c8; } .c-8 { background: #f2b179; color: #f9f6f2; } .c-16 { background: #f59563; color: #f9f6f2; } .c-32 { background: #f67c5f; color: #f9f6f2; } .c-64 { background: #f65e3b; color: #f9f6f2; } .c-128 { background: #edcf72; color: #f9f6f2; } .c-256 { background: #edcc61; color: #f9f6f2; } .c-512 { background: #edc850; color: #f9f6f2; } .c-1024 { background: #edc53f; color: #f9f6f2; } .c-2048 { background: #edc22e; color: #f9f6f2; box-shadow: 0 0 10px yellow; }
         .controls-2048 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; max-width: 200px; margin: 10px auto; }
         .btn-2048 { padding: 10px; background: #444; color: white; border: 1px solid #777; font-size: 1.2em; cursor: pointer; text-shadow: none;}
         
+        /* SAPER STYLES */
         .mine-grid { display: grid; grid-template-columns: repeat(8, 1fr); gap: 2px; background: #555; padding: 5px; border-radius: 5px; margin: 10px auto; width: 240px; height: 240px; }
         .mine-cell { width: 28px; height: 28px; background: #ccc; display: flex; justify-content: center; align-items: center; font-size: 14px; font-weight: bold; color: #333; border-radius: 2px; text-shadow: none; cursor: pointer; }
         .mine-revealed { background: #999; }
         .mine-bomb { background: red; }
 
+        /* ОПЛАТА */
         #payment-modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; color: black; border: 3px solid blue; padding: 20px; z-index: 6000; width: 300px; text-align: center; box-shadow: 0 0 50px black; text-shadow: none; }
         .pay-btn { background: green; color: white; padding: 10px; border: none; cursor: pointer; }
+        
+        /* СКРИМЕР */
         #screamer-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: black; z-index: 9999; align-items: center; justify-content: center; flex-direction: column; }
         .screamer-face { font-size: 8em; animation: shake 0.1s infinite; text-shadow: none;}
         .screamer-text { color: red; font-size: 3em; font-weight: bold; text-shadow: none;}
+        
+        /* СЕКРЕТ */
         .secret-container { position: absolute; bottom: 50px; width: 100%; }
         .secret-text { color: #330000; font-size: 14px; font-weight: bold; transition: color 0.2s; user-select: text; text-shadow: none; }
         .secret-text::selection { background: white; color: black; }
         @keyframes shake { 0% { transform: translate(1px, 1px) rotate(0deg); } 50% { transform: translate(-1px, 2px) rotate(-1deg); } 100% { transform: translate(1px, -1px) rotate(1deg); } }
 
+        /* STROOP */
         .stroop-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
         .stroop-btn { padding: 15px; font-weight: bold; border: 2px solid white; cursor: pointer; color: black; text-shadow: none; }
+        
+        /* SLIDER & BUTTON */
         #hellSlider { width: 100%; margin: 20px 0; }
         #dontPressBtn { width: 150px; height: 150px; border-radius: 50%; background: red; color: white; font-weight: bold; font-size: 1.5em; border: 5px solid darkred; cursor: pointer; box-shadow: 0 0 20px red; text-shadow: none; }
 
+        /* NOTIFICATIONS */
         #checkpoint-notify {
             position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
             background: #00aa00; color: white; padding: 10px 20px; font-weight: bold;
@@ -144,7 +165,7 @@
     <div id="chat-box" class="chat-notification"></div>
     <div id="checkpoint-notify">🚩 ПРОГРЕСС СОХРАНЕН</div>
     
-    <!-- ИНДИКАТОР ПРОГРЕССА -->
+    <!-- ИНДИКАТОР ПРОГРЕССА (Кликабельный для чита) -->
     <div id="progress-indicator">SYSTEM PROGRESS: 0.00%</div>
 
     <div id="login-screen">
@@ -155,7 +176,7 @@
         <p class="error-msg" id="errorMsg">НЕВЕРНЫЙ КОД</p>
     </div>
 
-    <!-- ДОБАВИЛ ONCLICK ДЛЯ РАНДОМНЫХ ОКОН -->
+    <!-- ТЕЛО САЙТА -->
     <div id="trap-screen" onclick="randomPopup(event)">
         <div style="position: sticky; top: 20px; z-index: 200;">
             <div class="trap-title">ВЗЛОМ СИСТЕМЫ</div>
@@ -166,7 +187,6 @@
 
         <button id="runaway-btn" onmouseover="moveButton()">СКАЧАТЬ КООРДИНАТЫ</button>
 
-        <!-- ВОССТАНОВИЛ ONCLICK ХЕНДЛЕРЫ -->
         <div class="toggle-container" onclick="stopProp(event)">
             <span>Сложно</span>
             <label class="switch">
@@ -199,49 +219,70 @@
         </div>
     </div>
 
-    <!-- === ГЕЙТЫ === -->
+    <!-- === ГЕЙТЫ (ЗАДАНИЯ) === -->
+    
+    <!-- 1. ЗАГАДКА -->
     <div id="gate1" class="gate-overlay">
         <div class="gate-box"><h2>ЗАЩИТА: ЗАГАДКА</h2><p id="riddle-text">...</p><input type="text" id="ans1" class="gate-input" placeholder="Ответ..."><br><button class="login-btn" onclick="checkGate1()" style="margin-top:10px;">ОТВЕТИТЬ</button></div>
     </div>
+
+    <!-- 2. МАТЕМАТИКА -->
     <div id="gate2" class="gate-overlay">
         <div class="gate-box"><h2 id="math-title">МАТЕМАТИКА</h2><p id="math-instr">Реши пример!</p><div id="math-timer" class="timer-display">20</div><h1 id="math-problem" style="color:white; font-size: 2em; margin: 20px 0;">?</h1><input type="number" id="ans2" class="gate-input" placeholder="Число..."><br><button class="login-btn" onclick="checkGateMath()" style="margin-top:10px;">ОТВЕТИТЬ</button></div>
     </div>
+
+    <!-- 3. ТЕСТ СТРУПА -->
     <div id="gateStroop" class="gate-overlay">
         <div class="gate-box"><h2>ТЕСТ МОЗГА</h2><p>Нажми кнопку, цвет которой совпадает с <b>ЦВЕТОМ ТЕКСТА</b>!</p><h1 id="stroopWord" style="font-size: 3em; background: #000; padding: 10px;">ТЕКСТ</h1><div class="stroop-grid" id="stroopButtons"></div></div>
     </div>
+
+    <!-- 4. АДСКИЙ ПОЛЗУНОК -->
     <div id="gateSlider" class="gate-overlay">
         <div class="gate-box"><h2>ТОЧНОСТЬ</h2><p>Установи ползунок ровно на <b id="sliderTargetText">77</b>.</p><p id="sliderVal" style="font-size: 2em; color: white;">0</p><input type="range" id="hellSlider" min="0" max="100" value="0" oninput="updateSlider(this.value)" data-current-val="0"><br><button class="login-btn" onclick="checkSlider()" style="margin-top:10px;">ГОТОВО</button></div>
     </div>
+
+    <!-- 5. ТЕСТ НА ПЕЧАТЬ -->
     <div id="gateType" class="gate-overlay">
         <div class="gate-box"><h2>ТЕСТ НА ПОСЛУШНОСТЬ</h2><p>Напечатай фразу без ошибок:</p><p id="typeTarget" style="background: #333; padding: 10px; color: yellow; user-select: none;">...</p><div id="type-timer" class="timer-display">15</div><br><input type="text" id="typeInput" placeholder="Печатай здесь..." style="width: 300px;"><br><button class="login-btn" onclick="checkTyping()" style="margin-top:10px;">ПРОВЕРИТЬ</button></div>
     </div>
+
+    <!-- 6. КНОПКА НЕ НАЖИМАЙ -->
     <div id="gateDontPress" class="gate-overlay">
         <div class="gate-box"><h2>ТЕРПЕНИЕ</h2><p>НЕ нажимай на красную кнопку!</p><div id="dont-timer" class="timer-display" style="border: none;">10</div><br><br><button id="dontPressBtn" onclick="failGate('Сказано же НЕ НАЖИМАТЬ!')">DON'T PRESS</button><button id="passDontBtn" class="login-btn" style="display:none; margin-top: 20px;" onclick="passDontPress()">ПРОЙТИ</button></div>
     </div>
+
+    <!-- 7. КЛИКЕР -->
     <div id="gate3" class="gate-overlay">
         <div class="gate-box"><h2>КЛИКЕР</h2><p>Нажми 10 раз за 5 секунд!</p><div id="click-timer" class="timer-display">5.00</div><p>Осталось: <span id="clickCount" style="color:white; font-size:1.5em;">10</span></p><div style="height: 250px; position: relative; border: 1px dashed #555;"><button id="clickGameBtn" onclick="clickerGame()" style="padding: 10px; background: red; color: white; border: none; font-weight: bold; position: absolute; top: 40%; left: 40%;">ЖМИ!</button></div><button onclick="startClicker()" id="startClickBtn" style="padding: 10px; background: blue; color: white; border: none; width: 100%; margin-top: 10px;">НАЧАТЬ</button></div>
     </div>
+
+    <!-- 8. 2048 (7x7) -->
     <div id="gate4" class="gate-overlay">
-        <div class="gate-box"><h2>2048</h2><p>Собери число 2048.</p><div class="grid-2048" id="grid2048"></div><div class="controls-2048"><div></div><button class="btn-2048" onclick="game2048.move('up')">⬆️</button><div></div><button class="btn-2048" onclick="game2048.move('left')">⬅️</button><button class="btn-2048" onclick="game2048.move('down')">⬇️</button><button class="btn-2048" onclick="game2048.move('right')">➡️</button></div></div>
+        <div class="gate-box"><h2>2048 (7x7)</h2><p>Собери число 2048.</p><div class="grid-2048" id="grid2048"></div><div class="controls-2048"><div></div><button class="btn-2048" onclick="game2048.move('up')">⬆️</button><div></div><button class="btn-2048" onclick="game2048.move('left')">⬅️</button><button class="btn-2048" onclick="game2048.move('down')">⬇️</button><button class="btn-2048" onclick="game2048.move('right')">➡️</button></div></div>
     </div>
+
+    <!-- 9. САПЕР -->
     <div id="gateMines" class="gate-overlay">
         <div class="gate-box"><h2>САПЕР</h2><p>Не подорвись. (8 мин)</p><div class="mine-grid" id="mineGrid"></div><p style="font-size:0.8em; margin-top:10px;">Нажми на клетку, чтобы открыть.</p></div>
     </div>
 
+    <!-- ОКНО ОПЛАТЫ -->
     <div id="payment-modal" onclick="stopProp(event)">
-        <h3>ТРЕБУЕТСЯ ОПЛАТА</h3><p>Для дальнейшего спуска оплатите комиссию.</p>
+        <h3>ТРЕБУЕТСЯ ОПЛАТА</h3>
+        <p>Для дальнейшего спуска оплатите комиссию.</p>
         <div style="margin-top: 20px; display: flex; justify-content: space-around;">
             <button class="pay-btn" id="payBtn" onmouseover="movePayBtn()">ОПЛАТИТЬ 5000₽</button>
             <button style="padding: 10px;" onclick="closePayment()">Я нищая, решить задачу</button>
         </div>
     </div>
 
+    <!-- СКРИМЕР -->
     <div id="screamer-overlay"><div class="screamer-face">👹</div><div class="screamer-text">БУ!</div></div>
 
     <script>
         function stopProp(e) { e.stopPropagation(); }
 
-        // --- VISUALS ---
+        // --- МАТРИЦА ---
         const canvas = document.getElementById('matrix');
         const ctx = canvas.getContext('2d');
         canvas.width = window.innerWidth;
@@ -250,10 +291,12 @@
         const fontSize = 16;
         const columns = canvas.width/fontSize;
         const drops = Array(Math.floor(columns)).fill(1);
+        
         function drawMatrix() {
             ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = '#440000'; ctx.font = fontSize + 'px monospace';
+            ctx.fillStyle = '#440000'; 
+            ctx.font = fontSize + 'px monospace';
             for(let i = 0; i < drops.length; i++) {
                 const text = katakana.charAt(Math.floor(Math.random() * katakana.length));
                 ctx.fillText(text, i*fontSize, drops[i]*fontSize);
@@ -263,6 +306,7 @@
         }
         setInterval(drawMatrix, 30);
 
+        // --- ГЕНЕРАЦИЯ ШИФРА ---
         function generateCipher() {
             let chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ@#$%&*<>";
             let str = "";
@@ -274,13 +318,13 @@
         }
         generateCipher();
 
-        // --- LOGIN & INIT ---
+        // --- ВХОД И ИНИЦИАЛИЗАЦИЯ ---
         function checkPassword() {
             var input = document.getElementById("passwordInput").value;
             if (input.toUpperCase().trim() === "КПЮЛП") {
                 document.getElementById("login-screen").style.display = "none";
                 document.getElementById("trap-screen").style.display = "flex";
-                document.getElementById("progress-indicator").style.display = "block"; // Показать прогресс
+                document.getElementById("progress-indicator").style.display = "block"; 
                 startFakeLoading();
                 window.addEventListener('scroll', checkScrollTraps);
                 startBrokenScroll(); 
@@ -291,16 +335,32 @@
             }
         }
 
-        // --- PROGRESS BAR ---
+        // --- СЧЕТЧИК ПРОГРЕССА & ЧИТ-КОД ---
+        let progClicks = 0;
+        let progressEl = document.getElementById('progress-indicator');
+        
+        // Логика обновления текста
         window.addEventListener('scroll', function() {
             let scrollTotal = document.body.scrollHeight - window.innerHeight;
             let current = window.scrollY;
             let percent = (current / scrollTotal) * 100;
             if(percent > 100) percent = 100;
-            document.getElementById('progress-indicator').innerText = "SYSTEM PROGRESS: " + percent.toFixed(2) + "%";
+            progressEl.innerText = "SYSTEM PROGRESS: " + percent.toFixed(2) + "%";
         });
 
-        // --- TROLL FUNCTIONS (ВОССТАНОВЛЕНЫ) ---
+        // Логика Чит-кода
+        progressEl.addEventListener('click', function() {
+            progClicks++;
+            if(progClicks >= 5) {
+                alert("ЧИТ-КОД АКТИВИРОВАН: ПРЫЖОК В БУДУЩЕЕ!");
+                // Прыгаем на 80% (это около 400 000 px)
+                let target = document.body.scrollHeight * 0.8;
+                window.scrollTo(0, target);
+                progClicks = 0; // Сброс
+            }
+        });
+
+        // --- ТРОЛЛ ФУНКЦИИ ---
         function moveButton() {
             var btn = document.getElementById("runaway-btn");
             var x = Math.random() * (window.innerWidth - 200);
@@ -329,7 +389,6 @@
             }, 100);
         }
         function randomPopup(e) {
-            // Чтобы не спамило, если кликнули по кнопкам
             if(e.target.tagName === 'BUTTON' || e.target.tagName === 'INPUT' || e.target.tagName === 'LABEL') return;
             if (Math.random() > 0.4) return; 
             var div = document.createElement("div");
@@ -350,8 +409,11 @@
             }, 50);
         }
 
-        // --- CHAOS SYSTEM ---
-        function startChaosSystem() { setInterval(() => { triggerRandomChaos(); }, 15000); }
+        // --- СИСТЕМА ХАОСА ---
+        function startChaosSystem() { 
+            setInterval(() => { triggerRandomChaos(); }, 15000); 
+        }
+        
         function triggerRandomChaos() {
             if(isGateOpen) return;
             let rand = Math.random();
@@ -368,14 +430,18 @@
             else if (rand < 0.95) triggerFly(); 
             else triggerMultiCursor();
         }
-        // Chaos Effects
+
+        // Эффекты
         function triggerZoom() { document.body.classList.add(Math.random()>0.5?'zoom-in-mode':'zoom-out-mode'); setTimeout(()=>document.body.classList.remove('zoom-in-mode','zoom-out-mode'), 3000); }
+        
         function triggerChat() { 
-            let msgs = ["Я вижу тебя...", "Включаю камеру...", "Ты красивая...", "Пароль украден...", "Удаляю фото..."];
+            let msgs = ["Я вижу тебя...", "Включаю камеру...", "Ты красивая...", "Пароль украден...", "Удаляю фото...", "Кто стоит сзади?"];
             let box = document.getElementById('chat-box');
             box.innerText = "⚠️ СИСТЕМА: " + msgs[Math.floor(Math.random()*msgs.length)];
-            box.style.right = "20px"; setTimeout(()=>{box.style.right="-300px"},4000);
+            box.style.right = "20px"; 
+            setTimeout(()=>{box.style.right="-300px"}, 4000);
         }
+        
         function triggerMultiCursor() {
             for(let i=0;i<10;i++){
                 let c=document.createElement("div");c.className="fake-cursor";
@@ -385,12 +451,21 @@
                 setTimeout(()=>{clearInterval(int);c.remove()},4000);
             }
         }
+        
         function triggerFly() {
             let fly=document.createElement("div");fly.innerText="🪰";fly.className="fly";document.body.appendChild(fly);
             let int=setInterval(()=>{fly.style.left=Math.random()*window.innerWidth+"px";fly.style.top=(Math.random()*window.innerHeight+window.scrollY)+"px";},300);
             setTimeout(()=>{clearInterval(int);fly.remove()},5000);
         }
-        function startTacoRain() { for(let i=0;i<30;i++){let t=document.createElement("div");t.innerText="🌮";t.className="taco";t.style.left=Math.random()*window.innerWidth+"px";t.style.animationDuration=(Math.random()*2+1)+"s";document.body.appendChild(t);setTimeout(()=>t.remove(),4000);}}
+        
+        function startTacoRain() { 
+            for(let i=0;i<30;i++){
+                let t=document.createElement("div");t.innerText="🌮";t.className="taco";
+                t.style.left=Math.random()*window.innerWidth+"px";t.style.animationDuration=(Math.random()*2+1)+"s";
+                document.body.appendChild(t);setTimeout(()=>t.remove(),4000);
+            }
+        }
+        
         function triggerEarthquake() { document.body.classList.add("earthquake-mode"); setTimeout(() => document.body.classList.remove("earthquake-mode"), 5000); }
         function triggerSpin() { document.body.classList.add("spin-mode"); setTimeout(() => document.body.classList.remove("spin-mode"), 3000); }
         function triggerBlackout() { document.getElementById("blackout-overlay").style.display = "block"; setTimeout(() => document.getElementById("blackout-overlay").style.display = "none", 2000); }
@@ -399,7 +474,7 @@
         function triggerInvert() { document.body.classList.add("invert-mode"); setTimeout(() => document.body.classList.remove("invert-mode"), 3000); }
         function triggerPulse() { document.body.classList.add("pulse-mode"); setTimeout(() => document.body.classList.remove("pulse-mode"), 4000); }
 
-        // --- MAIN LOGIC ---
+        // --- ГЛАВНАЯ ЛОГИКА ---
         let riddleFlags = [false, false, false];
         let mathStage = 0;
         let passedClicker = false, passed2048 = false, passedPayment = false, passedStroop = false, passedSlider = false, passedType = false, passedDontPress = false, passedMines = false;
@@ -412,7 +487,7 @@
             let y = window.scrollY;
             let skipBtn = document.getElementById("skipTrapBtn");
 
-            // Checkpoint
+            // Checkpoint logic
             if(y > CHECKPOINT_POS && !checkpointReached) {
                 checkpointReached = true;
                 let notif = document.getElementById("checkpoint-notify");
@@ -420,11 +495,11 @@
             }
             if(y > 400000 && passed2048) document.getElementById('trollText').style.opacity = 1;
 
-            // Skip button trap
+            // Show skip button
             if ((y > 70000 && y < 75000) || (y > 200000 && y < 205000)) skipBtn.style.display = 'block';
             else skipBtn.style.display = 'none';
             
-            // Gates
+            // Check gates
             if (y > 20000 && !riddleFlags[0]) openRiddleGate(0);
             else if (y > 160000 && !riddleFlags[1]) openRiddleGate(1);
             else if (y > 340000 && !riddleFlags[2]) openRiddleGate(2);
@@ -467,7 +542,9 @@
             }
         }
 
-        // --- GATE LOGIC ---
+        // --- ЛОГИКА ГЕЙТОВ ---
+        
+        // Stroop
         let stroopCorrectColor = "";
         function openStroopGate() {
             isGateOpen = true; let colors = ["КРАСНЫЙ", "ЗЕЛЕНЫЙ", "СИНИЙ", "ЖЕЛТЫЙ"], cssColors = ["red", "lime", "blue", "yellow"];
@@ -480,6 +557,7 @@
         }
         function checkStroop(color) { if(color === stroopCorrectColor) { passedStroop = true; isGateOpen = false; document.getElementById('gateStroop').style.display = 'none'; document.body.style.overflow = 'auto'; alert("Верно. Мозг работает."); } else { failGate("Не тот цвет! Читай условие!"); } }
 
+        // Slider
         let sliderTarget = 50;
         function openSliderGate() {
             isGateOpen = true; document.getElementById('gateSlider').style.display = 'flex'; document.body.style.overflow = 'hidden';
@@ -496,6 +574,7 @@
             if(val == sliderTarget) { passedSlider = true; isGateOpen = false; document.getElementById('gateSlider').style.display = 'none'; document.body.style.overflow = 'auto'; alert("Снайперская точность."); } else { failGate("Нужно ровно " + sliderTarget + ". У тебя " + val); }
         }
 
+        // Typing
         let typeInterval;
         function openTypeGate() {
             isGateOpen = true; document.getElementById('gateType').style.display = 'flex'; document.body.style.overflow = 'hidden';
@@ -509,6 +588,7 @@
             if(document.getElementById('typeInput').value === document.getElementById('typeTarget').innerText) { clearInterval(typeInterval); passedType = true; isGateOpen = false; document.getElementById('gateType').style.display = 'none'; document.body.style.overflow = 'auto'; alert("Умница."); } else { failGate("Ошибка в тексте."); }
         }
 
+        // Button
         let dontInterval;
         function openDontPressGate() {
             isGateOpen = true; document.getElementById('gateDontPress').style.display = 'flex'; document.body.style.overflow = 'hidden';
@@ -519,7 +599,8 @@
         }
         function passDontPress() { passedDontPress = true; isGateOpen = false; document.getElementById('gateDontPress').style.display = 'none'; document.body.style.overflow = 'auto'; alert("Терпение вознаграждается."); }
 
-        let clicksLeft = 10, clickGameActive = false, clickInterval;
+        // Clicker
+        let clickGameActive = false, clickInterval;
         function startClicker() {
             if(clickGameActive) return; clickGameActive = true; clicksLeft = 10;
             document.getElementById('clickCount').innerText = clicksLeft; document.getElementById('startClickBtn').style.display = 'none';
@@ -534,15 +615,17 @@
             if (clicksLeft <= 0) { clearInterval(clickInterval); clickGameActive = false; passedClicker = true; isGateOpen = false; document.getElementById('gate3').style.display = 'none'; document.body.style.overflow = 'auto'; alert("Руки быстрые."); }
         }
 
+        // 2048 Logic (7x7 VERSION)
         const game2048 = {
             board: [], score: 0,
-            init: function() { this.board = Array(4).fill().map(() => Array(4).fill(0)); this.spawn(); this.spawn(); this.draw(); document.addEventListener('keydown', this.handleKey); },
-            spawn: function() { let empty = []; for(let r=0; r<4; r++) for(let c=0; c<4; c++) if(this.board[r][c] === 0) empty.push({r,c}); if(empty.length > 0) { let spot = empty[Math.floor(Math.random() * empty.length)]; this.board[spot.r][spot.c] = Math.random() < 0.9 ? 2 : 4; } },
-            draw: function() { let html = ''; let won = false; for(let r=0; r<4; r++) { for(let c=0; c<4; c++) { let val = this.board[r][c]; let cls = 'c-' + val; html += `<div class="cell-2048 ${cls}">${val > 0 ? val : ''}</div>`; if(val === 2048) won = true; } } document.getElementById('grid2048').innerHTML = html; if(won) { setTimeout(() => { alert("МОЛОДЕЦ! ДУМАЕШЬ ЭТО ВСЁ?"); passed2048 = true; isGateOpen = false; document.getElementById('gate4').style.display = 'none'; document.body.style.overflow = 'auto'; document.removeEventListener('keydown', this.handleKey); }, 500); } },
-            move: function(dir) { let moved = false; const rotate = matrix => matrix[0].map((val, index) => matrix.map(row => row[index]).reverse()); let b = this.board; if(dir === 'right') b = rotate(rotate(b)); if(dir === 'down') b = rotate(b); if(dir === 'up') b = rotate(rotate(rotate(b))); for(let r=0; r<4; r++) { let row = b[r].filter(x => x); for(let i=0; i < row.length - 1; i++) { if(row[i] === row[i+1]) { row[i] *= 2; row[i+1] = 0; } } row = row.filter(x => x); while(row.length < 4) row.push(0); if(b[r].join(',') !== row.join(',')) moved = true; b[r] = row; } if(dir === 'right') b = rotate(rotate(b)); if(dir === 'down') b = rotate(rotate(rotate(b))); if(dir === 'up') b = rotate(b); this.board = b; if(moved) { this.spawn(); this.draw(); } },
+            init: function() { this.board = Array(7).fill().map(() => Array(7).fill(0)); this.spawn(); this.spawn(); this.draw(); document.addEventListener('keydown', this.handleKey); },
+            spawn: function() { let empty = []; for(let r=0; r<7; r++) for(let c=0; c<7; c++) if(this.board[r][c] === 0) empty.push({r,c}); if(empty.length > 0) { let spot = empty[Math.floor(Math.random() * empty.length)]; this.board[spot.r][spot.c] = Math.random() < 0.9 ? 2 : 4; } },
+            draw: function() { let html = ''; let won = false; for(let r=0; r<7; r++) { for(let c=0; c<7; c++) { let val = this.board[r][c]; let cls = 'c-' + val; html += `<div class="cell-2048 ${cls}">${val > 0 ? val : ''}</div>`; if(val === 2048) won = true; } } document.getElementById('grid2048').innerHTML = html; if(won) { setTimeout(() => { alert("МОЛОДЕЦ! ДУМАЕШЬ ЭТО ВСЁ?"); passed2048 = true; isGateOpen = false; document.getElementById('gate4').style.display = 'none'; document.body.style.overflow = 'auto'; document.removeEventListener('keydown', this.handleKey); }, 500); } },
+            move: function(dir) { let moved = false; const rotate = matrix => matrix[0].map((val, index) => matrix.map(row => row[index]).reverse()); let b = this.board; if(dir === 'right') b = rotate(rotate(b)); if(dir === 'down') b = rotate(b); if(dir === 'up') b = rotate(rotate(rotate(b))); for(let r=0; r<7; r++) { let row = b[r].filter(x => x); for(let i=0; i < row.length - 1; i++) { if(row[i] === row[i+1]) { row[i] *= 2; row[i+1] = 0; } } row = row.filter(x => x); while(row.length < 7) row.push(0); if(b[r].join(',') !== row.join(',')) moved = true; b[r] = row; } if(dir === 'right') b = rotate(rotate(b)); if(dir === 'down') b = rotate(rotate(rotate(b))); if(dir === 'up') b = rotate(b); this.board = b; if(moved) { this.spawn(); this.draw(); } },
             handleKey: function(e) { if(e.key === 'ArrowUp') game2048.move('up'); if(e.key === 'ArrowDown') game2048.move('down'); if(e.key === 'ArrowLeft') game2048.move('left'); if(e.key === 'ArrowRight') game2048.move('right'); }
         };
 
+        // Minesweeper Logic
         const gameMinesweeper = {
             rows: 8, cols: 8, mines: 8, grid: [], revealedCount: 0,
             init: function() { this.grid = []; this.revealedCount = 0; let mineLocs = new Set(); while(mineLocs.size < this.mines) mineLocs.add(Math.floor(Math.random() * (this.rows * this.cols))); let container = document.getElementById('mineGrid'); container.innerHTML = ""; for(let r=0; r<this.rows; r++) { this.grid[r] = []; for(let c=0; c<this.cols; c++) { let isMine = mineLocs.has(r*this.cols + c); this.grid[r][c] = { isMine: isMine, revealed: false, neighbors: 0 }; let div = document.createElement("div"); div.className = "mine-cell"; div.dataset.r = r; div.dataset.c = c; div.onclick = () => this.clickCell(r, c); container.appendChild(div); } } for(let r=0; r<this.rows; r++) for(let c=0; c<this.cols; c++) { if(this.grid[r][c].isMine) continue; let count = 0; for(let i=-1; i<=1; i++) for(let j=-1; j<=1; j++) { let nr=r+i, nc=c+j; if(nr>=0 && nr<this.rows && nc>=0 && nc<this.cols && this.grid[nr][nc].isMine) count++; } this.grid[r][c].neighbors = count; } },
@@ -551,11 +634,13 @@
             revealAll: function() { for(let r=0; r<this.rows; r++) for(let c=0; c<this.cols; c++) if(this.grid[r][c].isMine) { let cell = document.querySelector(`.mine-cell[data-r='${r}'][data-c='${c}']`); cell.classList.add("mine-bomb"); cell.innerText = "💣"; } }
         };
 
+        // Riddles
         const riddles = [ { q: "Что поднимается вверх, но никогда не спускается?", a: ["возраст", "годы"] }, { q: "Зимой и летом одним цветом?", a: ["елка", "ёлка", "ель", "сосна"] }, { q: "Не лает, не кусает, а в дом не пускает?", a: ["замок"] }, { q: "Сидит дед, во сто шуб одет, кто его раздевает, тот слезы проливает?", a: ["лук"] }, { q: "Висит груша, нельзя скушать?", a: ["лампочка", "лампа"] }, { q: "Что можно сломать, даже если не трогать?", a: ["обещание", "слово"] } ];
         let currentRiddleIndex = 0; let activeRiddleStage = 0;
         function openRiddleGate(stage) { isGateOpen = true; activeRiddleStage = stage; currentRiddleIndex = Math.floor(Math.random() * riddles.length); document.getElementById('riddle-text').innerText = riddles[currentRiddleIndex].q; document.getElementById('ans1').value = ""; document.getElementById('gate1').style.display = 'flex'; document.body.style.overflow = 'hidden'; }
         function checkGate1() { let ans = document.getElementById('ans1').value.toLowerCase().trim(); let correctAnswers = riddles[currentRiddleIndex].a; if (correctAnswers.includes(ans)) { riddleFlags[activeRiddleStage] = true; isGateOpen = false; document.getElementById('gate1').style.display = 'none'; document.body.style.overflow = 'auto'; alert("Верно."); } else { failGate("Неверный ответ на загадку"); } }
 
+        // Math
         let currentMathAnswer = 0; let mathInterval; let currentMathLevel = 0;
         function openMathGate(level) { isGateOpen = true; currentMathLevel = level; document.getElementById('math-title').innerText = `МАТЕМАТИКА ${level}/5`; let timeLimit = 20; let probText = ""; let a = Math.floor(Math.random() * 20) + 1; let b = Math.floor(Math.random() * 20) + 1; let c = Math.floor(Math.random() * 10) + 1; if (level <= 2) { let types = ['+', '-']; let type = types[Math.floor(Math.random() * types.length)]; if (type === '+') currentMathAnswer = a + b; else currentMathAnswer = a - b; probText = `${a} ${type} ${b} = ?`; } else { timeLimit = 35 + (level - 3) * 5; let types = ['+', '-', '*']; let t1 = types[Math.floor(Math.random() * types.length)]; let t2 = types[Math.floor(Math.random() * types.length)]; if (t1 === '*') a = Math.floor(Math.random() * 5) + 1; if (t2 === '*') b = Math.floor(Math.random() * 5) + 1; probText = `${a} ${t1} ${b} ${t2} ${c} = ?`; currentMathAnswer = eval(`${a} ${t1} ${b} ${t2} ${c}`); } document.getElementById('math-instr').innerText = `Реши пример за ${timeLimit} секунд!`; document.getElementById('math-problem').innerText = probText; document.getElementById('ans2').value = ""; document.getElementById('math-timer').innerText = timeLimit; document.getElementById('gate2').style.display = 'flex'; document.body.style.overflow = 'hidden'; if(mathInterval) clearInterval(mathInterval); mathInterval = setInterval(() => { timeLimit--; document.getElementById('math-timer').innerText = timeLimit; if (timeLimit <= 0) { clearInterval(mathInterval); failGate("Время вышло"); } }, 1000); }
         function checkGateMath() { let ans = parseInt(document.getElementById('ans2').value); if (ans === currentMathAnswer) { clearInterval(mathInterval); mathStage = currentMathLevel; isGateOpen = false; document.getElementById('gate2').style.display = 'none'; document.body.style.overflow = 'auto'; if(mathStage < 5) alert("Уровень пройден."); else alert("Твой мозг еще не вскипел?"); } else { failGate("Ошибка в вычислениях"); } }
