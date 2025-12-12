@@ -19,11 +19,17 @@
             overflow-x: hidden;
             user-select: none; 
             touch-action: pan-y;
-            transition: filter 0.2s, color 0.5s; 
+            /* ПЛАВНАЯ СМЕНА ЦВЕТА ДЛЯ ВСЕГО */
+            transition: color 1s ease, text-shadow 1s ease;
             text-shadow: 2px 2px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
         }
 
-        /* --- ЗЕЛЕНАЯ ТЕМА (СТИЛИ) --- */
+        /* Элементы, которые тоже должны менять цвет плавно */
+        .trap-title, #statusText, .big-cipher {
+            transition: color 1s ease, text-shadow 1s ease;
+        }
+
+        /* ЗЕЛЕНАЯ ТЕМА (активируется классом) */
         body.green-theme { color: #00ff00 !important; }
         body.green-theme .trap-title { color: #00ff00 !important; text-shadow: 3px 3px 0 #000, 0 0 20px #00ff00 !important; }
         body.green-theme .fake-loader { border-color: #00ff00 !important; box-shadow: 0 0 10px #00ff00 !important; }
@@ -35,7 +41,7 @@
             position: fixed; top: 10px; right: 10px;
             background: rgba(0,0,0,0.8); color: inherit; border: 1px solid currentColor;
             padding: 5px 10px; font-weight: bold; z-index: 9000;
-            font-size: 14px; display: none; cursor: pointer;
+            font-size: 14px; display: none; cursor: pointer; transition: color 1s, border-color 1s;
         }
         #progress-indicator:active { background: #004400; }
 
@@ -89,16 +95,19 @@
         .case-item { width: 96px; height: 96px; border-right: 4px solid #000; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 20px; color: black; flex-shrink: 0; }
         .case-marker { position: absolute; top: 0; left: 148px; width: 4px; height: 100%; background: red; z-index: 10; }
 
-        /* --- ХАОС --- */
+        /* --- ХАОС ЭФФЕКТЫ --- */
         .zoom-in-mode { transform: scale(1.8); } .zoom-out-mode { transform: scale(0.4); }
+        
         .fake-cursor { position: fixed; width: 20px; height: 30px; background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="30" viewBox="0 0 320 512"><path fill="white" d="M302.189 329.126H196.105l55.831 135.993c3.889 9.428-.555 19.999-9.444 23.999l-49.165 21.427c-9.165 4-19.443-.571-23.332-9.714l-53.053-129.136-86.664 89.138C18.729 472.71 0 463.554 0 447.977V18.299C0 1.899 19.921-6.096 30.277 5.443l284.412 292.542c11.472 11.179 6.407 31.141-12.5 31.141z"/></svg>') no-repeat; z-index: 9998; pointer-events: none; transition: 0.1s; }
         .fake-cursor-img { position: fixed; width: 20px; height: 30px; background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="30" viewBox="0 0 320 512"><path fill="white" d="M302.189 329.126H196.105l55.831 135.993c3.889 9.428-.555 19.999-9.444 23.999l-49.165 21.427c-9.165 4-19.443-.571-23.332-9.714l-53.053-129.136-86.664 89.138C18.729 472.71 0 463.554 0 447.977V18.299C0 1.899 19.921-6.096 30.277 5.443l284.412 292.542c11.472 11.179 6.407 31.141-12.5 31.141z"/></svg>') no-repeat; z-index: 9999; pointer-events: none; transition: 0.05s; }
+        
         .fly { position: fixed; font-size: 30px; z-index: 9999; pointer-events: none; transition: top 0.2s, left 0.2s; }
         .chat-notification { position: fixed; top: 50px; right: -300px; background: #222; border: 1px solid #0f0; color: #0f0; padding: 10px; width: 250px; text-align: left; font-size: 12px; z-index: 9000; transition: right 0.5s; box-shadow: 0 0 10px #0f0; text-shadow: none; }
         .earthquake-mode { animation: hard-shake 0.1s infinite; }
         @keyframes hard-shake { 0% { transform: translate(5px, 5px) rotate(0deg); } 50% { transform: translate(-5px, -5px) rotate(2deg); } 100% { transform: translate(0, 0) rotate(0); } }
         .taco { position: fixed; top: -100px; font-size: 60px; z-index: 9000; pointer-events: none; animation: fall linear forwards; text-shadow: none; }
         @keyframes fall { to { transform: translateY(110vh) rotate(720deg); } }
+        .spin-mode { transform: rotate(360deg); transition: transform 3s; }
         .drunk-mode { transform: scaleY(-1) scaleX(-1); filter: hue-rotate(90deg); }
         .no-cursor { cursor: none !important; }
         .blur-mode { filter: blur(5px); }
@@ -125,32 +134,24 @@
             background-color: rgba(0, 0, 0, 0.4); width: 100%; position: relative; padding-top: 50px;
             z-index: 1; height: 1250000px; 
         }
-        .trap-title { font-size: 3em; color: #ff0000; text-shadow: 3px 3px 0 #000, 0 0 20px #ff0000; margin-bottom: 10px; padding: 10px; }
+        .trap-title { font-size: 3em; color: inherit; text-shadow: inherit; margin-bottom: 10px; padding: 10px; }
         
-        .big-cipher { width: 90%; word-break: break-all; font-size: 10px; opacity: 0.5; color: #880000; text-shadow: none; margin-top: 30px; font-family: monospace; text-align: left; overflow: hidden; height: 200px; mask-image: linear-gradient(to bottom, black 50%, transparent 100%); pointer-events: none; }
+        .big-cipher { width: 90%; word-break: break-all; font-size: 10px; opacity: 0.5; color: inherit; text-shadow: none; margin-top: 30px; font-family: monospace; text-align: left; overflow: hidden; height: 200px; mask-image: linear-gradient(to bottom, black 50%, transparent 100%); pointer-events: none; }
         
         /* КНОПКА КООРДИНАТ - ТОЛЬКО В НАЧАЛЕ */
         #runaway-btn { 
-            position: absolute; top: 250px; 
+            position: absolute; top: 350px; /* НИЖЕ ЗАГОЛОВКА */
             padding: 15px 30px; background: #ff0000; color: white; font-weight: bold; border: 2px solid white; 
             cursor: pointer; font-size: 1.2em; box-shadow: 0 0 15px red; z-index: 50; transition: 0.1s; text-shadow: none; 
         }
         
         .fake-loader { width: 300px; border: 2px solid #ff3333; padding: 3px; margin: 20px auto; background: black; box-shadow: 0 0 10px #000; }
         .progress-bar { height: 15px; background-color: #ff3333; width: 0%; }
-        .toggle-container { margin: 20px; display: flex; align-items: center; justify-content: center; gap: 10px; padding: 5px; border-radius: 10px; z-index: 100; position: relative;}
-        .switch { position: relative; display: inline-block; width: 50px; height: 28px; }
-        .switch input { opacity: 0; width: 0; height: 0; }
-        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #330000; border: 1px solid red; transition: .4s; }
-        .slider:before { position: absolute; content: ""; height: 20px; width: 20px; left: 3px; bottom: 3px; background-color: red; transition: .4s; }
-        input:checked + .slider { background-color: #ff3333; }
-        input:checked + .slider:before { transform: translateX(22px); background-color: white; }
-        .checkbox-container { margin-top: 15px; display: flex; align-items: center; gap: 10px; cursor: pointer; padding: 5px; border-radius: 5px; z-index: 100; position: relative;}
-        .checkbox-container input { width: 20px; height: 20px; margin: 0; cursor: pointer; }
-        .help-link { margin-top: 30px; font-size: 0.8em; color: #fff; text-decoration: underline; cursor: pointer; background: #000; padding: 5px; text-shadow: none; z-index: 100; position: relative;}
-        .help-link:hover { color: red; }
+        
+        /* ОКНО ОШИБКИ */
         .popup { position: absolute; background: #ccc; color: black; border: 2px solid blue; padding: 5px; font-family: Arial, sans-serif; font-size: 11px; box-shadow: 5px 5px 10px rgba(0,0,0,0.5); z-index: 50; width: 180px; text-align: left; user-select: none; text-shadow: none; }
         .popup-header { background: blue; color: white; padding: 2px; margin-bottom: 5px; font-weight: bold; }
+        
         .skip-trap-btn { position: fixed; bottom: 20px; right: 20px; background: #ffaa00; color: black; padding: 10px 20px; font-weight: bold; border: 2px solid white; cursor: pointer; z-index: 400; display: none; box-shadow: 0 0 10px yellow; animation: bounce 1s infinite; text-shadow: none; }
         @keyframes bounce { 0%, 100% {transform: translateY(0);} 50% {transform: translateY(-5px);} }
         
@@ -169,18 +170,10 @@
         .controls-2048 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; max-width: 200px; margin: 10px auto; }
         .btn-2048 { padding: 10px; background: #444; color: white; border: 1px solid #777; font-size: 1.2em; cursor: pointer; text-shadow: none;}
         
-        /* ОПЛАТА */
-        #payment-modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; color: black; border: 3px solid blue; padding: 20px; z-index: 6000; width: 300px; text-align: center; box-shadow: 0 0 50px black; text-shadow: none; }
-        .pay-btn { background: green; color: white; padding: 10px; border: none; cursor: pointer; position: relative; }
-        
-        #screamer-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: black; z-index: 9999; align-items: center; justify-content: center; flex-direction: column; }
-        .screamer-face { font-size: 8em; animation: shake 0.1s infinite; text-shadow: none;}
-        .screamer-text { color: red; font-size: 3em; font-weight: bold; text-shadow: none;}
         .secret-container { position: absolute; bottom: 50px; width: 100%; }
         .secret-text { color: #330000; font-size: 14px; font-weight: bold; transition: color 0.2s; user-select: text; text-shadow: none; }
         .secret-text::selection { background: white; color: black; }
-        @keyframes shake { 0% { transform: translate(1px, 1px) rotate(0deg); } 50% { transform: translate(-1px, 2px) rotate(-1deg); } 100% { transform: translate(1px, -1px) rotate(1deg); } }
-
+        
         .stroop-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
         .stroop-btn { padding: 15px; font-weight: bold; border: 2px solid white; cursor: pointer; color: black; text-shadow: none; }
         #hellSlider { width: 100%; margin: 20px 0; }
@@ -194,17 +187,13 @@
         .odd-grid { display: grid; grid-template-columns: repeat(10, 1fr); gap: 2px; width: 300px; margin: 0 auto; }
         .odd-cell { font-size: 20px; cursor: pointer; user-select: none; }
 
-        .sheep-field { width: 300px; height: 200px; background: #2e8b57; position: relative; margin: 0 auto; border: 2px solid white; }
-        .sheep { font-size: 30px; position: absolute; cursor: pointer; transition: 0.2s; }
-        .grass { font-size: 30px; position: absolute; cursor: grab; }
+        .sheep-field { width: 300px; height: 200px; background: #2e8b57; position: relative; margin: 0 auto; border: 2px solid white; touch-action: none; }
+        .sheep { font-size: 30px; position: absolute; cursor: pointer; transition: 0.2s; user-select: none; }
+        .grass { font-size: 30px; position: absolute; cursor: grab; user-select: none; touch-action: none; }
 
-        .flag-img { font-size: 80px; margin: 20px; }
+        /* Специальный шрифт для флагов в Windows */
+        .flag-img { font-size: 80px; margin: 20px; font-family: "Segoe UI Emoji", "Segoe UI Symbol", "Apple Color Emoji", "Noto Color Emoji", sans-serif; }
         .flag-opts button { width: 100%; margin: 5px 0; }
-
-        .mine-grid { display: grid; grid-template-columns: repeat(8, 1fr); gap: 2px; background: #555; padding: 5px; border-radius: 5px; margin: 10px auto; width: 240px; height: 240px; }
-        .mine-cell { width: 28px; height: 28px; background: #ccc; display: flex; justify-content: center; align-items: center; font-size: 14px; font-weight: bold; color: #333; border-radius: 2px; text-shadow: none; cursor: pointer; }
-        .mine-revealed { background: #999; }
-        .mine-bomb { background: red; }
 
         #checkpoint-notify { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: #00aa00; color: white; padding: 10px 20px; font-weight: bold; z-index: 10000; display: none; border: 2px solid white; text-shadow: none; box-shadow: 0 0 20px #00ff00; }
     </style>
@@ -250,17 +239,20 @@
             <button class="admin-btn" onclick="triggerGravity()">ГРАВИТАЦИЯ</button>
             <button class="admin-btn" onclick="triggerBlur()">РАСФОКУС</button>
             <button class="admin-btn" onclick="triggerPulse()">ПУЛЬСАЦИЯ</button>
+            <button class="admin-btn" onclick="triggerMultiCursor()">МУЛЬТИ-КУРСОР</button>
+            <button class="admin-btn" onclick="triggerFakeCursor()">ФЕЙК КУРСОР</button>
         </div>
 
         <div id="adm-tasks" class="tab-content">
+            <button class="admin-btn" onclick="forceOpenGate('gate1')">ЗАГАДКИ</button>
+            <button class="admin-btn" onclick="forceOpenGate('gateQuiz')">ВИКТОРИНА</button>
             <button class="admin-btn" onclick="forceOpenGate('gateMaze')">ЛАБИРИНТ</button>
             <button class="admin-btn" onclick="forceOpenGate('gate2', 5)">МАТЕМАТИКА</button>
-            <button class="admin-btn" onclick="forceOpenGate('gateStroop')">СТРУП</button>
+            <button class="admin-btn" onclick="forceOpenGate('gateStroop')">ЦВЕТА</button>
             <button class="admin-btn" onclick="forceOpenGate('gateOdd')">ЛИШНЕЕ</button>
             <button class="admin-btn" onclick="forceOpenGate('gate4')">2048</button>
             <button class="admin-btn" onclick="forceOpenGate('gateSheep', 5)">ОВЦЫ</button>
             <button class="admin-btn" onclick="forceOpenGate('gateFlags')">ФЛАГИ</button>
-            <button class="admin-btn" onclick="forceOpenGate('gateMines')">САПЕР</button>
             <button class="admin-btn" onclick="forceOpenGate('gate3')">КЛИКЕР</button>
             <button class="admin-btn" onclick="forceOpenGate('gateMemory')">ПАМЯТЬ</button>
             <button class="admin-btn" onclick="forceOpenGate('gateSlider')">ПОЛЗУНОК</button>
@@ -310,24 +302,7 @@
             <div id="statusText" style="font-size: 0.8em; margin-bottom: 20px; text-shadow: 1px 1px 0 #000;">Удаление данных...</div>
         </div>
 
-        <!-- КНОПКА КООРДИНАТ - ТОЛЬКО В НАЧАЛЕ -->
         <button id="runaway-btn" onmouseover="moveButton()">СКАЧАТЬ КООРДИНАТЫ</button>
-
-        <div class="toggle-container" onclick="stopProp(event)">
-            <span>Сложно</span>
-            <label class="switch">
-                <input type="checkbox" id="trollSwitch" onchange="trollToggle()">
-                <span class="slider"></span>
-            </label>
-            <span>Легко</span>
-        </div>
-
-        <div class="checkbox-container" onclick="stopProp(event)">
-            <input type="checkbox" id="humanCheck" onchange="noHuman(this)">
-            <label for="humanCheck">Я не робот</label>
-        </div>
-
-        <div class="help-link" onclick="triggerScreamer(event)">[ ? ] Нужна помощь?</div>
 
         <button class="skip-trap-btn" id="skipTrapBtn" onclick="activateSkipTrap()">⏩ ПРОПУСТИТЬ УРОВЕНЬ</button>
         <div class="big-cipher" id="cipherBlock"></div>
@@ -346,7 +321,7 @@
     <div id="gateMaze" class="gate-overlay"><div class="gate-box"><h2>ЛАБИРИНТ</h2><p>Иди по КРАСНОМУ! Белый = смерть.</p><div id="maze-container" onmouseover="checkMazeFail(event)"></div></div></div>
     <div id="gate2" class="gate-overlay"><div class="gate-box"><h2 id="math-title">МАТЕМАТИКА</h2><p id="math-instr">Реши пример!</p><div id="math-timer" class="timer-display">20</div><h1 id="math-problem" style="color:white; font-size: 2em; margin: 20px 0;">?</h1><input type="number" id="ans2" class="gate-input" placeholder="Число..."><br><button class="login-btn" onclick="checkGateMath()" style="margin-top:10px;">ОТВЕТИТЬ</button></div></div>
     <div id="gateMemory" class="gate-overlay"><div class="gate-box"><h2>ПАМЯТЬ РЫБКИ</h2><p>Запомни число!</p><h1 id="memNumber" style="font-size:3em; color:yellow;">123456</h1><div id="memInputDiv" style="display:none;"><input type="number" id="memInput" class="gate-input" placeholder="Число?"><br><button class="login-btn" onclick="checkMemory()" style="margin-top:10px;">ПРОВЕРИТЬ</button></div></div></div>
-    <div id="gateStroop" class="gate-overlay"><div class="gate-box"><h2>ТЕСТ МОЗГА</h2><p>Нажми кнопку, цвет которой совпадает с <b>ЦВЕТОМ ТЕКСТА</b>!</p><h1 id="stroopWord" style="font-size: 3em; background: #000; padding: 10px;">ТЕКСТ</h1><div class="stroop-grid" id="stroopButtons"></div></div></div>
+    <div id="gateStroop" class="gate-overlay"><div class="gate-box"><h2>ЦВЕТА</h2><p>Нажми кнопку, цвет которой совпадает с <b>ЦВЕТОМ ТЕКСТА</b>!</p><h1 id="stroopWord" style="font-size: 3em; background: #000; padding: 10px;">ТЕКСТ</h1><div class="stroop-grid" id="stroopButtons"></div></div></div>
     <div id="gateSlider" class="gate-overlay"><div class="gate-box"><h2>ТОЧНОСТЬ</h2><p>Установи ползунок ровно на <b id="sliderTargetText">77</b>.</p><p id="sliderVal" style="font-size: 2em; color: white;">0</p><input type="range" id="hellSlider" min="0" max="100" value="0" oninput="updateSlider(this.value)" data-current-val="0"><br><button class="login-btn" onclick="checkSlider()" style="margin-top:10px;">ГОТОВО</button></div></div>
     <div id="gateOdd" class="gate-overlay"><div class="gate-box"><h2>НАЙДИ ЛИШНЕЕ</h2><p>Найди отличающийся смайлик за 5 сек!</p><div id="odd-timer" class="timer-display">5</div><div class="odd-grid" id="oddGrid"></div></div></div>
     <div id="gateType" class="gate-overlay"><div class="gate-box"><h2>ПОСЛУШНОСТЬ</h2><p>Напечатай фразу без ошибок:</p><p id="typeTarget" style="background: #333; padding: 10px; color: yellow; user-select: none;">...</p><div id="type-timer" class="timer-display">15</div><br><input type="text" id="typeInput" placeholder="Печатай здесь..." style="width: 300px;"><br><button class="login-btn" onclick="checkTyping()" style="margin-top:10px;">ПРОВЕРИТЬ</button></div></div>
@@ -356,15 +331,6 @@
     <div id="gateQuiz" class="gate-overlay"><div class="gate-box"><h2>ВИКТОРИНА</h2><p>Ответь на 10 вопросов подряд!</p><p id="quiz-counter">1/10</p><p id="quiz-q" style="font-size:1.2em; color:yellow;">...</p><div id="quiz-options"></div></div></div>
     <div id="gateSheep" class="gate-overlay"><div class="gate-box"><h2>КОРМЛЕНИЕ</h2><p id="sheep-msg">Перетащи траву на овечек!</p><div class="sheep-field" id="sheepField"></div></div></div>
     <div id="gateFlags" class="gate-overlay"><div class="gate-box"><h2>ГЕОГРАФИЯ</h2><p>Угадай 3 страны по флагу!</p><div class="flag-img" id="flagImg"></div><div class="flag-opts" id="flagOpts"></div></div></div>
-    <div id="gateMines" class="gate-overlay"><div class="gate-box"><h2>САПЕР</h2><p>Не подорвись. (8 мин)</p><div class="mine-grid" id="mineGrid"></div><p style="font-size:0.8em; margin-top:10px;">Нажми на клетку, чтобы открыть.</p></div></div>
-
-    <div id="payment-modal" onclick="stopProp(event)">
-        <h3>ТРЕБУЕТСЯ ОПЛАТА</h3><p>Для дальнейшего спуска оплатите комиссию.</p>
-        <div style="margin-top: 20px; display: flex; justify-content: space-around; height: 100px; position: relative;">
-            <button class="pay-btn" id="payBtn" onmouseover="evadePayBtn()" onclick="payMoney()">ОПЛАТИТЬ 5000 МОНЕТ</button>
-            <button style="padding: 10px; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);" onclick="payMath()">Я нищая (Решить задачи)</button>
-        </div>
-    </div>
 
     <div id="screamer-overlay"><div class="screamer-face">👹</div><div class="screamer-text">БУ!</div></div>
 
@@ -394,6 +360,17 @@
         }
         setInterval(drawMatrix, 30);
 
+        function generateCipher() {
+            let chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ@#$%&*<>";
+            let str = "";
+            for(let i=0; i<3000; i++) {
+                str += chars.charAt(Math.floor(Math.random() * chars.length));
+                if(i%50 === 0) str += " ";
+            }
+            document.getElementById('cipherBlock').innerText = str;
+        }
+        generateCipher();
+
         // --- ВХОД И ИНИЦИАЛИЗАЦИЯ ---
         let coins = 0;
         let baseIncome = 900;
@@ -412,7 +389,7 @@
             { id: 'gateMemory', pct: 0.25, passed: false, type: 'memory' },
             { id: 'gateStroop', pct: 0.30, passed: false, type: 'stroop' },
             { id: 'gate2', pct: 0.35, passed: false, type: 'math', level: 2 },
-            { id: 'gateSlider', pct: 0.42, passed: false, type: 'slider' },
+            { id: 'gateSlider', pct: 0.40, passed: false, type: 'slider' },
             { id: 'gate1', pct: 0.45, passed: false, type: 'riddle', index: 1 },
             { id: 'gate2', pct: 0.50, passed: false, type: 'math', level: 3 },
             { id: 'gateOdd', pct: 0.55, passed: false, type: 'odd' },
@@ -424,10 +401,9 @@
             { id: 'gate2', pct: 0.85, passed: false, type: 'math', level: 5 },
             { id: 'gate4', pct: 0.90, passed: false, type: '2048' },
             { id: 'gateQuiz', pct: 1.50, passed: false, type: 'quiz' },
-            { id: 'gateSheep', pct: 2.10, passed: false, type: 'sheep', count: 5, msg: "Покорми овечек!" },
+            { id: 'gateSheep', pct: 2.10, passed: false, type: 'sheep', count: 5, msg: "Перетащи траву на овечек!" },
             { id: 'gateFlags', pct: 2.20, passed: false, type: 'flags' },
-            { id: 'gateSheep', pct: 2.30, passed: false, type: 'sheep', count: 8, msg: "Они снова голодны!" },
-            { id: 'gateMines', pct: 0.95, passed: false, type: 'mines' }
+            { id: 'gateSheep', pct: 2.30, passed: false, type: 'sheep', count: 8, msg: "Они снова голодны!" }
         ];
 
         function checkPassword() {
@@ -512,7 +488,7 @@
             else if (gate.type === 'maze') openMazeGate(gate);
             else if (gate.type === 'memory') openMemoryGate(gate);
             else if (gate.type === 'stroop') openStroopGate(gate);
-            else if (gate.type === 'slider') { openSliderGate(gate); setTimeout(()=> {if(isGateOpen) {document.getElementById('payment-modal').style.display='block';}}, 500); } 
+            else if (gate.type === 'slider') openSliderGate(gate);
             else if (gate.type === 'odd') openOddGate(gate);
             else if (gate.type === 'type') openTypeGate(gate);
             else if (gate.type === 'dont') openDontPressGate(gate);
@@ -521,7 +497,6 @@
             else if (gate.type === 'quiz') openQuizGate(gate);
             else if (gate.type === 'sheep') openSheepGate(gate);
             else if (gate.type === 'flags') openFlagGate(gate);
-            else if (gate.type === 'mines') { gameMinesweeper.init(); document.getElementById('gateMines').style.display='flex'; document.body.style.overflow='hidden'; }
         }
 
         let activeGateObj = null;
@@ -531,7 +506,6 @@
             isGateOpen = false;
             currentGateId = "";
             document.querySelectorAll('.gate-overlay').forEach(el => el.style.display = 'none');
-            document.getElementById('payment-modal').style.display = 'none';
             document.body.style.overflow = 'auto';
             clearInterval(mathInterval); clearInterval(clickInterval); clearInterval(typeInterval); clearInterval(dontInterval); clearInterval(oddInterval);
         }
@@ -571,29 +545,11 @@
         function buyShield() { if(coins >= 2000) { coins -= 2000; updateShopUI(); hasShield = true; alert("Щит активен!"); } else { alert("Нужно 2000 $!"); } }
         function buyMultiplier(mult) { 
             let cost = 0;
-            if(mult === 2) cost = 50000;
-            if(mult === 3) cost = 100000;
-            if(mult === 4) cost = 500000;
-            if(mult === 5) cost = 1000000;
+            if(mult === 2) cost = 50000; if(mult === 3) cost = 100000; if(mult === 4) cost = 500000; if(mult === 5) cost = 1000000;
             if(coins >= cost) { coins -= cost; incomeMultiplier = mult; updateShopUI(); alert("Доход x" + mult + "!"); } else { alert("Нужно " + cost + " $!"); } 
         }
         function buyInsurance() { if(coins >= 3000) { coins -= 3000; updateShopUI(); hasInsurance = true; alert("Страховка куплена!"); } else { alert("Нужно 3000 $!"); } }
         function buyBribe() { if(coins >= 20000) { coins -= 20000; updateShopUI(); bribes += 3; alert("Взятка дана. 3 пропуска."); } else { alert("Нужно 20000 $!"); } }
-
-        // --- PAYMENT LOGIC ---
-        function evadePayBtn() {
-            let btn = document.getElementById("payBtn");
-            let x = Math.random() * 150;
-            let y = Math.random() * 50;
-            btn.style.transform = `translate(${x}px, ${y}px)`;
-        }
-        function payMoney() {
-            if(coins >= 5000) { coins -= 5000; updateShopUI(); markGatePassed(); alert("Взятка принята."); } else { alert("Денег нет!"); }
-        }
-        function payMath() {
-            document.getElementById('payment-modal').style.display='none';
-            openMathGate(5, activeGateObj); 
-        }
 
         // --- ADMIN NEW ---
         let adminClicks = 0;
@@ -626,6 +582,13 @@
                 if(param) { fakeGate.level = param; fakeGate.count = param; }
                 openGate(fakeGate);
             }
+        }
+        // Admin triggers for specific events
+        function triggerFakeCursor() {
+            let c=document.createElement("div");c.className="fake-cursor";
+            c.style.left=Math.random()*window.innerWidth+"px";c.style.top=Math.random()*window.innerHeight+"px";
+            document.body.appendChild(c);
+            setTimeout(()=>c.remove(), 5000);
         }
 
         // --- CASE ANIMATION (10s) ---
@@ -666,7 +629,6 @@
             clearInterval(mathInterval); clearInterval(clickInterval); clearInterval(typeInterval); clearInterval(dontInterval); clearInterval(oddInterval);
             isGateOpen = false;
             document.querySelectorAll('.gate-overlay').forEach(el => el.style.display = 'none');
-            document.getElementById('payment-modal').style.display = 'none';
             document.body.style.overflow = 'auto';
             document.getElementById('ans1').value = ""; document.getElementById('ans2').value = ""; document.getElementById('hellSlider').value = 0; document.getElementById('sliderVal').innerText = "0"; document.getElementById('typeInput').value = "";
 
@@ -742,30 +704,44 @@
 
         const game2048 = { board: [], score: 0, init: function() { this.board = Array(7).fill().map(() => Array(7).fill(0)); this.spawn(); this.spawn(); this.draw(); document.addEventListener('keydown', this.handleKey); }, spawn: function() { let empty = []; for(let r=0; r<7; r++) for(let c=0; c<7; c++) if(this.board[r][c] === 0) empty.push({r,c}); if(empty.length > 0) { let spot = empty[Math.floor(Math.random() * empty.length)]; this.board[spot.r][spot.c] = Math.random() < 0.9 ? 2 : 4; } }, draw: function() { let html = ''; let won = false; for(let r=0; r<7; r++) { for(let c=0; c<7; c++) { let val = this.board[r][c]; let cls = 'c-' + val; html += `<div class="cell-2048 ${cls}">${val > 0 ? val : ''}</div>`; if(val === 2048) won = true; } } document.getElementById('grid2048').innerHTML = html; if(won) { setTimeout(() => { alert("МОЛОДЕЦ! 2048 СОБРАНО."); grantReward(); markGatePassed(); document.removeEventListener('keydown', this.handleKey); }, 500); } }, move: function(dir) { let moved = false; const rotate = matrix => matrix[0].map((val, index) => matrix.map(row => row[index]).reverse()); let b = this.board; if(dir === 'right') b = rotate(rotate(b)); if(dir === 'down') b = rotate(b); if(dir === 'up') b = rotate(rotate(rotate(b))); for(let r=0; r<7; r++) { let row = b[r].filter(x => x); for(let i=0; i < row.length - 1; i++) { if(row[i] === row[i+1]) { row[i] *= 2; row[i+1] = 0; } } row = row.filter(x => x); while(row.length < 7) row.push(0); if(b[r].join(',') !== row.join(',')) moved = true; b[r] = row; } if(dir === 'right') b = rotate(rotate(b)); if(dir === 'down') b = rotate(rotate(rotate(b))); if(dir === 'up') b = rotate(b); this.board = b; if(moved) { this.spawn(); this.draw(); } }, handleKey: function(e) { if(e.key === 'ArrowUp') game2048.move('up'); if(e.key === 'ArrowDown') game2048.move('down'); if(e.key === 'ArrowLeft') game2048.move('left'); if(e.key === 'ArrowRight') game2048.move('right'); } };
 
-        // SHEEP
+        // SHEEP (DRAG & DROP)
         function openSheepGate(gate) {
             document.getElementById('gateSheep').style.display = 'flex'; document.body.style.overflow = 'hidden';
             document.getElementById('sheep-msg').innerText = gate.msg;
             let field = document.getElementById('sheepField'); field.innerHTML = "";
             let fedCount = 0;
+            // Create Sheep (Drop Zones)
             for(let i=0; i<gate.count; i++) {
                 let s = document.createElement('div'); s.className = 'sheep'; s.innerText = '🐑';
                 s.style.top = Math.random() * 150 + 'px'; s.style.left = Math.random() * 250 + 'px'; s.id = 'sheep'+i;
+                
+                // Allow Drop
+                s.ondragover = function(ev) { ev.preventDefault(); };
+                s.ondrop = function(ev) {
+                    ev.preventDefault();
+                    if(this.classList.contains('fed')) return;
+                    let data = ev.dataTransfer.getData("text");
+                    let grassEl = document.getElementById(data);
+                    if(grassEl) {
+                        grassEl.style.display = 'none';
+                        this.innerText = '😋'; this.classList.add('fed');
+                        fedCount++;
+                        if(fedCount >= gate.count) { grantReward(); markGatePassed(); alert("Овцы сыты."); }
+                    }
+                };
                 field.appendChild(s);
             }
+            // Create Grass (Draggable)
             for(let i=0; i<gate.count; i++) {
                 let g = document.createElement('div'); g.className = 'grass'; g.innerText = '🌿';
                 g.style.top = '170px'; g.style.left = (i*30) + 'px'; g.draggable = true;
-                g.addEventListener('dragstart', (e) => { e.dataTransfer.setData("text", e.target.id); });
-                g.onclick = function() {
-                    let sheep = field.querySelectorAll('.sheep:not(.fed)');
-                    if(sheep.length > 0) { sheep[0].innerText = '😋'; sheep[0].classList.add('fed'); g.style.display = 'none'; fedCount++; if(fedCount >= gate.count) { grantReward(); markGatePassed(); alert("Овцы сыты."); } }
-                };
+                g.id = 'grass'+i;
+                g.ondragstart = function(ev) { ev.dataTransfer.setData("text", ev.target.id); };
                 field.appendChild(g);
             }
         }
 
-        // FLAGS
+        // FLAGS (EMOJI FONT FIX)
         const flagsDB = [ {f:"🇺🇸", n:"США"}, {f:"🇫🇷", n:"Франция"}, {f:"🇯🇵", n:"Япония"}, {f:"🇮🇹", n:"Италия"}, {f:"🇧🇷", n:"Бразилия"}, {f:"🇨🇦", n:"Канада"}, {f:"🇬🇧", n:"Великобритания"}, {f:"🇩🇪", n:"Германия"} ];
         let flagWins = 0;
         function openFlagGate(gate) { document.getElementById('gateFlags').style.display = 'flex'; document.body.style.overflow = 'hidden'; flagWins = 0; nextFlagRound(); }
@@ -817,37 +793,30 @@
             });
         }
 
-        const gameMinesweeper = {
-            rows: 8, cols: 8, mines: 8, grid: [], revealedCount: 0,
-            init: function() { this.grid = []; this.revealedCount = 0; let mineLocs = new Set(); while(mineLocs.size < this.mines) mineLocs.add(Math.floor(Math.random() * (this.rows * this.cols))); let container = document.getElementById('mineGrid'); container.innerHTML = ""; for(let r=0; r<this.rows; r++) { this.grid[r] = []; for(let c=0; c<this.cols; c++) { let isMine = mineLocs.has(r*this.cols + c); this.grid[r][c] = { isMine: isMine, revealed: false, neighbors: 0 }; let div = document.createElement("div"); div.className = "mine-cell"; div.dataset.r = r; div.dataset.c = c; div.onclick = () => this.clickCell(r, c); container.appendChild(div); } } for(let r=0; r<this.rows; r++) for(let c=0; c<this.cols; c++) { if(this.grid[r][c].isMine) continue; let count = 0; for(let i=-1; i<=1; i++) for(let j=-1; j<=1; j++) { let nr=r+i, nc=c+j; if(nr>=0 && nr<this.rows && nc>=0 && nc<this.cols && this.grid[nr][nc].isMine) count++; } this.grid[r][c].neighbors = count; } },
-            clickCell: function(r, c) { if(this.grid[r][c].revealed) return; if(this.grid[r][c].isMine) { this.revealAll(); setTimeout(() => failGate("Бум! Ты подорвалась."), 1000); } else { this.reveal(r, c); if(this.revealedCount === (this.rows*this.cols - this.mines)) { grantReward(); markGatePassed(); alert("ЧИСТО! ТЫ ВЫЖИЛА!"); } } },
-            reveal: function(r, c) { if(r<0 || r>=this.rows || c<0 || c>=this.cols || this.grid[r][c].revealed) return; this.grid[r][c].revealed = true; this.revealedCount++; let cell = document.querySelector(`.mine-cell[data-r='${r}'][data-c='${c}']`); cell.classList.add("mine-revealed"); if(this.grid[r][c].neighbors > 0) cell.innerText = this.grid[r][c].neighbors; else for(let i=-1; i<=1; i++) for(let j=-1; j<=1; j++) this.reveal(r+i, c+j); },
-            revealAll: function() { for(let r=0; r<this.rows; r++) for(let c=0; c<this.cols; c++) if(this.grid[r][c].isMine) { let cell = document.querySelector(`.mine-cell[data-r='${r}'][data-c='${c}']`); cell.classList.add("mine-bomb"); cell.innerText = "💣"; } }
-        };
-
         // --- TROLL & CHAOS ---
         function moveButton() {
             var btn = document.getElementById("runaway-btn");
             var x = Math.max(20, Math.random() * (window.innerWidth - 200));
             var y = Math.max(100, Math.random() * 200); 
+            // Ограничиваем только верхнюю зону, если скролл 0
+            if (window.scrollY < 100) {
+                if (y < 250) y = 350; // Толкаем вниз, чтобы не перекрывал
+            }
             btn.style.position = "absolute"; btn.style.left = x + "px"; btn.style.top = y + "px"; 
         }
-        function trollToggle() { var chk = document.getElementById("trollSwitch"); if (chk.checked) { setTimeout(() => { chk.checked = false; alert("Ошибка прав доступа!"); }, 300); } }
-        function noHuman(chk) { if (chk.checked) { setTimeout(() => { chk.checked = false; alert("Роботам вход запрещен! 🤖"); }, 300); } }
+        
         function triggerScreamer(e) { e.stopPropagation(); var scr = document.getElementById("screamer-overlay"); scr.style.display = "flex"; var count = 0; var inter = setInterval(() => { scr.style.backgroundColor = (scr.style.backgroundColor === 'black') ? 'red' : 'black'; count++; if(count > 10) { clearInterval(inter); scr.style.display = "none"; } }, 100); }
         function randomPopup(e) { if(e.target.tagName === 'BUTTON' || e.target.tagName === 'INPUT' || e.target.tagName === 'LABEL') return; if (Math.random() > 0.4) return; var div = document.createElement("div"); div.className = "popup"; div.innerHTML = "<div class='popup-header'>System Error</div>VIRUS DETECTED<br>Sending data..."; div.style.left = (e.clientX) + "px"; div.style.top = (e.clientY + window.scrollY) + "px"; document.body.appendChild(div); setTimeout(() => div.remove(), 1500); }
         function startFakeLoading() { var bar = document.getElementById("progBar"); var width = 0; setInterval(() => { if (width >= 100) width = 0; else width += 2; bar.style.width = width + '%'; }, 50); }
         function startBrokenScroll() { window.addEventListener('scroll', function() { if(!isGateOpen && Math.random() > 0.99) window.scrollBy(0, -200); }); }
         function activateSkipTrap() { alert("Ага, размечталась! ШТРАФ ЗА ЛЕНЬ!"); window.scrollBy(0, -50000); document.getElementById("skipTrapBtn").style.display = 'none'; }
-        function movePayBtn() { let btn = document.getElementById("payBtn"); btn.style.position = "relative"; btn.style.left = (Math.random()*200 - 100) + "px"; btn.style.top = (Math.random()*100 - 50) + "px"; }
-        function closePayment() { if(activeGateObj && activeGateObj.type === 'slider') markGatePassed(); else {isGateOpen = false; document.getElementById('payment-modal').style.display='none'; document.body.style.overflow='auto';} alert("Платеж не прошел."); }
-
+        
         function startChaosSystem() { setInterval(() => { scheduleNextChaos(); }, 1000); }
         let lastChaosTime = 0;
         function scheduleNextChaos() {
             if(hasShield) return;
             let now = Date.now();
-            let delay = 30000;
+            let delay = isGateOpen ? 30000 : 30000;
             if (now - lastChaosTime > delay) { triggerRandomChaos(); lastChaosTime = now; }
         }
         function triggerRandomChaos() {
@@ -858,6 +827,7 @@
         function triggerZoom() { document.body.classList.add(Math.random()>0.5?'zoom-in-mode':'zoom-out-mode'); setTimeout(()=>document.body.classList.remove('zoom-in-mode','zoom-out-mode'), 3000); }
         function triggerChat() { let msgs = ["Я вижу тебя...", "Включаю камеру...", "Ты красивая...", "Пароль украден...", "Удаляю фото...", "Кто стоит сзади?"]; let box = document.getElementById('chat-box'); box.innerText = "⚠️ СИСТЕМА: " + msgs[Math.floor(Math.random()*msgs.length)]; box.style.right = "20px"; setTimeout(()=>{box.style.right="-300px"}, 4000); }
         function triggerMultiCursor() { for(let i=0;i<10;i++){ let c=document.createElement("div");c.className="fake-cursor"; c.style.left=Math.random()*window.innerWidth+"px";c.style.top=Math.random()*window.innerHeight+"px"; document.body.appendChild(c); let int=setInterval(()=>{c.style.left=(parseFloat(c.style.left)+(Math.random()*20-10))+"px";c.style.top=(parseFloat(c.style.top)+(Math.random()*20-10))+"px";},100); setTimeout(()=>{clearInterval(int);c.remove()},4000); } }
+        function triggerFakeCursor() { let c=document.createElement("div");c.className="fake-cursor"; c.style.left=Math.random()*window.innerWidth+"px";c.style.top=Math.random()*window.innerHeight+"px"; document.body.appendChild(c); let int=setInterval(()=>{c.style.left=(parseFloat(c.style.left)+(Math.random()*20-10))+"px";c.style.top=(parseFloat(c.style.top)+(Math.random()*20-10))+"px";},100); setTimeout(()=>{clearInterval(int);c.remove()},4000); }
         function triggerFly() { let fly=document.createElement("div");fly.innerText="🪰";fly.className="fly";document.body.appendChild(fly); let int=setInterval(()=>{fly.style.left=Math.random()*window.innerWidth+"px";fly.style.top=(Math.random()*window.innerHeight+window.scrollY)+"px";},300); setTimeout(()=>{clearInterval(int);fly.remove()},5000); }
         function startTacoRain() { for(let i=0;i<300;i++){let t=document.createElement("div");t.innerText="🌮";t.className="taco";t.style.left=Math.random()*window.innerWidth+"px";t.style.animationDuration=(Math.random()*2+1)+"s";document.body.appendChild(t);setTimeout(()=>t.remove(),10000);}}
         function triggerEarthquake() { document.body.classList.add("earthquake-mode"); setTimeout(() => document.body.classList.remove("earthquake-mode"), 5000); }
