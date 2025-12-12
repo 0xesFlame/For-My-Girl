@@ -113,21 +113,30 @@
         .mine-revealed { background: #999; }
         .mine-bomb { background: red; }
 
+        /* ОПЛАТА */
         #payment-modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; color: black; border: 3px solid blue; padding: 20px; z-index: 6000; width: 300px; text-align: center; box-shadow: 0 0 50px black; text-shadow: none; }
         .pay-btn { background: green; color: white; padding: 10px; border: none; cursor: pointer; }
+        
+        /* СКРИМЕР */
         #screamer-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: black; z-index: 9999; align-items: center; justify-content: center; flex-direction: column; }
         .screamer-face { font-size: 8em; animation: shake 0.1s infinite; text-shadow: none;}
         .screamer-text { color: red; font-size: 3em; font-weight: bold; text-shadow: none;}
+        
+        /* СЕКРЕТ */
         .secret-container { position: absolute; bottom: 50px; width: 100%; }
         .secret-text { color: #330000; font-size: 14px; font-weight: bold; transition: color 0.2s; user-select: text; text-shadow: none; }
         .secret-text::selection { background: white; color: black; }
         @keyframes shake { 0% { transform: translate(1px, 1px) rotate(0deg); } 50% { transform: translate(-1px, 2px) rotate(-1deg); } 100% { transform: translate(1px, -1px) rotate(1deg); } }
 
+        /* STROOP */
         .stroop-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
         .stroop-btn { padding: 15px; font-weight: bold; border: 2px solid white; cursor: pointer; color: black; text-shadow: none; }
+        
+        /* SLIDER & BUTTON */
         #hellSlider { width: 100%; margin: 20px 0; }
         #dontPressBtn { width: 150px; height: 150px; border-radius: 50%; background: red; color: white; font-weight: bold; font-size: 1.5em; border: 5px solid darkred; cursor: pointer; box-shadow: 0 0 20px red; text-shadow: none; }
 
+        /* NOTIFICATIONS */
         #checkpoint-notify {
             position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
             background: #00aa00; color: white; padding: 10px 20px; font-weight: bold;
@@ -201,43 +210,64 @@
         </div>
     </div>
 
-    <!-- === ГЕЙТЫ === -->
+    <!-- === ГЕЙТЫ (ЗАДАНИЯ) === -->
+    
+    <!-- 1. ЗАГАДКА -->
     <div id="gate1" class="gate-overlay">
         <div class="gate-box"><h2>ЗАЩИТА: ЗАГАДКА</h2><p id="riddle-text">...</p><input type="text" id="ans1" class="gate-input" placeholder="Ответ..."><br><button class="login-btn" onclick="checkGate1()" style="margin-top:10px;">ОТВЕТИТЬ</button></div>
     </div>
+
+    <!-- 2. МАТЕМАТИКА -->
     <div id="gate2" class="gate-overlay">
         <div class="gate-box"><h2 id="math-title">МАТЕМАТИКА</h2><p id="math-instr">Реши пример!</p><div id="math-timer" class="timer-display">20</div><h1 id="math-problem" style="color:white; font-size: 2em; margin: 20px 0;">?</h1><input type="number" id="ans2" class="gate-input" placeholder="Число..."><br><button class="login-btn" onclick="checkGateMath()" style="margin-top:10px;">ОТВЕТИТЬ</button></div>
     </div>
+
+    <!-- 3. ТЕСТ СТРУПА -->
     <div id="gateStroop" class="gate-overlay">
         <div class="gate-box"><h2>ТЕСТ МОЗГА</h2><p>Нажми кнопку, цвет которой совпадает с <b>ЦВЕТОМ ТЕКСТА</b>!</p><h1 id="stroopWord" style="font-size: 3em; background: #000; padding: 10px;">ТЕКСТ</h1><div class="stroop-grid" id="stroopButtons"></div></div>
     </div>
+
+    <!-- 4. АДСКИЙ ПОЛЗУНОК -->
     <div id="gateSlider" class="gate-overlay">
         <div class="gate-box"><h2>ТОЧНОСТЬ</h2><p>Установи ползунок ровно на <b id="sliderTargetText">77</b>.</p><p id="sliderVal" style="font-size: 2em; color: white;">0</p><input type="range" id="hellSlider" min="0" max="100" value="0" oninput="updateSlider(this.value)" data-current-val="0"><br><button class="login-btn" onclick="checkSlider()" style="margin-top:10px;">ГОТОВО</button></div>
     </div>
+
+    <!-- 5. ТЕСТ НА ПЕЧАТЬ -->
     <div id="gateType" class="gate-overlay">
         <div class="gate-box"><h2>ТЕСТ НА ПОСЛУШНОСТЬ</h2><p>Напечатай фразу без ошибок:</p><p id="typeTarget" style="background: #333; padding: 10px; color: yellow; user-select: none;">...</p><div id="type-timer" class="timer-display">15</div><br><input type="text" id="typeInput" placeholder="Печатай здесь..." style="width: 300px;"><br><button class="login-btn" onclick="checkTyping()" style="margin-top:10px;">ПРОВЕРИТЬ</button></div>
     </div>
+
+    <!-- 6. КНОПКА НЕ НАЖИМАЙ -->
     <div id="gateDontPress" class="gate-overlay">
         <div class="gate-box"><h2>ТЕРПЕНИЕ</h2><p>НЕ нажимай на красную кнопку!</p><div id="dont-timer" class="timer-display" style="border: none;">10</div><br><br><button id="dontPressBtn" onclick="failGate('Сказано же НЕ НАЖИМАТЬ!')">DON'T PRESS</button><button id="passDontBtn" class="login-btn" style="display:none; margin-top: 20px;" onclick="passDontPress()">ПРОЙТИ</button></div>
     </div>
+
+    <!-- 7. КЛИКЕР -->
     <div id="gate3" class="gate-overlay">
         <div class="gate-box"><h2>КЛИКЕР</h2><p>Нажми 10 раз за 5 секунд!</p><div id="click-timer" class="timer-display">5.00</div><p>Осталось: <span id="clickCount" style="color:white; font-size:1.5em;">10</span></p><div style="height: 250px; position: relative; border: 1px dashed #555;"><button id="clickGameBtn" onclick="clickerGame()" style="padding: 10px; background: red; color: white; border: none; font-weight: bold; position: absolute; top: 40%; left: 40%;">ЖМИ!</button></div><button onclick="startClicker()" id="startClickBtn" style="padding: 10px; background: blue; color: white; border: none; width: 100%; margin-top: 10px;">НАЧАТЬ</button></div>
     </div>
+
+    <!-- 8. 2048 (7x7) -->
     <div id="gate4" class="gate-overlay">
         <div class="gate-box"><h2>2048 (7x7)</h2><p>Собери число 2048.</p><div class="grid-2048" id="grid2048"></div><div class="controls-2048"><div></div><button class="btn-2048" onclick="game2048.move('up')">⬆️</button><div></div><button class="btn-2048" onclick="game2048.move('left')">⬅️</button><button class="btn-2048" onclick="game2048.move('down')">⬇️</button><button class="btn-2048" onclick="game2048.move('right')">➡️</button></div></div>
     </div>
+
+    <!-- 9. САПЕР -->
     <div id="gateMines" class="gate-overlay">
         <div class="gate-box"><h2>САПЕР</h2><p>Не подорвись. (8 мин)</p><div class="mine-grid" id="mineGrid"></div><p style="font-size:0.8em; margin-top:10px;">Нажми на клетку, чтобы открыть.</p></div>
     </div>
 
+    <!-- ОКНО ОПЛАТЫ -->
     <div id="payment-modal" onclick="stopProp(event)">
-        <h3>ТРЕБУЕТСЯ ОПЛАТА</h3><p>Для дальнейшего спуска оплатите комиссию.</p>
+        <h3>ТРЕБУЕТСЯ ОПЛАТА</h3>
+        <p>Для дальнейшего спуска оплатите комиссию.</p>
         <div style="margin-top: 20px; display: flex; justify-content: space-around;">
             <button class="pay-btn" id="payBtn" onmouseover="movePayBtn()">ОПЛАТИТЬ 5000₽</button>
             <button style="padding: 10px;" onclick="closePayment()">Я нищая, решить задачу</button>
         </div>
     </div>
 
+    <!-- СКРИМЕР -->
     <div id="screamer-overlay"><div class="screamer-face">👹</div><div class="screamer-text">БУ!</div></div>
 
     <script>
@@ -265,6 +295,7 @@
         }
         setInterval(drawMatrix, 30);
 
+        // --- ГЕНЕРАЦИЯ ШИФРА ---
         function generateCipher() {
             let chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ@#$%&*<>";
             let str = "";
@@ -276,7 +307,7 @@
         }
         generateCipher();
 
-        // --- ВХОД ---
+        // --- ВХОД И ИНИЦИАЛИЗАЦИЯ ---
         function checkPassword() {
             var input = document.getElementById("passwordInput").value;
             if (input.toUpperCase().trim() === "КПЮЛП") {
@@ -293,10 +324,11 @@
             }
         }
 
-        // --- ПРОГРЕСС & РИТМ-ЧИТ (3 -> 4 -> 1) ---
+        // --- СЧЕТЧИК ПРОГРЕССА & РИТМ-ЧИТЫ ---
         let cheatStep = 0;
         let cheatClicks = 0;
         let cheatTimer;
+        let cheatHistory = [];
         let progressEl = document.getElementById('progress-indicator');
         
         window.addEventListener('scroll', function() {
@@ -312,26 +344,35 @@
             cheatClicks++;
             clearTimeout(cheatTimer);
             
-            // Ждем 600мс чтобы понять, закончил ли юзер серию кликов
             cheatTimer = setTimeout(() => {
-                // Логика шагов
-                if (cheatStep === 0 && cheatClicks === 3) {
-                    cheatStep = 1; // Первый этап пройден (3 клика)
-                } else if (cheatStep === 1 && cheatClicks === 4) {
-                    cheatStep = 2; // Второй этап пройден (4 клика)
-                } else if (cheatStep === 2 && cheatClicks === 1) {
-                    activateCheat(); // Третий этап (1 клик) -> УСПЕХ
+                if (cheatStep === 0) {
+                    cheatHistory[0] = cheatClicks;
+                    cheatStep = 1;
+                } else if (cheatStep === 1) {
+                    cheatHistory[1] = cheatClicks;
+                    cheatStep = 2;
+                } else if (cheatStep === 2) {
+                    let finalClick = cheatClicks;
+                    
+                    // КОД 1: 3-4-1 (80%)
+                    if (cheatHistory[0] === 3 && cheatHistory[1] === 4 && finalClick === 1) {
+                        activateCheat(0.80, "АДМИН-ДОСТУП: СКИП УРОВНЕЙ...");
+                    }
+                    // КОД 2: 4-3-1 (82%) - Пропуск 2048
+                    else if (cheatHistory[0] === 4 && cheatHistory[1] === 3 && finalClick === 1) {
+                        activateCheat(0.82, "SUPER-ADMIN: ТЕЛЕПОРТ К САПЕРУ!");
+                    }
+
                     cheatStep = 0;
-                } else {
-                    // Сбился ритм
-                    cheatStep = 0;
+                    cheatHistory = [];
                 }
                 cheatClicks = 0;
             }, 600);
         });
 
-        function activateCheat() {
-            alert("АДМИН-ДОСТУП: СКИП УРОВНЕЙ...");
+        function activateCheat(percent, msg) {
+            alert(msg);
+            
             // 1. Помечаем все задания до 80% как пройденные
             riddleFlags = [true, true, true];
             mathStage = 5;
@@ -339,16 +380,21 @@
             passedSlider = true;
             passedType = true;
             passedDontPress = true;
-            passedClicker = true; // Кликер тоже скипаем
+            passedClicker = true; 
             passedPayment = true;
             checkpointReached = true;
 
+            // Если это чит на 82%, то скипаем и 2048
+            if (percent > 0.81) {
+                passed2048 = true;
+            }
+
             // 2. Телепорт
-            let target = document.body.scrollHeight * 0.8; // 80%
+            let target = document.body.scrollHeight * percent;
             window.scrollTo(0, target);
         }
 
-        // --- TROLL FUNCTIONS ---
+        // --- ТРОЛЛ ФУНКЦИИ ---
         function moveButton() {
             var btn = document.getElementById("runaway-btn");
             var x = Math.random() * (window.innerWidth - 200);
@@ -458,7 +504,7 @@
             let y = window.scrollY;
             let skipBtn = document.getElementById("skipTrapBtn");
 
-            // Checkpoint
+            // Checkpoint logic
             if(y > CHECKPOINT_POS && !checkpointReached) {
                 checkpointReached = true;
                 let notif = document.getElementById("checkpoint-notify");
