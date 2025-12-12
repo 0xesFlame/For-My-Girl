@@ -1,0 +1,195 @@
+@import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+
+:root {
+    --primary: #ff0000; /* Красный */
+    --bg: #000000;
+    --glass: rgba(20, 0, 0, 0.9);
+}
+
+body.green-mode {
+    --primary: #00ff00; /* Зеленый */
+    --glass: rgba(0, 20, 0, 0.9);
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background-color: var(--bg);
+    color: var(--primary);
+    font-family: 'VT323', monospace;
+    font-size: 24px;
+    height: 1250000px; /* Тот самый длинный скролл */
+    overflow-x: hidden;
+    cursor: crosshair;
+    transition: filter 1s ease;
+}
+
+/* Скрываем скроллбар, но оставляем скролл */
+body::-webkit-scrollbar {
+    width: 0px;
+    background: transparent;
+}
+
+/* МАТРИЦА ФОН */
+#matrixCanvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    opacity: 0.25;
+}
+
+/* UI ВЕРХ */
+#ui-layer {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 60px;
+    background: black;
+    border-bottom: 2px solid var(--primary);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 100;
+    padding: 0 20px;
+    box-sizing: border-box;
+}
+
+.cyber-btn {
+    background: transparent;
+    border: 1px solid var(--primary);
+    color: var(--primary);
+    font-family: 'VT323', monospace;
+    font-size: 20px;
+    padding: 5px 15px;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: 0.2s;
+}
+
+.cyber-btn:hover {
+    background: var(--primary);
+    color: black;
+    box-shadow: 0 0 10px var(--primary);
+}
+
+.loader-bar {
+    width: 200px;
+    height: 10px;
+    border: 1px solid var(--primary);
+    margin-top: 5px;
+}
+.loader-fill {
+    height: 100%;
+    width: 100%;
+    background: repeating-linear-gradient(45deg, var(--primary), var(--primary) 10px, black 10px, black 20px);
+    animation: loadAnim 2s linear infinite;
+}
+
+@keyframes loadAnim { from { background-position: 0 0; } to { background-position: 40px 0; } }
+
+/* Стартовый экран */
+.start-screen {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+#runaway-btn {
+    padding: 15px 30px;
+    font-size: 24px;
+    background: black;
+    color: var(--primary);
+    border: 2px solid var(--primary);
+    position: relative; /* Чтобы можно было двигать */
+    cursor: pointer;
+}
+
+/* ОКНА */
+.overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.8);
+    backdrop-filter: blur(5px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+.hidden { display: none !important; }
+
+.cyber-window {
+    width: 500px;
+    background: black;
+    border: 2px solid var(--primary);
+    box-shadow: 0 0 20px var(--primary);
+    padding: 20px;
+    text-align: center;
+    position: relative;
+}
+
+.window-header {
+    background: var(--primary);
+    color: black;
+    font-weight: bold;
+    padding: 5px;
+    margin-bottom: 20px;
+}
+
+/* МАГАЗИН */
+.shop-item {
+    border: 1px solid var(--primary);
+    margin: 10px 0;
+    padding: 10px;
+    cursor: pointer;
+    transition: 0.2s;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+.shop-item:hover { background: rgba(255,0,0,0.2); }
+body.green-mode .shop-item:hover { background: rgba(0,255,0,0.2); }
+
+.item-name { font-weight: bold; width: 100%; text-align: left;}
+.item-desc { font-size: 16px; opacity: 0.7; text-align: left; width: 70%;}
+.item-price { font-weight: bold; width: 30%; text-align: right; }
+
+/* ЗАДАНИЯ СТИЛИ */
+input {
+    background: black;
+    border: 1px solid var(--primary);
+    color: var(--primary);
+    font-family: inherit;
+    font-size: 24px;
+    padding: 5px;
+    text-align: center;
+    margin: 10px 0;
+}
+.error-msg { color: var(--primary); font-weight: bold; margin-top: 10px; }
+
+/* ХАОС ЭФФЕКТЫ */
+.shake-screen { animation: shake 0.5s infinite; }
+.invert-colors { filter: invert(1); }
+.blur-screen { filter: blur(4px); }
+
+@keyframes shake {
+    0% { transform: translate(1px, 1px) rotate(0deg); }
+    10% { transform: translate(-1px, -2px) rotate(-1deg); }
+    20% { transform: translate(-3px, 0px) rotate(1deg); }
+    30% { transform: translate(3px, 2px) rotate(0deg); }
+    40% { transform: translate(1px, -1px) rotate(1deg); }
+    50% { transform: translate(-1px, 2px) rotate(-1deg); }
+    60% { transform: translate(-3px, 1px) rotate(0deg); }
+    70% { transform: translate(3px, 1px) rotate(-1deg); }
+    80% { transform: translate(-1px, -1px) rotate(1deg); }
+    90% { transform: translate(1px, 2px) rotate(0deg); }
+    100% { transform: translate(1px, -2px) rotate(-1deg); }
+}
+
+/* Цветные кнопки для задания */
+.color-grid { display: flex; gap: 10px; justify-content: center; }
+.color-btn { width: 50px; height: 50px; border: 2px solid white; cursor: pointer; }
