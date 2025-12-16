@@ -16,40 +16,24 @@
             text-align: center;
             margin: 0; padding: 0;
             min-height: 100vh;
-            /* ВАЖНО: scroll-lock класс контролирует прокрутку */
             overflow-x: hidden;
             user-select: none; 
             touch-action: pan-y;
-            transition: color 1s ease, text-shadow 1s ease;
+            transition: filter 0.2s; 
             text-shadow: 2px 2px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
         }
 
-        /* Класс для блокировки скролла на входе */
-        body.scroll-lock {
-            overflow: hidden;
-            height: 100vh;
-        }
-
-        /* --- ЗЕЛЕНАЯ ТЕМА --- */
+        /* ЗЕЛЕНАЯ ТЕМА */
         body.green-theme { color: #00ff00 !important; }
-        body.green-theme .trap-title { color: #00ff00 !important; text-shadow: 3px 3px 0 #000, 0 0 20px #00ff00 !important; }
-        body.green-theme .fake-loader { border-color: #00ff00 !important; box-shadow: 0 0 10px #00ff00 !important; }
-        body.green-theme .progress-bar { background-color: #00ff00 !important; }
-        body.green-theme .big-cipher { color: #005500 !important; }
         
         /* ИНДИКАТОР ПРОГРЕССА */
         #progress-indicator {
             position: fixed; top: 10px; right: 10px;
-            background: rgba(0,0,0,0.8); 
-            color: inherit; /* Наследует текущий цвет темы */
-            border: 1px solid currentColor;
+            background: rgba(0,0,0,0.8); color: #0f0; border: 1px solid #0f0;
             padding: 5px 10px; font-weight: bold; z-index: 9000;
             font-size: 14px; display: none; cursor: pointer;
-            transition: background 0.2s;
         }
-        #progress-indicator:active { 
-            background: #333; /* Нейтральный цвет при клике */
-        }
+        #progress-indicator:active { background: #004400; }
 
         /* МАГАЗИН */
         #open-shop-btn {
@@ -62,22 +46,22 @@
             display: none; position: fixed; top: 50px; left: 10px;
             background: rgba(0,0,0,0.95); border: 2px solid gold;
             color: gold; padding: 15px; z-index: 9100; text-align: left;
-            width: 240px; font-size: 12px; box-shadow: 0 0 15px gold;
+            width: 250px; font-size: 12px; box-shadow: 0 0 15px gold;
             max-height: 80vh; overflow-y: auto;
         }
         .shop-title { text-align: center; border-bottom: 1px solid gold; margin-bottom: 10px; padding-bottom: 5px; font-size: 1.2em; }
         .shop-btn {
             background: #333; color: gold; border: 1px solid gold;
-            width: 100%; margin-top: 8px; cursor: pointer; padding: 8px;
+            width: 100%; margin-top: 5px; cursor: pointer; padding: 8px;
             text-align: left; display: flex; justify-content: space-between;
         }
         .shop-btn:hover { background: #555; }
 
-        /* АДМИН ПАНЕЛЬ */
+        /* АДМИН ПАНЕЛЬ (TABBED) */
         #admin-modal {
             display: none; position: fixed; bottom: 20px; right: 20px;
-            background: #111; border: 2px solid #0f0; color: #0f0; padding: 10px; z-index: 99999;
-            width: 320px; text-align: center; box-shadow: 0 0 20px #0f0; height: 450px; overflow-y: auto;
+            background: #000; border: 2px solid #0f0; color: #0f0; padding: 10px; z-index: 99999;
+            width: 320px; text-align: center; box-shadow: 0 0 30px #0f0; height: 450px; overflow-y: auto;
         }
         .admin-tabs { display: flex; justify-content: space-between; margin-bottom: 10px; border-bottom: 1px solid #0f0; padding-bottom: 5px; }
         .tab-btn { background: none; border: none; color: #005500; cursor: pointer; font-weight: bold; padding: 5px; flex: 1; border-bottom: 2px solid transparent;}
@@ -86,22 +70,11 @@
         .tab-content { display: none; }
         .tab-content.active { display: block; }
 
-        .admin-btn { background: #003300; color: #0f0; border: 1px solid #0f0; width: 100%; padding: 8px; margin: 3px 0; cursor: pointer; font-size: 11px; font-weight: bold; }
+        .admin-btn { background: #003300; color: #0f0; border: 1px solid #0f0; width: 100%; padding: 8px; margin: 3px 0; cursor: pointer; font-size: 12px; font-weight: bold; }
         .admin-btn:hover { background: #006600; color: white; }
-        .admin-input { background: black; color: white; border: 1px solid #0f0; padding: 5px; width: 60px; text-align: center; }
+        .admin-input { background: #111; color: #0f0; border: 1px solid #0f0; padding: 5px; width: 60px; text-align: center; }
 
-        /* КЕЙС */
-        #case-modal {
-            display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            background: #222; border: 4px solid gold; width: 300px; height: 150px; z-index: 9500;
-            overflow: hidden;
-        }
-        .case-window { width: 100%; height: 100px; margin-top: 25px; background: #000; position: relative; overflow: hidden; border-top: 2px solid #555; border-bottom: 2px solid #555; }
-        .case-strip { display: flex; height: 100%; position: absolute; left: 0; top: 0; transition: transform 10s cubic-bezier(0.1, 1, 0.1, 1); }
-        .case-item { width: 96px; height: 96px; border-right: 4px solid #000; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 20px; color: black; flex-shrink: 0; }
-        .case-marker { position: absolute; top: 0; left: 148px; width: 4px; height: 100%; background: red; z-index: 10; }
-
-        /* --- ХАОС ЭФФЕКТЫ --- */
+        /* --- ХАОС --- */
         .zoom-in-mode { transform: scale(1.8); } .zoom-out-mode { transform: scale(0.4); }
         .fake-cursor { position: fixed; width: 20px; height: 30px; background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="30" viewBox="0 0 320 512"><path fill="white" d="M302.189 329.126H196.105l55.831 135.993c3.889 9.428-.555 19.999-9.444 23.999l-49.165 21.427c-9.165 4-19.443-.571-23.332-9.714l-53.053-129.136-86.664 89.138C18.729 472.71 0 463.554 0 447.977V18.299C0 1.899 19.921-6.096 30.277 5.443l284.412 292.542c11.472 11.179 6.407 31.141-12.5 31.141z"/></svg>') no-repeat; z-index: 9998; pointer-events: none; transition: 0.1s; }
         .fake-cursor-img { position: fixed; width: 20px; height: 30px; background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="30" viewBox="0 0 320 512"><path fill="white" d="M302.189 329.126H196.105l55.831 135.993c3.889 9.428-.555 19.999-9.444 23.999l-49.165 21.427c-9.165 4-19.443-.571-23.332-9.714l-53.053-129.136-86.664 89.138C18.729 472.71 0 463.554 0 447.977V18.299C0 1.899 19.921-6.096 30.277 5.443l284.412 292.542c11.472 11.179 6.407 31.141-12.5 31.141z"/></svg>') no-repeat; z-index: 9999; pointer-events: none; transition: 0.05s; }
@@ -138,13 +111,12 @@
             background-color: rgba(0, 0, 0, 0.4); width: 100%; position: relative; padding-top: 50px;
             z-index: 1; height: 1250000px; 
         }
-        .trap-title { font-size: 3em; color: inherit; margin-bottom: 10px; padding: 10px; }
-        
-        .big-cipher { width: 90%; word-break: break-all; font-size: 10px; opacity: 0.5; color: inherit; text-shadow: none; margin-top: 30px; font-family: monospace; text-align: left; overflow: hidden; height: 200px; mask-image: linear-gradient(to bottom, black 50%, transparent 100%); pointer-events: none; }
+        .trap-title { font-size: 3em; color: #ff0000; text-shadow: 3px 3px 0 #000, 0 0 20px #ff0000; margin-bottom: 10px; padding: 10px; }
         
         /* КНОПКА КООРДИНАТ - ТОЛЬКО В НАЧАЛЕ */
         #runaway-btn { 
-            position: absolute; top: 350px; /* НИЖЕ ЗАГОЛОВКА */
+            position: absolute; /* Не фиксированная, пропадает при скролле */
+            top: 250px; /* Изначально под заголовком */
             padding: 15px 30px; background: #ff0000; color: white; font-weight: bold; border: 2px solid white; 
             cursor: pointer; font-size: 1.2em; box-shadow: 0 0 15px red; z-index: 50; transition: 0.1s; text-shadow: none; 
         }
@@ -164,6 +136,7 @@
         .help-link:hover { color: red; }
         .popup { position: absolute; background: #ccc; color: black; border: 2px solid blue; padding: 5px; font-family: Arial, sans-serif; font-size: 11px; box-shadow: 5px 5px 10px rgba(0,0,0,0.5); z-index: 50; width: 180px; text-align: left; user-select: none; text-shadow: none; }
         .popup-header { background: blue; color: white; padding: 2px; margin-bottom: 5px; font-weight: bold; }
+        
         .skip-trap-btn { position: fixed; bottom: 20px; right: 20px; background: #ffaa00; color: black; padding: 10px 20px; font-weight: bold; border: 2px solid white; cursor: pointer; z-index: 400; display: none; box-shadow: 0 0 10px yellow; animation: bounce 1s infinite; text-shadow: none; }
         @keyframes bounce { 0%, 100% {transform: translateY(0);} 50% {transform: translateY(-5px);} }
         
@@ -207,22 +180,17 @@
         .odd-grid { display: grid; grid-template-columns: repeat(10, 1fr); gap: 2px; width: 300px; margin: 0 auto; }
         .odd-cell { font-size: 20px; cursor: pointer; user-select: none; }
 
-        .sheep-field { width: 300px; height: 200px; background: #2e8b57; position: relative; margin: 0 auto; border: 2px solid white; touch-action: none; }
-        .sheep { font-size: 30px; position: absolute; cursor: pointer; transition: 0.2s; user-select: none; }
-        .grass { font-size: 30px; position: absolute; cursor: grab; user-select: none; touch-action: none; }
+        .sheep-field { width: 300px; height: 200px; background: #2e8b57; position: relative; margin: 0 auto; border: 2px solid white; }
+        .sheep { font-size: 30px; position: absolute; cursor: pointer; transition: 0.2s; }
+        .grass { font-size: 30px; position: absolute; cursor: grab; }
 
-        .flag-img { font-size: 80px; margin: 20px; font-family: "Segoe UI Emoji", "Segoe UI Symbol", "Apple Color Emoji", "Noto Color Emoji", sans-serif; }
+        .flag-img { font-size: 80px; margin: 20px; }
         .flag-opts button { width: 100%; margin: 5px 0; }
-
-        .mine-grid { display: grid; grid-template-columns: repeat(8, 1fr); gap: 2px; background: #555; padding: 5px; border-radius: 5px; margin: 10px auto; width: 240px; height: 240px; }
-        .mine-cell { width: 28px; height: 28px; background: #ccc; display: flex; justify-content: center; align-items: center; font-size: 14px; font-weight: bold; color: #333; border-radius: 2px; text-shadow: none; cursor: pointer; }
-        .mine-revealed { background: #999; }
-        .mine-bomb { background: red; }
 
         #checkpoint-notify { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: #00aa00; color: white; padding: 10px 20px; font-weight: bold; z-index: 10000; display: none; border: 2px solid white; text-shadow: none; box-shadow: 0 0 20px #00ff00; }
     </style>
 </head>
-<body class="scroll-lock">
+<body>
     
     <canvas id="matrix"></canvas>
     <div id="blackout-overlay"></div>
@@ -244,7 +212,7 @@
         </div>
 
         <div id="adm-main" class="tab-content active">
-            <button class="admin-btn" onclick="cheatSkipGate()">ПРОПУСТИТЬ ЗАДАНИЕ</button>
+            <button class="admin-btn" onclick="cheatSkipGate()">ПРОПУСТИТЬ ТЕКУЩЕЕ</button>
             <button class="admin-btn" onclick="cheatAddMoney()">+99 999 999 $</button>
             <div style="margin-top: 10px;">
                 <input type="number" id="teleportPercent" class="admin-input" placeholder="%" min="0" max="250">
@@ -255,40 +223,29 @@
         <div id="adm-events" class="tab-content">
             <button class="admin-btn" onclick="startTacoRain()">ДОЖДЬ ИЗ ТАКО</button>
             <button class="admin-btn" onclick="triggerEarthquake()">ЗЕМЛЕТРЯСЕНИЕ</button>
+            <button class="admin-btn" onclick="triggerSpin()">ВЕРТУШКА</button>
             <button class="admin-btn" onclick="triggerBlackout()">ТЕМНОТА</button>
             <button class="admin-btn" onclick="triggerFreeze()">ЗАМОРОЗКА</button>
             <button class="admin-btn" onclick="triggerInvert()">ИНВЕРСИЯ</button>
             <button class="admin-btn" onclick="triggerChat()">ЧАТ</button>
             <button class="admin-btn" onclick="triggerFly()">МУХА</button>
             <button class="admin-btn" onclick="triggerGravity()">ГРАВИТАЦИЯ</button>
-            <button class="admin-btn" onclick="triggerBlur()">РАСФОКУС</button>
-            <button class="admin-btn" onclick="triggerPulse()">ПУЛЬСАЦИЯ</button>
-            <button class="admin-btn" onclick="triggerMultiCursor()">МУЛЬТИ-КУРСОР</button>
-            <button class="admin-btn" onclick="triggerFakeCursor()">ФЕЙК КУРСОР</button>
         </div>
 
         <div id="adm-tasks" class="tab-content">
-            <button class="admin-btn" onclick="forceOpenGate('gate1')">ЗАГАДКИ</button>
             <button class="admin-btn" onclick="forceOpenGate('gateMaze')">ЛАБИРИНТ</button>
             <button class="admin-btn" onclick="forceOpenGate('gate2', 5)">МАТЕМАТИКА</button>
-            <button class="admin-btn" onclick="forceOpenGate('gateMemory')">ПАМЯТЬ</button>
-            <button class="admin-btn" onclick="forceOpenGate('gateStroop')">ЦВЕТА</button>
-            <button class="admin-btn" onclick="forceOpenGate('gateSlider')">ПОЛЗУНОК</button>
+            <button class="admin-btn" onclick="forceOpenGate('gateStroop')">СТРУП</button>
             <button class="admin-btn" onclick="forceOpenGate('gateOdd')">ЛИШНЕЕ</button>
-            <button class="admin-btn" onclick="forceOpenGate('gateType')">ПЕЧАТЬ</button>
-            <button class="admin-btn" onclick="forceOpenGate('gateDontPress')">НЕ НАЖИМАЙ</button>
-            <button class="admin-btn" onclick="forceOpenGate('gate3')">КЛИКЕР</button>
             <button class="admin-btn" onclick="forceOpenGate('gate4')">2048</button>
-            <button class="admin-btn" onclick="forceOpenGate('gateQuiz')">ВИКТОРИНА</button>
             <button class="admin-btn" onclick="forceOpenGate('gateSheep', 5)">ОВЦЫ</button>
             <button class="admin-btn" onclick="forceOpenGate('gateFlags')">ФЛАГИ</button>
-            <button class="admin-btn" onclick="forceOpenGate('gateMines')">САПЕР</button>
         </div>
 
         <button class="admin-btn" style="margin-top: 15px; background: #500;" onclick="document.getElementById('admin-modal').style.display='none'">ЗАКРЫТЬ ПАНЕЛЬ</button>
     </div>
 
-    <!-- КЕЙС С АНИМАЦИЕЙ -->
+    <!-- КЕЙС -->
     <div id="case-modal">
         <div class="case-window"><div class="case-marker"></div><div class="case-strip" id="caseStrip"></div></div>
     </div>
@@ -303,6 +260,7 @@
         <button class="shop-btn" onclick="openCaseAnimation()"><span>КЕЙС УДАЧИ</span> <span>10k $</span></button>
         <button class="shop-btn" onclick="buyShield()"><span>ЩИТ ОТ ХАОСА</span> <span>2k $</span></button>
         <button class="shop-btn" onclick="buyInsurance()"><span>СТРАХОВКА</span> <span>3k $</span></button>
+        <button class="shop-btn" onclick="buyMultiplier(2)"><span>x2 МОНЕТЫ</span> <span>50k $</span></button>
         <button class="shop-btn" onclick="buyMultiplier(3)"><span>x3 МОНЕТЫ</span> <span>100k $</span></button>
         <button class="shop-btn" onclick="buyMultiplier(4)"><span>x4 МОНЕТЫ</span> <span>500k $</span></button>
         <button class="shop-btn" onclick="buyMultiplier(5)"><span>x5 МОНЕТЫ</span> <span>1m $</span></button>
@@ -347,7 +305,6 @@
         <div class="help-link" onclick="triggerScreamer(event)">[ ? ] Нужна помощь?</div>
 
         <button class="skip-trap-btn" id="skipTrapBtn" onclick="activateSkipTrap()">⏩ ПРОПУСТИТЬ УРОВЕНЬ</button>
-        <div class="big-cipher" id="cipherBlock"></div>
 
         <div class="secret-container" onclick="stopProp(event)">
             <p class="secret-text">
@@ -373,12 +330,11 @@
     <div id="gateQuiz" class="gate-overlay"><div class="gate-box"><h2>ВИКТОРИНА</h2><p>Ответь на 10 вопросов подряд!</p><p id="quiz-counter">1/10</p><p id="quiz-q" style="font-size:1.2em; color:yellow;">...</p><div id="quiz-options"></div></div></div>
     <div id="gateSheep" class="gate-overlay"><div class="gate-box"><h2>КОРМЛЕНИЕ</h2><p id="sheep-msg">Перетащи траву на овечек!</p><div class="sheep-field" id="sheepField"></div></div></div>
     <div id="gateFlags" class="gate-overlay"><div class="gate-box"><h2>ГЕОГРАФИЯ</h2><p>Угадай 3 страны по флагу!</p><div class="flag-img" id="flagImg"></div><div class="flag-opts" id="flagOpts"></div></div></div>
-    <div id="gateMines" class="gate-overlay"><div class="gate-box"><h2>САПЕР</h2><p>Не подорвись. (8 мин)</p><div class="mine-grid" id="mineGrid"></div><p style="font-size:0.8em; margin-top:10px;">Нажми на клетку, чтобы открыть.</p></div></div>
 
     <div id="payment-modal" onclick="stopProp(event)">
         <h3>ТРЕБУЕТСЯ ОПЛАТА</h3><p>Для дальнейшего спуска оплатите комиссию.</p>
         <div style="margin-top: 20px; display: flex; justify-content: space-around; height: 100px; position: relative;">
-            <button class="pay-btn" id="payBtn" onmouseover="evadePayBtn()" onclick="payMoney()">ОПЛАТИТЬ 5000 МОНЕТ</button>
+            <button class="pay-btn" id="payBtn" onmouseover="evadePayBtn()" onclick="payMoney()">ОПЛАТИТЬ 5000 $</button>
             <button style="padding: 10px; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);" onclick="payMath()">Я нищая (Решить задачи)</button>
         </div>
     </div>
@@ -410,17 +366,6 @@
             }
         }
         setInterval(drawMatrix, 30);
-
-        function generateCipher() {
-            let chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ@#$%&*<>";
-            let str = "";
-            for(let i=0; i<3000; i++) {
-                str += chars.charAt(Math.floor(Math.random() * chars.length));
-                if(i%50 === 0) str += " ";
-            }
-            document.getElementById('cipherBlock').innerText = str;
-        }
-        generateCipher();
 
         // --- ВХОД И ИНИЦИАЛИЗАЦИЯ ---
         let coins = 0;
@@ -455,16 +400,13 @@
             { id: 'gateQuiz', pct: 1.50, passed: false, type: 'quiz' },
             { id: 'gateSheep', pct: 2.10, passed: false, type: 'sheep', count: 5, msg: "Покорми овечек!" },
             { id: 'gateFlags', pct: 2.20, passed: false, type: 'flags' },
-            { id: 'gateSheep', pct: 2.30, passed: false, type: 'sheep', count: 8, msg: "Они снова голодны!" },
-            { id: 'gateMines', pct: 0.95, passed: false, type: 'mines' }
+            { id: 'gateSheep', pct: 2.30, passed: false, type: 'sheep', count: 8, msg: "Они снова голодны!" }
         ];
 
         function checkPassword() {
             var input = document.getElementById("passwordInput").value;
             if (input.toUpperCase().trim() === "КПЮЛП") {
                 document.getElementById("login-screen").style.display = "none";
-                // СНИМАЕМ БЛОКИРОВКУ СКРОЛЛА
-                document.body.classList.remove("scroll-lock");
                 document.getElementById("trap-screen").style.display = "flex";
                 document.getElementById("progress-indicator").style.display = "block";
                 document.getElementById("open-shop-btn").style.display = "block";
@@ -482,17 +424,14 @@
         // --- SCROLL HANDLER ---
         function updateThemeColor(gamePercent) {
             if (gamePercent < 1.95) {
-                // RED
                 document.body.style.color = '#ff3333';
                 document.body.classList.remove('green-theme');
                 matrixColor = '#440000';
             } else if (gamePercent >= 2.00) {
-                // GREEN
                 document.body.style.color = '#00ff00';
                 document.body.classList.add('green-theme');
                 matrixColor = '#004400';
             } else {
-                // INTERPOLATE
                 let p = (gamePercent - 1.95) / 0.05; 
                 let r = Math.floor(255 * (1 - p));
                 let g = Math.floor(51 + (204 * p));
@@ -555,7 +494,6 @@
             else if (gate.type === 'quiz') openQuizGate(gate);
             else if (gate.type === 'sheep') openSheepGate(gate);
             else if (gate.type === 'flags') openFlagGate(gate);
-            else if (gate.type === 'mines') { gameMinesweeper.init(); document.getElementById('gateMines').style.display='flex'; document.body.style.overflow='hidden'; }
         }
 
         let activeGateObj = null;
@@ -605,13 +543,22 @@
         function buyShield() { if(coins >= 2000) { coins -= 2000; updateShopUI(); hasShield = true; alert("Щит активен!"); } else { alert("Нужно 2000 $!"); } }
         function buyMultiplier(mult) { 
             let cost = 0;
-            if(mult === 2) cost = 50000; if(mult === 3) cost = 100000; if(mult === 4) cost = 500000; if(mult === 5) cost = 1000000;
-            if(coins >= cost) { coins -= cost; incomeMultiplier = mult; updateShopUI(); alert("Доход x" + mult + "!"); } else { alert("Нужно " + cost + " $!"); } 
+            if(mult === 2) cost = 50000;
+            if(mult === 3) cost = 100000;
+            if(mult === 4) cost = 500000;
+            if(mult === 5) cost = 1000000;
+            
+            if(coins >= cost) { 
+                coins -= cost; 
+                incomeMultiplier = mult; 
+                updateShopUI(); 
+                alert("Доход x" + mult + "!"); 
+            } else { alert("Нужно " + cost + " $!"); } 
         }
         function buyInsurance() { if(coins >= 3000) { coins -= 3000; updateShopUI(); hasInsurance = true; alert("Страховка куплена!"); } else { alert("Нужно 3000 $!"); } }
         function buyBribe() { if(coins >= 20000) { coins -= 20000; updateShopUI(); bribes += 3; alert("Взятка дана. 3 пропуска."); } else { alert("Нужно 20000 $!"); } }
 
-        // --- PAYMENT LOGIC ---
+        // --- PAYMENT ---
         function evadePayBtn() {
             let btn = document.getElementById("payBtn");
             let x = Math.random() * 150;
@@ -653,20 +600,14 @@
         function forceOpenGate(gateId, param) {
             let gate = GATES.find(g => g.id === gateId || g.type === gateId);
             if(gate) {
+                // clone to allow multiple opens via admin
                 let fakeGate = Object.assign({}, gate); 
                 if(param) { fakeGate.level = param; fakeGate.count = param; }
                 openGate(fakeGate);
             }
         }
-        // Admin triggers for specific events
-        function triggerFakeCursor() {
-            let c=document.createElement("div");c.className="fake-cursor";
-            c.style.left=Math.random()*window.innerWidth+"px";c.style.top=Math.random()*window.innerHeight+"px";
-            document.body.appendChild(c);
-            setTimeout(()=>c.remove(), 5000);
-        }
 
-        // --- CASE ANIMATION (10s) ---
+        // --- CASE ---
         function openCaseAnimation() {
             if(coins < 10000) { alert("Недостаточно средств (10000)!"); return; }
             coins -= 10000; updateShopUI();
@@ -780,113 +721,14 @@
 
         const game2048 = { board: [], score: 0, init: function() { this.board = Array(7).fill().map(() => Array(7).fill(0)); this.spawn(); this.spawn(); this.draw(); document.addEventListener('keydown', this.handleKey); }, spawn: function() { let empty = []; for(let r=0; r<7; r++) for(let c=0; c<7; c++) if(this.board[r][c] === 0) empty.push({r,c}); if(empty.length > 0) { let spot = empty[Math.floor(Math.random() * empty.length)]; this.board[spot.r][spot.c] = Math.random() < 0.9 ? 2 : 4; } }, draw: function() { let html = ''; let won = false; for(let r=0; r<7; r++) { for(let c=0; c<7; c++) { let val = this.board[r][c]; let cls = 'c-' + val; html += `<div class="cell-2048 ${cls}">${val > 0 ? val : ''}</div>`; if(val === 2048) won = true; } } document.getElementById('grid2048').innerHTML = html; if(won) { setTimeout(() => { alert("МОЛОДЕЦ! 2048 СОБРАНО."); grantReward(); markGatePassed(); document.removeEventListener('keydown', this.handleKey); }, 500); } }, move: function(dir) { let moved = false; const rotate = matrix => matrix[0].map((val, index) => matrix.map(row => row[index]).reverse()); let b = this.board; if(dir === 'right') b = rotate(rotate(b)); if(dir === 'down') b = rotate(b); if(dir === 'up') b = rotate(rotate(rotate(b))); for(let r=0; r<7; r++) { let row = b[r].filter(x => x); for(let i=0; i < row.length - 1; i++) { if(row[i] === row[i+1]) { row[i] *= 2; row[i+1] = 0; } } row = row.filter(x => x); while(row.length < 7) row.push(0); if(b[r].join(',') !== row.join(',')) moved = true; b[r] = row; } if(dir === 'right') b = rotate(rotate(b)); if(dir === 'down') b = rotate(rotate(rotate(b))); if(dir === 'up') b = rotate(b); this.board = b; if(moved) { this.spawn(); this.draw(); } }, handleKey: function(e) { if(e.key === 'ArrowUp') game2048.move('up'); if(e.key === 'ArrowDown') game2048.move('down'); if(e.key === 'ArrowLeft') game2048.move('left'); if(e.key === 'ArrowRight') game2048.move('right'); } };
 
-        // SHEEP (DRAG & DROP)
-        function openSheepGate(gate) {
-            document.getElementById('gateSheep').style.display = 'flex'; document.body.style.overflow = 'hidden';
-            document.getElementById('sheep-msg').innerText = gate.msg || "Покорми овечек!";
-            let field = document.getElementById('sheepField'); field.innerHTML = "";
-            let fedCount = 0;
-            // Create Sheep (Drop Zones)
-            for(let i=0; i<gate.count; i++) {
-                let s = document.createElement('div'); s.className = 'sheep'; s.innerText = '🐑';
-                s.style.top = Math.random() * 150 + 'px'; s.style.left = Math.random() * 250 + 'px'; s.id = 'sheep'+i;
-                
-                // Allow Drop
-                s.ondragover = function(ev) { ev.preventDefault(); };
-                s.ondrop = function(ev) {
-                    ev.preventDefault();
-                    if(this.classList.contains('fed')) return;
-                    let data = ev.dataTransfer.getData("text");
-                    let grassEl = document.getElementById(data);
-                    if(grassEl) {
-                        grassEl.style.display = 'none';
-                        this.innerText = '😋'; this.classList.add('fed');
-                        fedCount++;
-                        if(fedCount >= gate.count) { grantReward(); markGatePassed(); alert("Овцы сыты."); }
-                    }
-                };
-                field.appendChild(s);
-            }
-            // Create Grass (Draggable)
-            for(let i=0; i<gate.count; i++) {
-                let g = document.createElement('div'); g.className = 'grass'; g.innerText = '🌿';
-                g.style.top = '170px'; g.style.left = (i*30) + 'px'; g.draggable = true;
-                g.id = 'grass'+i;
-                g.ondragstart = function(ev) { ev.dataTransfer.setData("text", ev.target.id); };
-                field.appendChild(g);
-            }
-        }
-
-        // FLAGS (EMOJI FONT FIX)
-        const flagsDB = [ {f:"🇺🇸", n:"США"}, {f:"🇫🇷", n:"Франция"}, {f:"🇯🇵", n:"Япония"}, {f:"🇮🇹", n:"Италия"}, {f:"🇧🇷", n:"Бразилия"}, {f:"🇨🇦", n:"Канада"}, {f:"🇬🇧", n:"Великобритания"}, {f:"🇩🇪", n:"Германия"} ];
-        let flagWins = 0;
-        function openFlagGate(gate) { document.getElementById('gateFlags').style.display = 'flex'; document.body.style.overflow = 'hidden'; flagWins = 0; nextFlagRound(); }
-        function nextFlagRound() {
-            if(flagWins >= 3) { grantReward(); markGatePassed(); alert("Географ!"); return; }
-            let correct = flagsDB[Math.floor(Math.random()*flagsDB.length)];
-            document.getElementById('flagImg').innerText = correct.f;
-            let opts = document.getElementById('flagOpts'); opts.innerHTML = "";
-            let choices = [correct.n];
-            while(choices.length < 4) { let r = flagsDB[Math.floor(Math.random()*flagsDB.length)].n; if(!choices.includes(r)) choices.push(r); }
-            choices.sort(() => 0.5 - Math.random());
-            choices.forEach(c => { let b = document.createElement('button'); b.className = 'login-btn'; b.innerText = c; b.style.margin = "5px"; b.onclick = () => { if(c === correct.n) { flagWins++; nextFlagRound(); } else failGate("Не та страна!"); }; opts.appendChild(b); });
-        }
-
-        // QUIZ MARATHON
-        let quizIdx = 0;
-        const quizQuestions = [
-            {q:"Сколько дней в году?", o:["365","366","360","Зависит"], a:3},
-            {q:"2+2*2?", o:["6","8","4","10"], a:0},
-            {q:"Столица Австралии?", o:["Сидней","Мельбурн","Канберра","Вена"], a:2},
-            {q:"Кто написал 'Войну и мир'?", o:["Пушкин","Толстой","Достоевский","Гоголь"], a:1},
-            {q:"H2O это?", o:["Водка","Вода","Спирт","Кислота"], a:1},
-            {q:"Сколько ног у паука?", o:["6","8","4","100"], a:0},
-            {q:"Самая большая планета?", o:["Земля","Марс","Юпитер","Сатурн"], a:2},
-            {q:"Сколько будет 5 в квадрате?", o:["10","20","25","55"], a:2},
-            {q:"Первый человек в космосе?", o:["Армстронг","Гагарин","Титов","Леонов"], a:1},
-            {q:"Сколько пальцев у человека?", o:["10","20","8","Зависит"], a:3}
-        ];
-        function openQuizGate(gate) {
-            quizIdx = 0;
-            document.getElementById('gateQuiz').style.display = 'flex'; document.body.style.overflow = 'hidden';
-            nextQuizQuestion();
-        }
-        function nextQuizQuestion() {
-            if(quizIdx >= 10) { grantReward(); markGatePassed(); alert("Гений!"); return; }
-            let q = quizQuestions[quizIdx];
-            document.getElementById('quiz-counter').innerText = (quizIdx+1) + "/10";
-            document.getElementById('quiz-q').innerText = q.q;
-            let optsDiv = document.getElementById('quiz-options');
-            optsDiv.innerHTML = "";
-            q.o.forEach((opt, idx) => {
-                let b = document.createElement("button"); b.className = "login-btn"; 
-                b.style.margin = "5px"; b.innerText = opt;
-                b.onclick = () => {
-                    if(idx === q.a) { quizIdx++; nextQuizQuestion(); }
-                    else failGate("Неправильный ответ!");
-                };
-                optsDiv.appendChild(b);
-            });
-        }
-
-        const gameMinesweeper = {
-            rows: 8, cols: 8, mines: 8, grid: [], revealedCount: 0,
-            init: function() { this.grid = []; this.revealedCount = 0; let mineLocs = new Set(); while(mineLocs.size < this.mines) mineLocs.add(Math.floor(Math.random() * (this.rows * this.cols))); let container = document.getElementById('mineGrid'); container.innerHTML = ""; for(let r=0; r<this.rows; r++) { this.grid[r] = []; for(let c=0; c<this.cols; c++) { let isMine = mineLocs.has(r*this.cols + c); this.grid[r][c] = { isMine: isMine, revealed: false, neighbors: 0 }; let div = document.createElement("div"); div.className = "mine-cell"; div.dataset.r = r; div.dataset.c = c; div.onclick = () => this.clickCell(r, c); container.appendChild(div); } } for(let r=0; r<this.rows; r++) for(let c=0; c<this.cols; c++) { if(this.grid[r][c].isMine) continue; let count = 0; for(let i=-1; i<=1; i++) for(let j=-1; j<=1; j++) { let nr=r+i, nc=c+j; if(nr>=0 && nr<this.rows && nc>=0 && nc<this.cols && this.grid[nr][nc].isMine) count++; } this.grid[r][c].neighbors = count; } },
-            clickCell: function(r, c) { if(this.grid[r][c].revealed) return; if(this.grid[r][c].isMine) { this.revealAll(); setTimeout(() => failGate("Бум! Ты подорвалась."), 1000); } else { this.reveal(r, c); if(this.revealedCount === (this.rows*this.cols - this.mines)) { grantReward(); markGatePassed(); alert("ЧИСТО! ТЫ ВЫЖИЛА!"); } } },
-            reveal: function(r, c) { if(r<0 || r>=this.rows || c<0 || c>=this.cols || this.grid[r][c].revealed) return; this.grid[r][c].revealed = true; this.revealedCount++; let cell = document.querySelector(`.mine-cell[data-r='${r}'][data-c='${c}']`); cell.classList.add("mine-revealed"); if(this.grid[r][c].neighbors > 0) cell.innerText = this.grid[r][c].neighbors; else for(let i=-1; i<=1; i++) for(let j=-1; j<=1; j++) this.reveal(r+i, c+j); },
-            revealAll: function() { for(let r=0; r<this.rows; r++) for(let c=0; c<this.cols; c++) if(this.grid[r][c].isMine) { let cell = document.querySelector(`.mine-cell[data-r='${r}'][data-c='${c}']`); cell.classList.add("mine-bomb"); cell.innerText = "💣"; } }
-        };
-
-        // --- TROLL & CHAOS ---
+        // --- TROLL FUNCTIONS ---
         function moveButton() {
             var btn = document.getElementById("runaway-btn");
+            // Убегает в пределах первого экрана
             var x = Math.max(20, Math.random() * (window.innerWidth - 200));
-            var y = Math.max(100, Math.random() * 200); 
-            // Ограничиваем только верхнюю зону, если скролл 0
-            if (window.scrollY < 100) {
-                if (y < 250) y = 350; // Толкаем вниз, чтобы не перекрывал
-            }
-            btn.style.position = "absolute"; btn.style.left = x + "px"; btn.style.top = y + "px"; 
+            var y = Math.max(100, Math.random() * (window.innerHeight - 200)); 
+            if(y < 200) y = 200; // Ниже заголовка
+            btn.style.left = x + "px"; btn.style.top = y + "px"; 
         }
         function trollToggle() { var chk = document.getElementById("trollSwitch"); if (chk.checked) { setTimeout(() => { chk.checked = false; alert("Ошибка прав доступа!"); }, 300); } }
         function noHuman(chk) { if (chk.checked) { setTimeout(() => { chk.checked = false; alert("Роботам вход запрещен! 🤖"); }, 300); } }
@@ -909,15 +751,15 @@
         function triggerRandomChaos() {
             if(hasShield) { hasShield = false; alert("Щит сработал!"); return; }
             let rand = Math.random();
-            if (rand < 0.1) startTacoRain(); else if (rand < 0.2) triggerEarthquake(); else if (rand < 0.3) triggerBlackout(); else if (rand < 0.4) triggerFreeze(); else if (rand < 0.5) triggerBlur(); else if (rand < 0.6) triggerInvert(); else if (rand < 0.7) triggerPulse(); else if (rand < 0.8) triggerChat(); else if (rand < 0.85) triggerZoom(); else if (rand < 0.9) triggerFly(); else if (rand < 0.95) triggerGravity(); else triggerMultiCursor();
+            if (rand < 0.1) startTacoRain(); else if (rand < 0.2) triggerEarthquake(); else if (rand < 0.3) triggerSpin(); else if (rand < 0.35) triggerBlackout(); else if (rand < 0.4) triggerFreeze(); else if (rand < 0.5) triggerBlur(); else if (rand < 0.6) triggerInvert(); else if (rand < 0.7) triggerPulse(); else if (rand < 0.8) triggerChat(); else if (rand < 0.85) triggerZoom(); else if (rand < 0.9) triggerFly(); else if (rand < 0.95) triggerGravity(); else triggerMultiCursor();
         }
         function triggerZoom() { document.body.classList.add(Math.random()>0.5?'zoom-in-mode':'zoom-out-mode'); setTimeout(()=>document.body.classList.remove('zoom-in-mode','zoom-out-mode'), 3000); }
         function triggerChat() { let msgs = ["Я вижу тебя...", "Включаю камеру...", "Ты красивая...", "Пароль украден...", "Удаляю фото...", "Кто стоит сзади?"]; let box = document.getElementById('chat-box'); box.innerText = "⚠️ СИСТЕМА: " + msgs[Math.floor(Math.random()*msgs.length)]; box.style.right = "20px"; setTimeout(()=>{box.style.right="-300px"}, 4000); }
         function triggerMultiCursor() { for(let i=0;i<10;i++){ let c=document.createElement("div");c.className="fake-cursor"; c.style.left=Math.random()*window.innerWidth+"px";c.style.top=Math.random()*window.innerHeight+"px"; document.body.appendChild(c); let int=setInterval(()=>{c.style.left=(parseFloat(c.style.left)+(Math.random()*20-10))+"px";c.style.top=(parseFloat(c.style.top)+(Math.random()*20-10))+"px";},100); setTimeout(()=>{clearInterval(int);c.remove()},4000); } }
-        function triggerFakeCursor() { let c=document.createElement("div");c.className="fake-cursor"; c.style.left=Math.random()*window.innerWidth+"px";c.style.top=Math.random()*window.innerHeight+"px"; document.body.appendChild(c); let int=setInterval(()=>{c.style.left=(parseFloat(c.style.left)+(Math.random()*20-10))+"px";c.style.top=(parseFloat(c.style.top)+(Math.random()*20-10))+"px";},100); setTimeout(()=>{clearInterval(int);c.remove()},4000); }
         function triggerFly() { let fly=document.createElement("div");fly.innerText="🪰";fly.className="fly";document.body.appendChild(fly); let int=setInterval(()=>{fly.style.left=Math.random()*window.innerWidth+"px";fly.style.top=(Math.random()*window.innerHeight+window.scrollY)+"px";},300); setTimeout(()=>{clearInterval(int);fly.remove()},5000); }
         function startTacoRain() { for(let i=0;i<300;i++){let t=document.createElement("div");t.innerText="🌮";t.className="taco";t.style.left=Math.random()*window.innerWidth+"px";t.style.animationDuration=(Math.random()*2+1)+"s";document.body.appendChild(t);setTimeout(()=>t.remove(),10000);}}
         function triggerEarthquake() { document.body.classList.add("earthquake-mode"); setTimeout(() => document.body.classList.remove("earthquake-mode"), 5000); }
+        function triggerSpin() { document.body.classList.add("spin-mode"); setTimeout(() => document.body.classList.remove("spin-mode"), 3000); }
         function triggerBlackout() { document.getElementById("blackout-overlay").style.display = "block"; setTimeout(() => document.getElementById("blackout-overlay").style.display = "none", 2000); }
         function triggerFreeze() { document.body.classList.add("no-cursor"); setTimeout(() => document.body.classList.remove("no-cursor"), 3000); }
         function triggerBlur() { document.body.classList.add("blur-mode"); setTimeout(() => document.body.classList.remove("blur-mode"), 3000); }
